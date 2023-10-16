@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "PCRD06A-rescue")(type "Legacy")(uri "${KIPRJMOD}/PCRD06A-rescue.lib")(options "")(descr ""))
+)
