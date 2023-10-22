@@ -122,6 +122,9 @@
   (junction (at 270.51 21.59) (diameter 1.016) (color 0 0 0 0)
     (uuid 725bcb91-5bfa-491d-8d2a-808aa98d9d03)
   )
+  (junction (at 151.13 73.66) (diameter 0) (color 0 0 0 0)
+    (uuid b95b6e4c-2113-47e9-bacf-bb1555ab17fd)
+  )
 
   (wire (pts (xy 265.43 21.59) (xy 260.35 21.59))
     (stroke (width 0) (type solid))
@@ -135,6 +138,15 @@
     (stroke (width 0) (type dash))
     (uuid 275ccf75-18bb-450a-8982-469b125af29b)
   )
+
+  (wire (pts (xy 87.63 81.28) (xy 87.63 73.66))
+    (stroke (width 0) (type default))
+    (uuid 2a058e58-9bca-42c9-8682-992579f5e443)
+  )
+  (wire (pts (xy 151.13 67.31) (xy 151.13 73.66))
+    (stroke (width 0) (type default))
+    (uuid 43dcfb99-a735-4baf-85bf-99057d23b9e0)
+  )
   (polyline (pts (xy 247.65 20.32) (xy 278.13 20.32))
     (stroke (width 0) (type dash))
     (uuid 47ef3c7f-3c74-4b1e-80a9-32b0638164ec)
@@ -144,6 +156,14 @@
     (uuid 4cefdb6d-723f-4ccd-922e-37c04fedffb6)
   )
 
+  (wire (pts (xy 87.63 73.66) (xy 151.13 73.66))
+    (stroke (width 0) (type default))
+    (uuid 4dccddd0-64c2-49a8-840e-960ca2fb112a)
+  )
+  (wire (pts (xy 151.13 73.66) (xy 151.13 80.01))
+    (stroke (width 0) (type default))
+    (uuid 652caa75-542f-4efd-a1ce-df6f6e799342)
+  )
   (wire (pts (xy 265.43 22.86) (xy 265.43 21.59))
     (stroke (width 0) (type solid))
     (uuid 746fa4d6-93a6-4d7f-ab3e-ec0b187635c8)
@@ -476,6 +496,10 @@
       (effects (font (size 1.524 1.524)) (justify left))
       (uuid b64d1980-4778-4ac4-80a8-a8cc6a258334)
     )
+    (pin "REF" input (at 151.13 80.01 90)
+      (effects (font (size 1.524 1.524)) (justify right))
+      (uuid 80bf4a47-7f74-4ee3-a56f-a849b0f7f5be)
+    )
     (instances
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55" (page "2"))
@@ -492,6 +516,10 @@
     )
     (property "Sheetfile" "power.kicad_sch" (at 129.54 67.8946 0)
       (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (pin "REF" output (at 151.13 67.31 270)
+      (effects (font (size 1.524 1.524)) (justify left))
+      (uuid ef1026e5-4126-4821-9398-6c1044cfeace)
     )
     (instances
       (project "AIRDOS04_base"
@@ -521,6 +549,10 @@
     (pin "SCL" input (at 101.6 113.03 270)
       (effects (font (size 1.524 1.524)) (justify left))
       (uuid 23176caa-1056-4505-8c7d-01d7d78b1049)
+    )
+    (pin "REF" input (at 87.63 81.28 90)
+      (effects (font (size 1.524 1.524)) (justify right))
+      (uuid 61dcbc53-319f-42b6-9588-e79db6eada52)
     )
     (instances
       (project "AIRDOS04_base"
