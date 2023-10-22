@@ -54,13 +54,11 @@ RX1/INT0 (D 10) PD2 16|        |25 PC3 (D 19) TMS
 TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
      PWM (D 12) PD4 18|        |23 PC1 (D 17) SDA
      PWM (D 13) PD5 19|        |22 PC0 (D 16) SCL
-     PWM (D 14) PD6 20|        |21 PD7 (D 15) PWM
+     PWM (D 14) PD6 20|        |21 PC7 (D 15) PWM
                       +--------+
 */
 
 #include "wiring_private.h"
-#include <Wire.h>           
-#include <SD.h>             
 #include <SPI.h>
 
 #define CONV        0    // PB0, ADC CONV signal
@@ -93,21 +91,6 @@ uint8_t bcdToDec(uint8_t b)
 uint32_t tm;
 uint8_t tm_s100;
 
-void readRTC()
-{
-  Wire.beginTransmission(0x51);
-  Wire.write(0);
-  Wire.endTransmission();
-  
-  Wire.requestFrom(0x51, 6);
-  tm_s100 = bcdToDec(Wire.read());
-  uint8_t tm_sec = bcdToDec(Wire.read() & 0x7f);
-  uint8_t tm_min = bcdToDec(Wire.read() & 0x7f);
-  tm = bcdToDec(Wire.read());
-  tm += bcdToDec(Wire.read()) * 100;
-  tm += bcdToDec(Wire.read()) * 10000;
-  tm = tm * 60 * 60 + tm_min * 60 + tm_sec;
-}
 
 bool store = false;
 
@@ -132,28 +115,19 @@ void DataOut()
 
   // make a string for assembling the data to log:
   String dataString = "";
-
-  readRTC();
   
   // make a string for assembling the data to log:
   dataString += "$HIST,";
   dataString += String(count); 
   dataString += ",";  
-  dataString += String(tm); 
+  dataString += String(0); 
   dataString += ".";
-  dataString += String(tm_s100); 
+  dataString += String(0); 
   dataString += ",";
   dataString += String(flux);
   
   for(uint16_t n=0; n<(RANGE); n++)  
-  {
-    if (n>600)
-    {
-    dataString += "\t,";
-    dataString += String(n);
-    dataString += "*";      
-      
-    }
+  {     
 #ifdef CALIBRATION
     dataString += "\t,";
     dataString += String(n);
@@ -164,40 +138,6 @@ void DataOut()
     dataString += String(histogram[n]); 
   }
 
-  if (SDinserted)
-  {
-    //PORTB = 0b11111110; // SD card power on
-    
-    // make sure that the default chip select pin is set to output
-    // see if the card is present and can be initialized:
-    if (!SD.begin(SS)) 
-    {
-      Serial.println("#SD init false");
-      SDinserted = false;
-      // don't do anything more:
-    }
-    else
-    {
-      // open the file. note that only one file can be open at a time,
-      // so you have to close this one before opening another.
-      File dataFile = SD.open(filename, FILE_WRITE);
-    
-      // if the file is available, write to it:
-      if (dataFile) 
-      {
-        dataFile.println(dataString);  // write to SDcard (800 ms)     
-        dataFile.close();
-      }  
-      // if the file isn't open, pop up an error:
-      else 
-      {
-        Serial.println("#SD false");
-        SDinserted = false;
-      }
-    }  
-  //PORTB = 0b00000000; // SD card power off
-    digitalWrite(SS, HIGH);         // Disable SD card
-  }          
 
   Serial.println(dataString);   // print to terminal 
   digitalWrite(LED, LOW);     
@@ -243,7 +183,6 @@ void setup()
   digitalWrite(DSET, HIGH);       // Disable ADC
   digitalWrite(DRESET, LOW);       
   
-  Wire.setClock(100000);
 
   Serial.println("#Hmmm...");
 
@@ -251,101 +190,6 @@ void setup()
   {
     base_offset = 18500; // Calculate mean of n measurements
   }
-
-  // Initiation of RTC
-  Wire.beginTransmission(0x51); // init clock
-  Wire.write((uint8_t)0x23); // Start register
-  Wire.write((uint8_t)0x00); // 0x23
-  Wire.write((uint8_t)0x00); // 0x24 Two's complement offset value
-  Wire.write((uint8_t)0b00000101); // 0x25 Normal offset correction, disable low-jitter mode, set load caps to 6 pF
-  Wire.write((uint8_t)0x00); // 0x26 Battery switch reg, same as after a reset
-  Wire.write((uint8_t)0x00); // 0x27 Enable CLK pin, using bits set in reg 0x28
-  Wire.write((uint8_t)0x97); // 0x28 stop watch mode, no periodic interrupts, CLK pin off
-  Wire.write((uint8_t)0x00); // 0x29
-  Wire.write((uint8_t)0x00); // 0x2a
-  Wire.endTransmission();
-  Wire.beginTransmission(0x51); // reset clock
-  Wire.write(0x2f); 
-  Wire.write(0x2c);
-  Wire.endTransmission();
-  Wire.beginTransmission(0x51); // start stop-watch
-  Wire.write(0x28); 
-  Wire.write(0x97);
-  Wire.endTransmission();
-  Wire.beginTransmission(0x51); // reset stop-watch
-  Wire.write((uint8_t)0x00); // Start register
-  Wire.write((uint8_t)0x00); // 0x00
-  Wire.write((uint8_t)0x00); // 0x01 
-  Wire.write((uint8_t)0x00); // 0x02 
-  Wire.write((uint8_t)0x00); // 0x03
-  Wire.write((uint8_t)0x00); // 0x04
-  Wire.write((uint8_t)0x00); // 0x05
-  Wire.endTransmission();
-  
-  // make a string for device identification output
-  String dataString = "$DOS,AIRDOS04," + FWversion + "," + String(base_offset) + "," + githash + ","; // FW version and Git hash
-  
-  Wire.beginTransmission(0x58);                   // request SN from EEPROM
-  Wire.write((int)0x08); // MSB
-  Wire.write((int)0x00); // LSB
-  Wire.endTransmission();
-  Wire.requestFrom((uint8_t)0x58, (uint8_t)16);    
-  for (int8_t reg=0; reg<16; reg++)
-  { 
-    uint8_t serialbyte = Wire.read(); // receive a byte
-    if (serialbyte<0x10) dataString += "0";
-    dataString += String(serialbyte,HEX);    
-    serialhash += serialbyte;
-  }
-
-  {    
-    // make sure that the default chip select pin is set to output
-    // see if the card is present and can be initialized:
-    if (!SD.begin(SS)) 
-    {
-      Serial.println("#SD init false");
-      SDinserted = false;
-    }
-    for (fn = 1; fn<MAXFILES; fn++) // find last file
-    {
-       filename = String(fn) + ".txt";
-       if (SD.exists(filename) == 0) break;
-    }
-    fn--;
-    filename = String(fn) + ".txt";
-    
-    // open the file. note that only one file can be open at a time,
-    // so you have to close this one before opening another.
-    File dataFile = SD.open(filename, FILE_WRITE);
-
-    uint32_t filesize = dataFile.size();
-    Serial.print("#Filesize,");
-    Serial.println(filesize); 
-    if (filesize > MAXFILESIZE)
-    {
-      dataFile.close();
-      fn++;
-      filename = String(fn) + ".txt";      
-      dataFile = SD.open(filename, FILE_WRITE);
-    }
-    Serial.print("#Filename,");
-    Serial.println(filename); 
-  
-    // if the file is available, write to it:
-    if (dataFile) 
-    {
-      dataFile.println(dataString);  // write to SDcard (800 ms)     
-      dataFile.close();  
-    }  
-    // if the file isn't open, pop up an error:
-    else 
-    {
-      Serial.println("#SD false");
-      SDinserted = false;
-    }
-    Serial.println(dataString);  // print SN to terminal 
-  }    
-
   
   for( uint8_t n=0; n<5; n++)
   {
@@ -372,7 +216,11 @@ void setup()
   store = false;
   sei(); // re-enable interrupts
 
-  ADMUX = (INTERNAL2V56 << 6) | ((0 | 0x10) & 0x1F);
+  SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE1));
+  SPI.begin();
+
+  //ADMUX = (INTERNAL2V56 << 6) | ((0 | 0x10) & 0x1F);
+  Serial.println("#Hmmm...");
 
 }
 
@@ -384,16 +232,40 @@ void loop()
   {
     histogram[n]=0;
   }
-
+/*
+  while (true)
+  {
+    while((PINB & 1)==0);
+    while((PINB & 1)==1);
+    digitalWrite(DRESET, LOW);
+    //delayMicroseconds(40);
+  digitalWrite(DSET, LOW);
+    SPI.transfer16(0x0000);    
+  digitalWrite(DSET, HIGH);
+    digitalWrite(DRESET, HIGH);
+  }
+*/
+   
   // dummy conversion
-  digitalWrite(DRESET, HIGH);
-  SPI.transfer16(0x8000);
   digitalWrite(DRESET, LOW);
+  delayMicroseconds(4);
+  SPI.transfer16(0x0000);
+  digitalWrite(DRESET, HIGH);
+  delayMicroseconds(4);
   
   // dosimeter integration
   while(true)
   {
-    while((PINB & 1)==0) if (store) 
+    while((PINB & 1)==0);
+    while((PINB & 1)==1);
+    //delayMicroseconds(4);
+    digitalWrite(DRESET, LOW);
+    uint16_t adcVal = SPI.transfer16(0x0000);
+    {
+      adcVal >>= 6;
+      if (histogram[adcVal]<255) histogram[adcVal]++;
+    }
+    if (store) 
     {
       store = false;
       digitalWrite(DRESET, LOW);
@@ -405,21 +277,9 @@ void loop()
         histogram[n]=0;
       }
       // dummy conversion
-      digitalWrite(DRESET, HIGH);
-      SPI.transfer16(0x0000); // 0x8000
       digitalWrite(DRESET, LOW);
-      continue;
+      SPI.transfer16(0x0000); // 0x8000
     };
-    //delayMicroseconds(4);
     digitalWrite(DRESET, HIGH);
-    uint16_t adcVal = SPI.transfer16(0x0000);
-    //if(adcVal>17000) 
-    {
-      //Serial.println(adcVal);
-      //adcVal -= 17001;
-      adcVal >>= 6;
-      if (histogram[adcVal]<255) histogram[adcVal]++;
-    }
-    digitalWrite(DRESET, LOW);
   }
 }
