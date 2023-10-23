@@ -5,6 +5,9 @@
   (paper "A4")
 
   (title_block
+    (title "AIRDOS04A base board")
+    (date "2023-10-23")
+    (company "Jakub Kákona <info@ust.cz>")
     (comment 2 "Airborne semiconductor\\nradiation detector")
   )
 

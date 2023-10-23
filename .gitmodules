@@ -1,3 +1,6 @@
 [submodule "doc/assets"]
 	path = doc/assets
 	url = git@github.com:UniversalScientificTechnologies/USTassets.git
+[submodule "hw/sch_pcb/AIRDOS04_battery"]
+	path = hw/sch_pcb/AIRDOS04_battery
+	url = git@github.com:mlab-modules/LIONXCELL01.git

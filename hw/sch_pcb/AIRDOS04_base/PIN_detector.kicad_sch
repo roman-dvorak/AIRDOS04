@@ -5,6 +5,9 @@
   (paper "A4")
 
   (title_block
+    (title "AIRDOS04A base board")
+    (date "2023-10-23")
+    (company "Jakub Kákona <info@ust.cz>")
     (comment 2 "Airborne semiconductor\\nradiation detector")
   )
 
@@ -714,58 +717,6 @@
       (symbol "GNDA_1_1"
         (pin power_in line (at 0 0 270) (length 0) hide
           (name "GNDA" (effects (font (size 1.27 1.27))))
-          (number "1" (effects (font (size 1.27 1.27))))
-        )
-      )
-    )
-    (symbol "power:VCC" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
-      (property "Reference" "#PWR" (at 0 -3.81 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Value" "VCC" (at 0 3.81 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Datasheet" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "ki_keywords" "global power" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "ki_description" "Power symbol creates a global label with name \"VCC\"" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "VCC_0_1"
-        (polyline
-          (pts
-            (xy -0.762 1.27)
-            (xy 0 2.54)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 0 0)
-            (xy 0 2.54)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 0 2.54)
-            (xy 0.762 1.27)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-      )
-      (symbol "VCC_1_1"
-        (pin power_in line (at 0 0 90) (length 0) hide
-          (name "VCC" (effects (font (size 1.27 1.27))))
           (number "1" (effects (font (size 1.27 1.27))))
         )
       )
@@ -1518,31 +1469,6 @@
     )
   )
 
-  (symbol (lib_id "power:VCC") (at 195.58 66.04 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid 130aba24-a8cc-48d3-9f07-9b41a36bb278)
-    (property "Reference" "#PWR058" (at 195.58 69.85 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "VCC" (at 195.58 61.9069 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 195.58 66.04 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 195.58 66.04 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid b19bcccc-79a6-4e74-a76e-b2454339fbcf))
-    (instances
-      (project "AIRDOS04_base"
-        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR058") (unit 1)
-        )
-      )
-    )
-  )
-
   (symbol (lib_id "Device:R") (at 59.69 92.71 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 176017ea-ee70-4d38-b819-7198187f091c)
@@ -1924,6 +1850,47 @@
     )
   )
 
+  (symbol (lib_id "power:+5V") (at 170.18 44.45 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 3298216a-f209-4490-b7f3-83d16e20b181)
+    (property "Reference" "#PWR0152" (at 170.18 48.26 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+5V" (at 170.561 40.0558 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 170.18 44.45 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 170.18 44.45 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 909f4045-b235-43fe-bd20-f7ea9d6428ca))
+    (instances
+      (project "USTSIPIN02"
+        (path "/0a87ced0-2af2-43c5-a56c-218f7013d76f/00000000-0000-0000-0000-00005c69bcb4"
+          (reference "#PWR0152") (unit 1)
+        )
+      )
+      (project "PIND02"
+        (path "/2ae32537-a16f-4c5b-a56b-c6dddfb8ddb4"
+          (reference "#PWR028") (unit 1)
+        )
+      )
+      (project "AIRDOS04_base"
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
+          (reference "#PWR019") (unit 1)
+        )
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/9a69f4cc-204a-4d5e-b6b5-6ba837845303"
+          (reference "#PWR017") (unit 1)
+        )
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/5c006114-f78d-4936-a365-c4e7307459e1"
+          (reference "#PWR067") (unit 1)
+        )
+      )
+    )
+  )
+
   (symbol (lib_id "Device:C_Polarized_Small") (at 64.77 97.79 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 36462f72-faf8-4d9b-af92-32bef0e99082)
@@ -2186,31 +2153,6 @@
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "U9") (unit 2)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "power:VCC") (at 41.91 26.67 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid 72e9a028-27eb-4a10-83ca-dab0729aaa18)
-    (property "Reference" "#PWR051" (at 41.91 30.48 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "VCC" (at 41.91 22.5369 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 41.91 26.67 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 41.91 26.67 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 19d6df6a-fd91-4d1f-a106-1a5b0da6f3c5))
-    (instances
-      (project "AIRDOS04_base"
-        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR051") (unit 1)
         )
       )
     )
@@ -2503,6 +2445,36 @@
     )
   )
 
+  (symbol (lib_id "power:VDD") (at 41.91 26.67 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 9c136ba2-b80f-4c58-a692-fd5dceb3ec34)
+    (property "Reference" "#PWR021" (at 41.91 30.48 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "VDD" (at 41.91 22.5369 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 41.91 26.67 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 41.91 26.67 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid acfe72e0-0492-4dcd-b4dd-cdcc7bf0ed95))
+    (instances
+      (project "PIND02"
+        (path "/2ae32537-a16f-4c5b-a56b-c6dddfb8ddb4"
+          (reference "#PWR021") (unit 1)
+        )
+      )
+      (project "AIRDOS04_base"
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
+          (reference "#PWR018") (unit 1)
+        )
+      )
+    )
+  )
+
   (symbol (lib_id "Device:R") (at 184.15 146.05 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a3f6a1aa-d063-47e6-85f7-0517a79444ff)
@@ -2567,6 +2539,47 @@
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "#PWR077") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:+5V") (at 195.58 66.04 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid aa3b2a36-3ca9-4fa6-b3b0-fc8f7996029d)
+    (property "Reference" "#PWR0152" (at 195.58 69.85 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+5V" (at 195.961 61.6458 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 195.58 66.04 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 195.58 66.04 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid c7aac030-aaaa-44e7-87e4-271dbe5effde))
+    (instances
+      (project "USTSIPIN02"
+        (path "/0a87ced0-2af2-43c5-a56c-218f7013d76f/00000000-0000-0000-0000-00005c69bcb4"
+          (reference "#PWR0152") (unit 1)
+        )
+      )
+      (project "PIND02"
+        (path "/2ae32537-a16f-4c5b-a56b-c6dddfb8ddb4"
+          (reference "#PWR028") (unit 1)
+        )
+      )
+      (project "AIRDOS04_base"
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
+          (reference "#PWR020") (unit 1)
+        )
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/9a69f4cc-204a-4d5e-b6b5-6ba837845303"
+          (reference "#PWR017") (unit 1)
+        )
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/5c006114-f78d-4936-a365-c4e7307459e1"
+          (reference "#PWR067") (unit 1)
         )
       )
     )
@@ -3091,31 +3104,6 @@
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "#PWR075") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "power:VCC") (at 170.18 44.45 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid f3c78711-cb89-41a1-b49a-3dd6147d7d9d)
-    (property "Reference" "#PWR045" (at 170.18 48.26 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "VCC" (at 170.18 40.3169 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 170.18 44.45 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 170.18 44.45 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 2774096c-0d27-42d0-9310-895eea317cd0))
-    (instances
-      (project "AIRDOS04_base"
-        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR045") (unit 1)
         )
       )
     )
