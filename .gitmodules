@@ -3,4 +3,8 @@
 	url = git@github.com:UniversalScientificTechnologies/USTassets.git
 [submodule "hw/sch_pcb/AIRDOS04_battery"]
 	path = hw/sch_pcb/AIRDOS04_battery
-	url = git@github.com:mlab-modules/LIONXCELL01.git
+	url = git@github.com:mlab-modules/BATDATUNIT01.git
+[submodule "hw/sch_pcb/AIRDOS04_socket"]
+        path = hw/sch_pcb/AIRDOS04_socket
+        url = git@github.com:mlab-modules/BATDATSOCKET01.git
+
