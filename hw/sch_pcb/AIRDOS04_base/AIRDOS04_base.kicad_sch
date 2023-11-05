@@ -8,7 +8,7 @@
     (title "AIRDOS04A base board")
     (date "2023-10-23")
     (company "Jakub Kákona <info@ust.cz>")
-    (comment 2 "Airborne semiconductor\\nradiation detector")
+    (comment 2 "Airborne semiconductor\\nionizing radiation detector")
     (comment 4 "GPL 3")
   )
 
@@ -127,6 +127,10 @@
     (stroke (width 0) (type solid))
     (uuid 060ab5d0-960e-4074-b97e-d191060fbf09)
   )
+  (wire (pts (xy 173.99 105.41) (xy 187.96 105.41))
+    (stroke (width 0) (type default))
+    (uuid 0a4f7f94-4d20-4b69-8451-c88dd228fd30)
+  )
   (wire (pts (xy 96.52 113.03) (xy 96.52 121.92))
     (stroke (width 0) (type default))
     (uuid 16b506ae-f936-454d-a9ba-22f7ac499d83)
@@ -143,6 +147,10 @@
   (wire (pts (xy 87.63 81.28) (xy 87.63 73.66))
     (stroke (width 0) (type default))
     (uuid 2a058e58-9bca-42c9-8682-992579f5e443)
+  )
+  (wire (pts (xy 173.99 107.95) (xy 187.96 107.95))
+    (stroke (width 0) (type default))
+    (uuid 3e1dfecf-713b-4402-9433-bca049e83782)
   )
   (polyline (pts (xy 247.65 20.32) (xy 278.13 20.32))
     (stroke (width 0) (type dash))
@@ -243,7 +251,7 @@
   (symbol (lib_id "MLAB_MECHANICAL:HOLE") (at 255.27 24.13 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 0f7caab5-0819-49b3-9d3c-848595206595)
-    (property "Reference" "M2" (at 255.27 26.67 90)
+    (property "Reference" "M1" (at 255.27 26.67 90)
       (effects (font (size 1.524 1.524)))
     )
     (property "Value" "HOLE" (at 257.81 24.13 0)
@@ -259,7 +267,7 @@
     (instances
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
-          (reference "M2") (unit 1)
+          (reference "M1") (unit 1)
         )
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/5c006114-f78d-4936-a365-c4e7307459e1"
           (reference "M2") (unit 1)
@@ -335,7 +343,7 @@
   (symbol (lib_id "power:GND") (at 275.59 22.86 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 3fd9a9d1-d6ff-4929-bc8e-7e6fded34d7e)
-    (property "Reference" "#PWR016" (at 275.59 29.21 0)
+    (property "Reference" "#PWR01" (at 275.59 29.21 0)
       (effects (font (size 1.524 1.524)) hide)
     )
     (property "Value" "GND" (at 275.59 26.67 0)
@@ -351,7 +359,7 @@
     (instances
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
-          (reference "#PWR016") (unit 1)
+          (reference "#PWR01") (unit 1)
         )
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/5c006114-f78d-4936-a365-c4e7307459e1"
           (reference "#PWR016") (unit 1)
@@ -363,7 +371,7 @@
   (symbol (lib_id "MLAB_MECHANICAL:HOLE") (at 260.35 24.13 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 4054a592-d87e-449f-b3ef-d58167abc7e7)
-    (property "Reference" "M3" (at 260.35 26.67 90)
+    (property "Reference" "M2" (at 260.35 26.67 90)
       (effects (font (size 1.524 1.524)))
     )
     (property "Value" "HOLE" (at 262.89 24.13 0)
@@ -379,7 +387,7 @@
     (instances
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
-          (reference "M3") (unit 1)
+          (reference "M2") (unit 1)
         )
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/5c006114-f78d-4936-a365-c4e7307459e1"
           (reference "M3") (unit 1)
@@ -391,7 +399,7 @@
   (symbol (lib_id "MLAB_MECHANICAL:HOLE") (at 265.43 24.13 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 9d6118cb-affa-4344-8507-72538abdb8a0)
-    (property "Reference" "M4" (at 265.43 26.67 90)
+    (property "Reference" "M3" (at 265.43 26.67 90)
       (effects (font (size 1.524 1.524)))
     )
     (property "Value" "HOLE" (at 267.97 24.13 0)
@@ -407,7 +415,7 @@
     (instances
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
-          (reference "M4") (unit 1)
+          (reference "M3") (unit 1)
         )
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/5c006114-f78d-4936-a365-c4e7307459e1"
           (reference "M4") (unit 1)
@@ -473,7 +481,7 @@
   (symbol (lib_id "MLAB_MECHANICAL:HOLE") (at 270.51 24.13 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid c9b5469c-9b81-4444-ad4c-685d592a460e)
-    (property "Reference" "M5" (at 270.51 26.67 90)
+    (property "Reference" "M4" (at 270.51 26.67 90)
       (effects (font (size 1.524 1.524)))
     )
     (property "Value" "HOLE" (at 273.05 24.13 0)
@@ -489,7 +497,7 @@
     (instances
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
-          (reference "M5") (unit 1)
+          (reference "M4") (unit 1)
         )
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/5c006114-f78d-4936-a365-c4e7307459e1"
           (reference "M5") (unit 1)
@@ -532,6 +540,14 @@
       (effects (font (size 1.524 1.524)) (justify left))
       (uuid 21950400-e2bc-4e9b-9519-e764df138c22)
     )
+    (pin "Set" output (at 187.96 107.95 180)
+      (effects (font (size 1.524 1.524)) (justify left))
+      (uuid 421452c5-68ed-4b32-86e5-1abe56fe9619)
+    )
+    (pin "Reset" output (at 187.96 105.41 180)
+      (effects (font (size 1.524 1.524)) (justify left))
+      (uuid c20cd818-ac81-4da3-835e-64a33b5f1974)
+    )
     (instances
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55" (page "4"))
@@ -572,6 +588,14 @@
     (pin "SDI" input (at 173.99 99.06 0)
       (effects (font (size 1.524 1.524)) (justify right))
       (uuid 608f4d2b-6754-4f07-9a93-a1fcd6850db3)
+    )
+    (pin "Reset" input (at 173.99 105.41 0)
+      (effects (font (size 1.524 1.524)) (justify right))
+      (uuid ded13d2d-ea35-4533-a513-66640c494f0f)
+    )
+    (pin "Set" input (at 173.99 107.95 0)
+      (effects (font (size 1.524 1.524)) (justify right))
+      (uuid fce602c3-9e75-43fe-99fc-204558d2ac9e)
     )
     (instances
       (project "AIRDOS04_base"

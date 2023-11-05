@@ -8,33 +8,33 @@
     (title "AIRDOS04A base board")
     (date "2023-10-23")
     (company "Jakub Kákona <info@ust.cz>")
-    (comment 2 "Airborne semiconductor\\nradiation detector")
+    (comment 2 "Airborne semiconductor\\nionizing radiation detector")
   )
 
   (lib_symbols
-    (symbol "AD8692_1" (in_bom yes) (on_board yes)
-      (property "Reference" "U1" (at 8.89 -2.54 0)
-        (effects (font (size 1.778 1.778)))
+    (symbol "Amplifier_Operational:MCP6001R" (pin_names (offset 0.127)) (in_bom yes) (on_board yes)
+      (property "Reference" "U" (at 0 5.08 0)
+        (effects (font (size 1.27 1.27)) (justify left))
       )
-      (property "Value" "AD8692_1" (at 8.89 -5.08 0)
-        (effects (font (size 1.778 1.778)))
+      (property "Value" "MCP6001R" (at 0 -5.08 0)
+        (effects (font (size 1.27 1.27)) (justify left))
       )
-      (property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (at 0 0 0)
-        (effects (font (size 1.524 1.524)) hide)
-      )
-      (property "Datasheet" "https://www.ti.com/lit/ds/symlink/opa2314.pdf" (at 13.7414 3.0734 0)
-        (effects (font (size 1.524 1.524)) (justify left) hide)
-      )
-      (property "UST_ID" "5c70984412875079b91f879b" (at 0 0 0)
+      (property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "AmpliOp" (at 0 0 0)
+      (property "Datasheet" "http://ww1.microchip.com/downloads/en/DeviceDoc/21733j.pdf" (at 0 5.08 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "Op amp." (at 0 0 0)
+      (property "ki_keywords" "single opamp" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (symbol "AD8692_1_0_1"
+      (property "ki_description" "1MHz, Low-Power Op Amp, SOT-23-5" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_fp_filters" "SOT?23*" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "MCP6001R_0_1"
         (polyline
           (pts
             (xy -5.08 5.08)
@@ -42,44 +42,30 @@
             (xy -5.08 -5.08)
             (xy -5.08 5.08)
           )
-          (stroke (width 0) (type default))
-          (fill (type none))
+          (stroke (width 0.254) (type default))
+          (fill (type background))
+        )
+        (pin power_in line (at -2.54 7.62 270) (length 3.81)
+          (name "V+" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27))))
+        )
+        (pin power_in line (at -2.54 -7.62 90) (length 3.81)
+          (name "V-" (effects (font (size 1.27 1.27))))
+          (number "5" (effects (font (size 1.27 1.27))))
         )
       )
-      (symbol "AD8692_1_1_1"
-        (pin output line (at 12.7 0 180) (length 7.62)
-          (name "~" (effects (font (size 1.016 1.016))))
-          (number "1" (effects (font (size 1.524 1.524))))
+      (symbol "MCP6001R_1_1"
+        (pin output line (at 7.62 0 180) (length 2.54)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
         )
-        (pin input line (at -12.7 -2.54 0) (length 7.62)
-          (name "-" (effects (font (size 1.016 1.016))))
-          (number "2" (effects (font (size 1.524 1.524))))
+        (pin input line (at -7.62 2.54 0) (length 2.54)
+          (name "+" (effects (font (size 1.27 1.27))))
+          (number "3" (effects (font (size 1.27 1.27))))
         )
-        (pin input line (at -12.7 2.54 0) (length 7.62)
-          (name "+" (effects (font (size 1.016 1.016))))
-          (number "3" (effects (font (size 1.524 1.524))))
-        )
-      )
-      (symbol "AD8692_1_2_1"
-        (pin power_in line (at -2.54 -10.16 90) (length 6.35)
-          (name "V-" (effects (font (size 1.016 1.016))))
-          (number "4" (effects (font (size 1.524 1.524))))
-        )
-        (pin input line (at -12.7 2.54 0) (length 7.62)
-          (name "+" (effects (font (size 1.016 1.016))))
-          (number "5" (effects (font (size 1.524 1.524))))
-        )
-        (pin input line (at -12.7 -2.54 0) (length 7.62)
-          (name "-" (effects (font (size 1.016 1.016))))
-          (number "6" (effects (font (size 1.524 1.524))))
-        )
-        (pin output line (at 12.7 0 180) (length 7.62)
-          (name "~" (effects (font (size 1.016 1.016))))
-          (number "7" (effects (font (size 1.524 1.524))))
-        )
-        (pin power_in line (at -2.54 10.16 270) (length 6.35)
-          (name "V+" (effects (font (size 1.016 1.016))))
-          (number "8" (effects (font (size 1.524 1.524))))
+        (pin input line (at -7.62 -2.54 0) (length 2.54)
+          (name "-" (effects (font (size 1.27 1.27))))
+          (number "4" (effects (font (size 1.27 1.27))))
         )
       )
     )
@@ -363,29 +349,29 @@
         )
       )
     )
-    (symbol "MLAB_IO:AD8692" (in_bom yes) (on_board yes)
-      (property "Reference" "U1" (at 8.89 -2.54 0)
-        (effects (font (size 1.778 1.778)))
+    (symbol "MLAB_IO:AD8691" (pin_names (offset 0.127)) (in_bom yes) (on_board yes)
+      (property "Reference" "U" (at 0 5.08 0)
+        (effects (font (size 1.27 1.27)) (justify left))
       )
-      (property "Value" "AD8692" (at 8.89 -5.08 0)
-        (effects (font (size 1.778 1.778)))
+      (property "Value" "AD8691" (at 0 -5.08 0)
+        (effects (font (size 1.27 1.27)) (justify left))
       )
-      (property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (at 0 0 0)
-        (effects (font (size 1.524 1.524)) hide)
-      )
-      (property "Datasheet" "https://www.ti.com/lit/ds/symlink/opa2314.pdf" (at 13.7414 3.0734 0)
-        (effects (font (size 1.524 1.524)) (justify left) hide)
-      )
-      (property "UST_ID" "5c70984412875079b91f879b" (at 0 0 0)
+      (property "Footprint" "TSOT-5" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "AmpliOp" (at 0 0 0)
+      (property "Datasheet" "" (at 0 5.08 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "Op amp." (at 0 0 0)
+      (property "ki_keywords" "single opamp" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (symbol "AD8692_0_1"
+      (property "ki_description" "Single Rail-to-Rail High Output Current Operational Amplifiers, SOT-23-5" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_fp_filters" "SOT?23*" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "AD8691_0_1"
         (polyline
           (pts
             (xy -5.08 5.08)
@@ -393,44 +379,30 @@
             (xy -5.08 -5.08)
             (xy -5.08 5.08)
           )
-          (stroke (width 0) (type default))
-          (fill (type none))
+          (stroke (width 0.254) (type default))
+          (fill (type background))
+        )
+        (pin power_in line (at -2.54 -7.62 90) (length 3.81)
+          (name "V-" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27))))
+        )
+        (pin power_in line (at -2.54 7.62 270) (length 3.81)
+          (name "V+" (effects (font (size 1.27 1.27))))
+          (number "5" (effects (font (size 1.27 1.27))))
         )
       )
-      (symbol "AD8692_1_1"
-        (pin output line (at 12.7 0 180) (length 7.62)
-          (name "~" (effects (font (size 1.016 1.016))))
-          (number "1" (effects (font (size 1.524 1.524))))
+      (symbol "AD8691_1_1"
+        (pin output line (at 7.62 0 180) (length 2.54)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
         )
-        (pin input line (at -12.7 -2.54 0) (length 7.62)
-          (name "-" (effects (font (size 1.016 1.016))))
-          (number "2" (effects (font (size 1.524 1.524))))
+        (pin input line (at -7.62 2.54 0) (length 2.54)
+          (name "+" (effects (font (size 1.27 1.27))))
+          (number "3" (effects (font (size 1.27 1.27))))
         )
-        (pin input line (at -12.7 2.54 0) (length 7.62)
-          (name "+" (effects (font (size 1.016 1.016))))
-          (number "3" (effects (font (size 1.524 1.524))))
-        )
-      )
-      (symbol "AD8692_2_1"
-        (pin power_in line (at -2.54 -10.16 90) (length 6.35)
-          (name "V-" (effects (font (size 1.016 1.016))))
-          (number "4" (effects (font (size 1.524 1.524))))
-        )
-        (pin input line (at -12.7 2.54 0) (length 7.62)
-          (name "+" (effects (font (size 1.016 1.016))))
-          (number "5" (effects (font (size 1.524 1.524))))
-        )
-        (pin input line (at -12.7 -2.54 0) (length 7.62)
-          (name "-" (effects (font (size 1.016 1.016))))
-          (number "6" (effects (font (size 1.524 1.524))))
-        )
-        (pin output line (at 12.7 0 180) (length 7.62)
-          (name "~" (effects (font (size 1.016 1.016))))
-          (number "7" (effects (font (size 1.524 1.524))))
-        )
-        (pin power_in line (at -2.54 10.16 270) (length 6.35)
-          (name "V+" (effects (font (size 1.016 1.016))))
-          (number "8" (effects (font (size 1.524 1.524))))
+        (pin input line (at -7.62 -2.54 0) (length 2.54)
+          (name "-" (effects (font (size 1.27 1.27))))
+          (number "4" (effects (font (size 1.27 1.27))))
         )
       )
     )
@@ -836,6 +808,9 @@
   (junction (at 212.09 113.03) (diameter 1.016) (color 0 0 0 0)
     (uuid 3ce2b556-475f-48f8-bcb5-ffb4a421100c)
   )
+  (junction (at 157.48 118.11) (diameter 0) (color 0 0 0 0)
+    (uuid 3ef00907-d57e-4782-8173-2995f3659733)
+  )
   (junction (at 120.65 79.756) (diameter 0) (color 0 0 0 0)
     (uuid 51c58970-3934-4fec-b81b-0736622bd64e)
   )
@@ -850,6 +825,9 @@
   )
   (junction (at 212.09 132.08) (diameter 1.016) (color 0 0 0 0)
     (uuid 72e584c8-f67c-46c8-bb04-e3739a37281b)
+  )
+  (junction (at 147.32 118.11) (diameter 0) (color 0 0 0 0)
+    (uuid 7ec99ef9-4b44-4ad9-b5ab-2914ffaa99ad)
   )
   (junction (at 184.15 132.08) (diameter 1.016) (color 0 0 0 0)
     (uuid b093ba72-8fed-49df-9c7c-a4c17b73997c)
@@ -888,10 +866,6 @@
   (no_connect (at 31.75 48.26) (uuid be02779c-bd84-423c-abb1-6ec19f0f2f14))
   (no_connect (at 52.07 50.8) (uuid d8aafecf-3817-42e6-8cde-53db481b5215))
 
-  (wire (pts (xy 210.82 113.03) (xy 212.09 113.03))
-    (stroke (width 0) (type solid))
-    (uuid 028c70cf-2a8e-4cf5-8476-b43cff9f0dbc)
-  )
   (wire (pts (xy 34.29 30.48) (xy 34.29 29.21))
     (stroke (width 0) (type default))
     (uuid 03a3b85d-3cb8-44ae-a455-0053d03ce9d6)
@@ -923,6 +897,10 @@
   (wire (pts (xy 220.98 113.03) (xy 224.79 113.03))
     (stroke (width 0) (type default))
     (uuid 0f4b31ef-65c4-4211-aa18-63e1da72b82f)
+  )
+  (wire (pts (xy 157.48 118.11) (xy 157.48 119.38))
+    (stroke (width 0) (type default))
+    (uuid 10f096e2-e16b-4fba-b862-7bd36cf22110)
   )
   (wire (pts (xy 119.38 92.71) (xy 120.65 92.71))
     (stroke (width 0) (type default))
@@ -988,6 +966,10 @@
     (stroke (width 0) (type solid))
     (uuid 3bb1f1d0-1f61-4ec0-9e80-6d21bd97340d)
   )
+  (wire (pts (xy 168.91 125.73) (xy 168.91 128.27))
+    (stroke (width 0) (type solid))
+    (uuid 3bdfa457-37dd-4bfb-9b5d-cbcdff769376)
+  )
   (wire (pts (xy 212.09 113.03) (xy 213.36 113.03))
     (stroke (width 0) (type solid))
     (uuid 4294c5d8-3644-4f38-b91c-9d0d28418250)
@@ -995,6 +977,10 @@
   (wire (pts (xy 86.36 92.71) (xy 92.71 92.71))
     (stroke (width 0) (type solid))
     (uuid 46e26d5d-72ca-4bb6-9372-6858069d4de1)
+  )
+  (wire (pts (xy 151.13 100.33) (xy 151.13 101.6))
+    (stroke (width 0) (type default))
+    (uuid 4b70d738-9c24-483c-afc3-56d4cae110f6)
   )
   (wire (pts (xy 138.43 92.71) (xy 147.32 92.71))
     (stroke (width 0) (type solid))
@@ -1020,11 +1006,7 @@
     (stroke (width 0) (type default))
     (uuid 541a1838-87f1-460e-911c-997080dece46)
   )
-  (wire (pts (xy 195.58 124.46) (xy 195.58 123.19))
-    (stroke (width 0) (type solid))
-    (uuid 561fff1c-0a00-4ce9-866b-2706ba54e234)
-  )
-  (wire (pts (xy 185.42 115.57) (xy 184.15 115.57))
+  (wire (pts (xy 184.15 115.57) (xy 190.5 115.57))
     (stroke (width 0) (type solid))
     (uuid 586f77b0-2112-4c0f-b6a9-e985ded9fa30)
   )
@@ -1043,6 +1025,10 @@
   (wire (pts (xy 107.95 79.756) (xy 112.395 79.756))
     (stroke (width 0) (type default))
     (uuid 66b252b0-3ff5-446d-8210-8ff99a49d1d7)
+  )
+  (wire (pts (xy 147.32 118.11) (xy 157.48 118.11))
+    (stroke (width 0) (type default))
+    (uuid 67a3c3cf-7e00-40ab-b17b-ecc799c0d72e)
   )
   (wire (pts (xy 62.23 157.48) (xy 67.31 157.48))
     (stroke (width 0) (type solid))
@@ -1108,6 +1094,10 @@
     (stroke (width 0) (type default))
     (uuid 9272f309-4134-4218-9f74-5b20f2a4c8e2)
   )
+  (wire (pts (xy 147.32 123.19) (xy 147.32 118.11))
+    (stroke (width 0) (type default))
+    (uuid 9279ceb4-258c-4a74-8958-0262fb9adcec)
+  )
   (wire (pts (xy 31.75 50.8) (xy 30.48 50.8))
     (stroke (width 0) (type default))
     (uuid 95097232-2715-4bea-8069-aa9bda6e56b7)
@@ -1116,11 +1106,11 @@
     (stroke (width 0) (type solid))
     (uuid 9582e574-328c-4c5a-818b-bcf06713630f)
   )
-  (wire (pts (xy 195.58 81.28) (xy 195.58 102.87))
+  (wire (pts (xy 195.58 81.28) (xy 195.58 105.41))
     (stroke (width 0) (type default))
     (uuid 9ba4f83b-abd3-4f61-8cc6-5a89e778e545)
   )
-  (wire (pts (xy 165.1 110.49) (xy 163.83 110.49))
+  (wire (pts (xy 157.48 110.49) (xy 165.1 110.49))
     (stroke (width 0) (type solid))
     (uuid 9dcba19f-0b20-4e70-b264-d4148efaabdf)
   )
@@ -1168,6 +1158,10 @@
     (stroke (width 0) (type default))
     (uuid bb6f1592-635c-4821-bca0-5f08d946f3d0)
   )
+  (wire (pts (xy 195.58 120.65) (xy 195.58 124.46))
+    (stroke (width 0) (type default))
+    (uuid bcaa3c45-e01c-438c-b9f0-8d0f316228a3)
+  )
   (wire (pts (xy 143.51 46.99) (xy 154.94 46.99))
     (stroke (width 0) (type solid))
     (uuid bd1f283e-7ede-44a5-b16d-9bfe1a36402b)
@@ -1180,13 +1174,33 @@
     (stroke (width 0) (type solid))
     (uuid c26f91d4-672c-4612-9e7f-290d922d5102)
   )
+  (wire (pts (xy 168.91 118.11) (xy 168.91 120.65))
+    (stroke (width 0) (type default))
+    (uuid c28a94d5-cc4c-4c00-9859-025db1650633)
+  )
+  (wire (pts (xy 168.91 118.11) (xy 157.48 118.11))
+    (stroke (width 0) (type solid))
+    (uuid c317c128-03d8-4900-a80e-34720eff742b)
+  )
+  (wire (pts (xy 157.48 128.27) (xy 157.48 127))
+    (stroke (width 0) (type solid))
+    (uuid c3c7883a-c04f-420c-9190-0ef51fd671e9)
+  )
   (wire (pts (xy 217.17 81.28) (xy 205.74 81.28))
     (stroke (width 0) (type solid))
     (uuid c6cb36a2-547e-4502-86d0-85ca1a784a30)
   )
+  (wire (pts (xy 147.32 100.33) (xy 151.13 100.33))
+    (stroke (width 0) (type default))
+    (uuid c7b4ab19-19a3-4a84-b1f6-e28463960a16)
+  )
   (wire (pts (xy 41.91 29.21) (xy 41.91 40.64))
     (stroke (width 0) (type default))
     (uuid cc160da1-4168-4866-925c-b6990ed35d0a)
+  )
+  (wire (pts (xy 147.32 133.35) (xy 147.32 130.81))
+    (stroke (width 0) (type default))
+    (uuid ccc6ea44-768b-4dfb-9899-2e4da3ef4312)
   )
   (wire (pts (xy 165.1 110.49) (xy 166.37 110.49))
     (stroke (width 0) (type solid))
@@ -1199,6 +1213,10 @@
   (wire (pts (xy 138.43 92.71) (xy 138.43 107.95))
     (stroke (width 0) (type solid))
     (uuid db0c2452-a39d-4bae-8559-5eef0ec46cf8)
+  )
+  (wire (pts (xy 205.74 113.03) (xy 212.09 113.03))
+    (stroke (width 0) (type solid))
+    (uuid dc5a447a-aa1d-47cf-8b01-9fb41f5fe230)
   )
   (wire (pts (xy 52.07 133.35) (xy 52.07 135.89))
     (stroke (width 0) (type default))
@@ -1216,7 +1234,7 @@
     (stroke (width 0) (type solid))
     (uuid e1492955-f92c-4bba-b050-c694b66a89ec)
   )
-  (wire (pts (xy 175.26 110.49) (xy 185.42 110.49))
+  (wire (pts (xy 175.26 110.49) (xy 190.5 110.49))
     (stroke (width 0) (type solid))
     (uuid e1866cc4-1f06-4010-a334-43a72238cc82)
   )
@@ -1232,7 +1250,7 @@
     (stroke (width 0) (type default))
     (uuid e6971d73-f9ff-4629-bcb9-ba2bf2c78ea7)
   )
-  (wire (pts (xy 134.62 113.03) (xy 138.43 113.03))
+  (wire (pts (xy 134.62 113.03) (xy 142.24 113.03))
     (stroke (width 0) (type solid))
     (uuid e98cd16a-bd20-4b3f-845f-0271d85b9f86)
   )
@@ -1248,6 +1266,10 @@
     (stroke (width 0) (type solid))
     (uuid f0e878e8-7252-421e-8032-676ee64be141)
   )
+  (wire (pts (xy 147.32 102.87) (xy 147.32 100.33))
+    (stroke (width 0) (type default))
+    (uuid f0f416a5-fd0c-42f6-9a57-ad9ba7d462ea)
+  )
   (wire (pts (xy 41.91 26.67) (xy 41.91 29.21))
     (stroke (width 0) (type default))
     (uuid f35709a8-b57e-465c-ac29-1d6ad3cdd810)
@@ -1255,6 +1277,10 @@
   (wire (pts (xy 30.48 50.8) (xy 30.48 52.07))
     (stroke (width 0) (type default))
     (uuid f441711c-55d4-4d6c-856d-1687bc1374ff)
+  )
+  (wire (pts (xy 138.43 107.95) (xy 142.24 107.95))
+    (stroke (width 0) (type default))
+    (uuid f52c0c21-bda7-4db3-8955-d4114726e515)
   )
   (wire (pts (xy 52.07 165.1) (xy 52.07 167.64))
     (stroke (width 0) (type solid))
@@ -1398,7 +1424,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR072") (unit 1)
+          (reference "#PWR044") (unit 1)
         )
       )
     )
@@ -1444,6 +1470,36 @@
     )
   )
 
+  (symbol (lib_id "power:GNDA") (at 168.91 128.27 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 080bfc3b-f895-4b7d-8038-eb2f547d7d42)
+    (property "Reference" "#PWR06" (at 168.91 134.62 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GNDA" (at 168.91 132.4031 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 168.91 128.27 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 168.91 128.27 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 58d1f347-4c34-4840-902c-9385f4473c5d))
+    (instances
+      (project "PIND02"
+        (path "/2ae32537-a16f-4c5b-a56b-c6dddfb8ddb4"
+          (reference "#PWR06") (unit 1)
+        )
+      )
+      (project "AIRDOS04_base"
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
+          (reference "#PWR052") (unit 1)
+        )
+      )
+    )
+  )
+
   (symbol (lib_id "Device:D_Photo") (at 133.35 92.71 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 085af551-44f8-4d23-b6f9-60e60962f991)
@@ -1477,7 +1533,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "D3") (unit 1)
+          (reference "D1") (unit 1)
         )
       )
     )
@@ -1516,7 +1572,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "R24") (unit 1)
+          (reference "R20") (unit 1)
         )
       )
     )
@@ -1546,7 +1602,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR047") (unit 1)
+          (reference "#PWR035") (unit 1)
         )
       )
     )
@@ -1585,7 +1641,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "R18") (unit 1)
+          (reference "R14") (unit 1)
         )
       )
     )
@@ -1624,7 +1680,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "R16") (unit 1)
+          (reference "R12") (unit 1)
         )
       )
     )
@@ -1654,7 +1710,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR070") (unit 1)
+          (reference "#PWR042") (unit 1)
         )
       )
     )
@@ -1693,7 +1749,49 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C44") (unit 1)
+          (reference "C29") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:C_Polarized_Small") (at 168.91 123.19 0) (mirror y) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 1dd7efc6-6ab3-4110-9375-c9a4687e1a36)
+    (property "Reference" "C50" (at 166.751 121.4318 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "10uF" (at 167.64 125.73 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A" (at 168.91 123.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "https://eu.mouser.com/datasheet/2/40/TAJ-3165264.pdf" (at 168.91 123.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "UST_ID" "65089dd0462c6d9e720542b3" (at 168.91 123.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 02c2b9a6-b75f-46ad-8ca9-93b1e13828a3))
+    (pin "2" (uuid 6403540b-abbb-4f5f-ae8d-249869757498))
+    (instances
+      (project "USTSIPIN02"
+        (path "/0a87ced0-2af2-43c5-a56c-218f7013d76f/00000000-0000-0000-0000-00005c69bcb4"
+          (reference "C50") (unit 1)
+        )
+        (path "/0a87ced0-2af2-43c5-a56c-218f7013d76f/df946b97-ee48-4dc9-bb94-44edab77d662"
+          (reference "C53") (unit 1)
+        )
+      )
+      (project "PIND02"
+        (path "/2ae32537-a16f-4c5b-a56b-c6dddfb8ddb4"
+          (reference "C7") (unit 1)
+        )
+      )
+      (project "AIRDOS04_base"
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
+          (reference "C34") (unit 1)
         )
       )
     )
@@ -1732,7 +1830,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "R17") (unit 1)
+          (reference "R13") (unit 1)
         )
       )
     )
@@ -1777,7 +1875,7 @@
           (reference "C25") (unit 1)
         )
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C11") (unit 1)
+          (reference "C36") (unit 1)
         )
       )
     )
@@ -1816,7 +1914,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C35") (unit 1)
+          (reference "C20") (unit 1)
         )
       )
     )
@@ -1855,7 +1953,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C46") (unit 1)
+          (reference "C31") (unit 1)
         )
       )
     )
@@ -1894,7 +1992,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "R15") (unit 1)
+          (reference "R11") (unit 1)
         )
       )
     )
@@ -1933,7 +2031,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C37") (unit 1)
+          (reference "C22") (unit 1)
         )
       )
     )
@@ -1972,7 +2070,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "R23") (unit 1)
+          (reference "R18") (unit 1)
         )
       )
     )
@@ -2007,7 +2105,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR019") (unit 1)
+          (reference "#PWR033") (unit 1)
         )
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/5c006114-f78d-4936-a365-c4e7307459e1"
           (reference "#PWR067") (unit 1)
@@ -2052,7 +2150,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C41") (unit 1)
+          (reference "C26") (unit 1)
         )
       )
     )
@@ -2091,7 +2189,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "R20") (unit 1)
+          (reference "R16") (unit 1)
         )
       )
     )
@@ -2130,7 +2228,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "R14") (unit 1)
+          (reference "R10") (unit 1)
         )
       )
     )
@@ -2172,7 +2270,37 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C42") (unit 1)
+          (reference "C27") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:GNDA") (at 157.48 128.27 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 51efad50-56f4-438b-aadf-3c4e757535d9)
+    (property "Reference" "#PWR05" (at 157.48 134.62 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GNDA" (at 157.48 132.4031 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 157.48 128.27 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 157.48 128.27 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid fd8f18b4-8fe9-4938-a13a-f1a88bc94bdf))
+    (instances
+      (project "PIND02"
+        (path "/2ae32537-a16f-4c5b-a56b-c6dddfb8ddb4"
+          (reference "#PWR05") (unit 1)
+        )
+      )
+      (project "AIRDOS04_base"
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
+          (reference "#PWR051") (unit 1)
         )
       )
     )
@@ -2202,7 +2330,83 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR071") (unit 1)
+          (reference "#PWR043") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "MLAB_IO:AD8691") (at 198.12 113.03 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 57e5c45f-ad25-4afb-b813-04dbc65692da)
+    (property "Reference" "U2" (at 199.39 109.22 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "AD8691" (at 199.39 118.11 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "Package_TO_SOT_SMD:TSOT-23-5_HandSoldering" (at 198.12 113.03 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/AD8691_8692_8694.pdf" (at 198.12 107.95 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "UST_ID" "5d47c084128750448e6b4671" (at 198.12 113.03 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "2" (uuid c49ec42e-1d22-40c3-9c57-432c29aa5ba6))
+    (pin "5" (uuid 59512566-d5e2-46d3-8bd0-1d8d03330f62))
+    (pin "1" (uuid 3da59f44-5d03-4ab8-af39-832a1cf4dc11))
+    (pin "3" (uuid 2efbad35-2278-42c5-9b67-9cc9f05612e4))
+    (pin "4" (uuid b5502d18-b854-4ac2-87bc-8e3b079361df))
+    (instances
+      (project "AIRDOS04_base"
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
+          (reference "U2") (unit 1)
+        )
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/5c006114-f78d-4936-a365-c4e7307459e1"
+          (reference "U1") (unit 1)
+        )
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
+          (reference "U9") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:+5V") (at 147.32 133.35 0) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 585518ee-7be4-4b0e-8a83-4a8c2ee70753)
+    (property "Reference" "#PWR0152" (at 147.32 129.54 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+5V" (at 147.701 137.7442 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 147.32 133.35 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 147.32 133.35 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 3da648ea-c3b4-4ef1-809e-fb3c965e1f99))
+    (instances
+      (project "USTSIPIN02"
+        (path "/0a87ced0-2af2-43c5-a56c-218f7013d76f/00000000-0000-0000-0000-00005c69bcb4"
+          (reference "#PWR0152") (unit 1)
+        )
+      )
+      (project "PIND02"
+        (path "/2ae32537-a16f-4c5b-a56b-c6dddfb8ddb4"
+          (reference "#PWR028") (unit 1)
+        )
+      )
+      (project "AIRDOS04_base"
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
+          (reference "#PWR054") (unit 1)
+        )
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/5c006114-f78d-4936-a365-c4e7307459e1"
+          (reference "#PWR067") (unit 1)
         )
       )
     )
@@ -2241,7 +2445,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "R3") (unit 1)
+          (reference "R21") (unit 1)
         )
       )
     )
@@ -2271,52 +2475,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR065") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "MLAB_IO:AD8692") (at 198.12 113.03 0) (unit 2)
-    (in_bom yes) (on_board yes) (dnp no)
-    (uuid 703a0d72-0642-4d7f-994e-220a481c7033)
-    (property "Reference" "U1" (at 200.66 115.57 0)
-      (effects (font (size 1.778 1.778)) (justify left))
-    )
-    (property "Value" "OPA2314" (at 198.12 118.11 0)
-      (effects (font (size 1.778 1.778)) (justify left))
-    )
-    (property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (at 198.12 113.03 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/opa2314.pdf" (at 211.8614 116.1034 0)
-      (effects (font (size 1.524 1.524)) (justify left) hide)
-    )
-    (property "UST_ID" "5c70984412875079b91f879b" (at 198.12 113.03 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 14a2c6d4-0416-4155-a5fb-8660a7d33475))
-    (pin "2" (uuid 513bbf5b-945a-413e-9715-6fdf747657a0))
-    (pin "3" (uuid 468b6d9d-7bb0-4d7a-88a0-235a8e55c932))
-    (pin "4" (uuid 9f8e042a-adc9-4beb-bd97-94deffb468f4))
-    (pin "5" (uuid 5bad950b-ff65-4909-b416-4efdc8d16981))
-    (pin "6" (uuid a71c4a9c-1a8f-4fd8-9594-dd751833b33e))
-    (pin "7" (uuid 1349c14a-67c0-44d6-a4f6-97945c6ca86a))
-    (pin "8" (uuid 75d2dfcd-720f-4d26-a492-4b020497ad85))
-    (instances
-      (project "USTSIPIN02"
-        (path "/0a87ced0-2af2-43c5-a56c-218f7013d76f/df946b97-ee48-4dc9-bb94-44edab77d662"
-          (reference "U1") (unit 2)
-        )
-      )
-      (project "PIND02"
-        (path "/2ae32537-a16f-4c5b-a56b-c6dddfb8ddb4"
-          (reference "U1") (unit 2)
-        )
-      )
-      (project "AIRDOS04_base"
-        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "U9") (unit 2)
+          (reference "#PWR039") (unit 1)
         )
       )
     )
@@ -2357,7 +2516,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR073") (unit 1)
+          (reference "#PWR046") (unit 1)
         )
       )
     )
@@ -2396,7 +2555,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C43") (unit 1)
+          (reference "C28") (unit 1)
         )
       )
     )
@@ -2426,7 +2585,39 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR078") (unit 1)
+          (reference "#PWR050") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Amplifier_Operational:MCP6001R") (at 149.86 110.49 0) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 7f3f42bd-11fe-4e38-9822-a7d5dc6613c4)
+    (property "Reference" "U8" (at 153.67 114.3 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "OPA314" (at 158.75 106.68 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 149.86 110.49 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/opa314.pdf" (at 149.86 115.57 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "UST_ID" "5c70984412875079b91f879a" (at 149.86 110.49 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "2" (uuid e72b169a-0a1c-4b7a-8766-d7620aa34409))
+    (pin "5" (uuid a2aa9fa3-71d2-4d7e-8eb4-f817e1daeb0a))
+    (pin "1" (uuid 3069d77e-b30a-446d-9567-db0eb368564e))
+    (pin "3" (uuid e48b66dd-4aeb-481c-852b-4fcefd2aa7f9))
+    (pin "4" (uuid e4dc3728-0934-49d2-a8f1-9a1986fee8f4))
+    (instances
+      (project "AIRDOS04_base"
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
+          (reference "U8") (unit 1)
         )
       )
     )
@@ -2467,7 +2658,7 @@
           (reference "U6") (unit 1)
         )
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "U2") (unit 1)
+          (reference "U10") (unit 1)
         )
       )
     )
@@ -2506,7 +2697,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "R21") (unit 1)
+          (reference "R17") (unit 1)
         )
       )
     )
@@ -2536,7 +2727,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR068") (unit 1)
+          (reference "#PWR041") (unit 1)
         )
       )
     )
@@ -2566,7 +2757,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR064") (unit 1)
+          (reference "#PWR038") (unit 1)
         )
       )
     )
@@ -2605,7 +2796,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C40") (unit 1)
+          (reference "C25") (unit 1)
         )
       )
     )
@@ -2644,7 +2835,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "R19") (unit 1)
+          (reference "R15") (unit 1)
         )
       )
     )
@@ -2674,7 +2865,46 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR018") (unit 1)
+          (reference "#PWR032") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:C") (at 157.48 123.19 0) (mirror y) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid a0085063-68e5-4b80-8c31-1cf3dd196fce)
+    (property "Reference" "C6" (at 154.559 122.0216 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "100nF" (at 154.559 124.333 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 156.5148 127 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 157.48 123.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "UST_ID" "6508260b462c6d9e720541f1" (at 157.48 123.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 618afa73-3b1a-4233-a0e1-efdf3cae6fe5))
+    (pin "2" (uuid a78cb15c-ebaa-4d11-9e66-9b7edae55d39))
+    (instances
+      (project "USTSIPIN02"
+        (path "/0a87ced0-2af2-43c5-a56c-218f7013d76f/df946b97-ee48-4dc9-bb94-44edab77d662"
+          (reference "C6") (unit 1)
+        )
+      )
+      (project "PIND02"
+        (path "/2ae32537-a16f-4c5b-a56b-c6dddfb8ddb4"
+          (reference "C6") (unit 1)
+        )
+      )
+      (project "AIRDOS04_base"
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
+          (reference "C33") (unit 1)
         )
       )
     )
@@ -2713,7 +2943,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "R25") (unit 1)
+          (reference "R22") (unit 1)
         )
       )
     )
@@ -2743,7 +2973,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR077") (unit 1)
+          (reference "#PWR049") (unit 1)
         )
       )
     )
@@ -2778,7 +3008,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR020") (unit 1)
+          (reference "#PWR040") (unit 1)
         )
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/5c006114-f78d-4936-a365-c4e7307459e1"
           (reference "#PWR067") (unit 1)
@@ -2820,7 +3050,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C45") (unit 1)
+          (reference "C30") (unit 1)
         )
       )
     )
@@ -2859,7 +3089,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C48") (unit 1)
+          (reference "C35") (unit 1)
         )
       )
     )
@@ -2898,7 +3128,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C38") (unit 1)
+          (reference "C23") (unit 1)
         )
       )
     )
@@ -2928,7 +3158,46 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR046") (unit 1)
+          (reference "#PWR034") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 147.32 127 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid c365c435-cc2d-4dc0-9eff-3c446f64e246)
+    (property "Reference" "R2" (at 144.78 129.54 90)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "470R" (at 147.32 127 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 145.542 127 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (at 147.32 127 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "UST_ID" "5c70984512875079b91f8986" (at 147.32 127 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 49aa185d-c580-4d10-9afa-4b7c68c52602))
+    (pin "2" (uuid 972f96ea-b15e-485d-afff-218f97527f99))
+    (instances
+      (project "USTSIPIN02"
+        (path "/0a87ced0-2af2-43c5-a56c-218f7013d76f/df946b97-ee48-4dc9-bb94-44edab77d662"
+          (reference "R2") (unit 1)
+        )
+      )
+      (project "PIND02"
+        (path "/2ae32537-a16f-4c5b-a56b-c6dddfb8ddb4"
+          (reference "R2") (unit 1)
+        )
+      )
+      (project "AIRDOS04_base"
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
+          (reference "R19") (unit 1)
         )
       )
     )
@@ -2958,7 +3227,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR052") (unit 1)
+          (reference "#PWR036") (unit 1)
         )
       )
     )
@@ -3000,7 +3269,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C36") (unit 1)
+          (reference "C21") (unit 1)
         )
       )
     )
@@ -3037,7 +3306,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C26") (unit 1)
+          (reference "C19") (unit 1)
         )
       )
     )
@@ -3079,7 +3348,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C39") (unit 1)
+          (reference "C24") (unit 1)
         )
       )
     )
@@ -3120,52 +3389,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR074") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_name "AD8692_1") (lib_id "MLAB_IO:AD8692") (at 151.13 110.49 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
-    (uuid cd02357e-c827-4ceb-b846-f463fd588f6f)
-    (property "Reference" "U1" (at 156.21 106.68 0)
-      (effects (font (size 1.778 1.778)))
-    )
-    (property "Value" "OPA2314" (at 156.21 102.87 0)
-      (effects (font (size 1.778 1.778)))
-    )
-    (property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (at 151.13 110.49 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/opa2314.pdf" (at 164.8714 113.5634 0)
-      (effects (font (size 1.524 1.524)) (justify left) hide)
-    )
-    (property "UST_ID" "5c70984412875079b91f879b" (at 151.13 110.49 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 92c857eb-2592-48e6-9337-134bc497f6b5))
-    (pin "2" (uuid 3a3ffe06-723b-43b9-8011-fc5b10acf361))
-    (pin "3" (uuid f4bf38ba-6f2a-40f5-a454-20b605839966))
-    (pin "4" (uuid c7b0ab76-0453-4cff-9764-f649bd258ac3))
-    (pin "5" (uuid 876cee24-9d0d-4bf5-96af-6989f48dbd96))
-    (pin "6" (uuid c84de63d-5d6c-49e1-a604-e763acf7cf24))
-    (pin "7" (uuid 3da9e3d0-f485-4d0e-99e4-d791f87aa113))
-    (pin "8" (uuid 232fe859-3ec6-476f-a1fb-6e32d93b224a))
-    (instances
-      (project "USTSIPIN02"
-        (path "/0a87ced0-2af2-43c5-a56c-218f7013d76f/df946b97-ee48-4dc9-bb94-44edab77d662"
-          (reference "U1") (unit 1)
-        )
-      )
-      (project "PIND02"
-        (path "/2ae32537-a16f-4c5b-a56b-c6dddfb8ddb4"
-          (reference "U1") (unit 1)
-        )
-      )
-      (project "AIRDOS04_base"
-        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "U9") (unit 1)
+          (reference "#PWR047") (unit 1)
         )
       )
     )
@@ -3236,7 +3460,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR054") (unit 1)
+          (reference "#PWR037") (unit 1)
         )
       )
     )
@@ -3272,7 +3496,7 @@
           (reference "#PWR042") (unit 1)
         )
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR022") (unit 1)
+          (reference "#PWR055") (unit 1)
         )
       )
     )
@@ -3307,7 +3531,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR021") (unit 1)
+          (reference "#PWR053") (unit 1)
         )
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/5c006114-f78d-4936-a365-c4e7307459e1"
           (reference "#PWR067") (unit 1)
@@ -3349,7 +3573,37 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "C47") (unit 1)
+          (reference "C32") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:GNDA") (at 151.13 101.6 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid e3e6e9c1-a7e4-4229-a445-2fccc8ac2e14)
+    (property "Reference" "#PWR011" (at 151.13 107.95 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GNDA" (at 151.13 105.7331 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 151.13 101.6 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 151.13 101.6 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 83d30d27-1149-4c7a-8085-f5a33ca409fd))
+    (instances
+      (project "PIND02"
+        (path "/2ae32537-a16f-4c5b-a56b-c6dddfb8ddb4"
+          (reference "#PWR011") (unit 1)
+        )
+      )
+      (project "AIRDOS04_base"
+        (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
+          (reference "#PWR045") (unit 1)
         )
       )
     )
@@ -3379,7 +3633,7 @@
       )
       (project "AIRDOS04_base"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR075") (unit 1)
+          (reference "#PWR048") (unit 1)
         )
       )
     )
@@ -3410,7 +3664,7 @@
           (reference "#PWR043") (unit 1)
         )
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
-          (reference "#PWR031") (unit 1)
+          (reference "#PWR056") (unit 1)
         )
       )
     )
