@@ -1983,8 +1983,8 @@
     (property "UST_ID" "5c70984512875079b91f8986" (at 195.58 72.39 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid af451f8b-a421-4cc6-84f8-5e1056eb78dc))
-    (pin "2" (uuid 7f8840a5-4f0c-49cd-b5c3-7485363c9835))
+    (pin "1" (uuid 23caf2c1-2fc9-4190-a6e3-9acb1d2dbc75))
+    (pin "2" (uuid c5f5bf74-539f-4538-aedd-30f839636a0b))
     (instances
       (project "USTSIPIN02"
         (path "/0a87ced0-2af2-43c5-a56c-218f7013d76f/df946b97-ee48-4dc9-bb94-44edab77d662"
@@ -3119,8 +3119,8 @@
     (property "UST_ID" "6508260b462c6d9e720541f1" (at 205.74 86.36 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 47594164-bf24-41e8-8cbd-ea31f1db9994))
-    (pin "2" (uuid 69fa3623-9d34-4c9e-aa42-3f7c253ecde0))
+    (pin "1" (uuid 80377f57-40f5-4924-9e9c-aa046cebd830))
+    (pin "2" (uuid 0c535335-da02-45ed-b7a5-684f45c5fc48))
     (instances
       (project "USTSIPIN02"
         (path "/0a87ced0-2af2-43c5-a56c-218f7013d76f/df946b97-ee48-4dc9-bb94-44edab77d662"
@@ -3333,8 +3333,8 @@
     (property "UST_ID" "65089dd0462c6d9e720542b3" (at 217.17 86.36 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 2d74f430-2135-4f95-9956-8af162edba7b))
-    (pin "2" (uuid c72d355b-0a02-4dbd-a1e0-ff4739d561b7))
+    (pin "1" (uuid 89d697dd-fcfd-4b2e-bc81-31ed099cd17c))
+    (pin "2" (uuid 04bd6e70-2e41-4ff9-8a28-23b74259210b))
     (instances
       (project "USTSIPIN02"
         (path "/0a87ced0-2af2-43c5-a56c-218f7013d76f/00000000-0000-0000-0000-00005c69bcb4"
