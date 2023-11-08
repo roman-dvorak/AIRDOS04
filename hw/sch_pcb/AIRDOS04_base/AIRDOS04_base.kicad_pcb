@@ -1098,10 +1098,10 @@
       (net 1 "GND") (pinfunction "Shield") (pintype "passive") (tstamp 138c12ac-3a37-49c2-ae21-2dbe91715856))
     (pad "1" smd rect locked (at 21.9 15.15) (size 1 1) (layers "B.Cu" "B.Paste" "B.Mask")
       (net 1 "GND") (pinfunction "Shield") (pintype "passive") (tstamp f2152185-2f7d-4c1d-93df-62c123c90e0d))
-    (model "${KICAD6_3DMODEL_DIR}/RF_Shielding.3dshapes/Laird_Technologies_BMI-S-210-F_44.00x30.50mm.wrl"
-      (offset (xyz 0 0 0))
+    (model "${KISYS3DMOD_MLAB}/bmi-s-210-f-stp-file.STP"
+      (opacity 0.7600)      (offset (xyz 0 0 3))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 0))
     )
   )
 
@@ -4985,10 +4985,10 @@
           )
           (width 0) (fill yes))
       ) (tstamp 1c7254f7-ba96-47a3-a993-2b80aeda7a29))
-    (model "${KICAD6_3DMODEL_DIR}/Sensor_Humidity.3dshapes/Sensirion_DFN-8-1EP_2.5x2.5mm_P0.5mm_EP1.1x1.7mm.wrl"
+    (model "${KISYS3DMOD_MLAB}/Sensirion_Humidity_SHT3x_STEP-file.STEP"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 0))
     )
   )
 
