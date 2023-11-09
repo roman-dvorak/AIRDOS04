@@ -15,8 +15,8 @@ on:
   workflow_dispatch:
 
 env:
-  schema: "hw/sch_pcb/AIRDOS04_base/${{ github.event.repository.name }}.kicad_sch"
-  board: "hw/sch_pcb/AIRDOS04_base/${{ github.event.repository.name }}.kicad_pcb"
+  schema: "hw/sch_pcb/AIRDOS04_base/${{ github.event.repository.name }}_base.kicad_sch"
+  board: "hw/sch_pcb/AIRDOS04_base/${{ github.event.repository.name }}_base.kicad_pcb"
   project: ${{ github.event.repository.name }}
   branch: ${{ github.head_ref || github.ref_name }}
   dir: "hw/out"
