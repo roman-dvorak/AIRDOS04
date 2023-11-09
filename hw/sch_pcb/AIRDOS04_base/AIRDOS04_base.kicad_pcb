@@ -318,6 +318,11 @@
       (net 15 "/PIN_detector/K") (pinfunction "K") (pintype "passive") (clearance 1) (zone_connect 1) (tstamp 3481196f-50b7-452b-aec2-8eda4eed9780))
     (pad "2" thru_hole circle locked (at -11 2.5 180) (size 1.524 1.524) (drill 0.762) (layers "*.Cu" "*.Mask")
       (net 18 "/PIN_detector/A") (pinfunction "A") (pintype "passive") (clearance 1) (zone_connect 1) (tstamp 1afdb59d-37a0-4707-bee4-94a23f4542ca))
+    (model "${KISYS3DMOD_MLAB}/PIN_sensor_frame.step"
+      (opacity 0.6200)      (offset (xyz 0 0 1))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 90))
+    )
   )
 
   (footprint "Capacitor_SMD:C_0805_2012Metric" (layer "B.Cu")
