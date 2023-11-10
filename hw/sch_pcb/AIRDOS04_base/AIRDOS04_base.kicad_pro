@@ -481,15 +481,7 @@
     "netclass_patterns": [
       {
         "netclass": "MLAB_power",
-        "pattern": "V*"
-      },
-      {
-        "netclass": "MLAB_power",
         "pattern": "GND"
-      },
-      {
-        "netclass": "Default",
-        "pattern": ""
       }
     ]
   },
