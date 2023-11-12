@@ -5,7 +5,7 @@ Board size: 70.61x50.29 mm (2.78x1.98 inches)
 - This is the size of the rectangle that contains the board
 - Thickness: 1.6 mm (63 mils)
 - Material: FR4
-- Finish: None
+- Finish: HAL SnPb
 - Layers: 2
 - Copper thickness: 35 µm
 
@@ -50,7 +50,7 @@ Via: 0.8/0.4 mm (31/16 mils)
 - By design rules: 0.8/0.3 mm (31/12 mils)
 - Micro via: yes [0.2/0.1 mm (8/4 mils)]
 - Buried/blind via: yes
-- Total: 4 (thru: 4 buried/blind: 0 micro: 0)
+- Total: 50 (thru: 50 buried/blind: 0 micro: 0)
 
 Outer Annular Ring: 0.15 mm (6 mils)
 
@@ -64,8 +64,8 @@ Eurocircuits class: 4B
 
 Components count: (SMD/THT)
 
-- Top: 1/4 (SMD + THT)
-- Bottom: 89/2 (SMD + THT)
+- Top: 0/7 (THT)
+- Bottom: 91/0 (SMD)
 
 Defined tracks:
 
@@ -79,19 +79,20 @@ Defined tracks:
 
 Used tracks:
 
-- 0.2 mm (8 mils) (7) defined: yes
-- 0.25 mm (10 mils) (1) defined: no
-- 0.3 mm (12 mils) (7) defined: yes
-- 0.45 mm (18 mils) (356) defined: no
-- 0.6 mm (24 mils) (1) defined: no
-- 0.7 mm (28 mils) (24) defined: yes
+- 0.2 mm (8 mils) (2) defined: yes
+- 0.3 mm (12 mils) (134) defined: yes
+- 0.4 mm (16 mils) (73) defined: yes
+- 0.45 mm (18 mils) (413) defined: no
+- 0.5 mm (20 mils) (4) defined: yes
+- 0.6 mm (24 mils) (23) defined: yes
+- 0.7 mm (28 mils) (30) defined: yes
 
 Defined vias:
 
 
 Used vias:
 
-- 0.8/0.4 mm (31/16 mils) (Count: 4, Aspect: 2.0 A) defined: no
+- 0.8/0.4 mm (31/16 mils) (Count: 50, Aspect: 2.0 A) defined: no
 
 Holes (excluding vias):
 
@@ -104,7 +105,7 @@ Oval holes:
 
 Drill tools (including vias and computing adjusts and rounding):
 
-- 0.5 mm (20 mils) (4)
+- 0.5 mm (20 mils) (50)
 - 0.85 mm (33 mils) (2)
 - 1.0 mm (39 mils) (30)
 - 3.1 mm (122 mils) (4)
