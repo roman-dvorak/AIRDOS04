@@ -2119,7 +2119,7 @@
           (reference "L1") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "L2") (unit 1)
         )
@@ -2165,7 +2165,7 @@
           (reference "#PWR020") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "#PWR062") (unit 1)
         )
@@ -2208,7 +2208,7 @@
           (reference "#PWR020") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "#PWR066") (unit 1)
         )
@@ -2238,7 +2238,7 @@
           (reference "#PWR028") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "#PWR070") (unit 1)
         )
@@ -2268,7 +2268,7 @@
     (pin "2" (uuid c1df3426-b71a-477e-afec-27c6739b3574))
     (pin "3" (uuid 2878c6f3-0b14-42c1-a648-a5921a5bbe03))
     (instances
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
           (reference "C21") (unit 1)
         )
@@ -2308,7 +2308,7 @@
           (reference "C2") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "C30") (unit 1)
         )
@@ -2354,7 +2354,7 @@
           (reference "#PWR020") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "#PWR061") (unit 1)
         )
@@ -2384,7 +2384,7 @@
           (reference "#PWR018") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "#PWR048") (unit 1)
         )
@@ -2419,7 +2419,7 @@
     (pin "7" (uuid cfd1c99e-cf5a-44c1-ba90-c9ae17e4ebb5))
     (pin "8" (uuid 35535280-213e-4f29-8c6d-8d10658e5f59))
     (instances
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "U13") (unit 1)
         )
@@ -2462,7 +2462,7 @@
           (reference "#PWR020") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "#PWR065") (unit 1)
         )
@@ -2487,7 +2487,7 @@
     )
     (pin "1" (uuid ec94ba7e-0cf9-4396-973f-61708a19fb61))
     (instances
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
           (reference "#PWR016") (unit 1)
         )
@@ -2523,7 +2523,7 @@
           (reference "#PWR030") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "#PWR071") (unit 1)
         )
@@ -2553,7 +2553,7 @@
           (reference "#PWR015") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "#PWR062") (unit 1)
         )
@@ -2585,7 +2585,7 @@
     (pin "1" (uuid 01eb9dd5-9538-4e38-8e0d-5b08338375a0))
     (pin "2" (uuid ae59aaa2-2218-4540-8564-d2491c63ee2d))
     (instances
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
           (reference "C4") (unit 1)
         )
@@ -2634,7 +2634,7 @@
           (reference "#PWR020") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "#PWR074") (unit 1)
         )
@@ -2659,7 +2659,7 @@
     )
     (pin "1" (uuid 5ef76f5f-b506-4e3a-82fb-171944dce859))
     (instances
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "#PWR025") (unit 1)
         )
@@ -2693,7 +2693,7 @@
           (reference "C2") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
           (reference "C1") (unit 1)
         )
@@ -2733,7 +2733,7 @@
           (reference "C2") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "C30") (unit 1)
         )
@@ -2771,7 +2771,7 @@
           (reference "#PWR028") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "#PWR049") (unit 1)
         )
@@ -2820,7 +2820,7 @@
           (reference "#PWR020") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "#PWR079") (unit 1)
         )
@@ -2850,7 +2850,7 @@
           (reference "#PWR015") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "#PWR062") (unit 1)
         )
@@ -2883,7 +2883,7 @@
           (reference "#PWR018") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "#PWR048") (unit 1)
         )
@@ -2918,7 +2918,7 @@
     (pin "7" (uuid b556ec22-d6d0-4ea1-a7c3-e70e127e1f01))
     (pin "8" (uuid 8dde0465-4998-414b-beb7-81bea2aa68b4))
     (instances
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "U12") (unit 1)
         )
@@ -2955,7 +2955,7 @@
           (reference "C1") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "C29") (unit 1)
         )
@@ -3001,7 +3001,7 @@
           (reference "#PWR020") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "#PWR064") (unit 1)
         )
@@ -3035,7 +3035,7 @@
           (reference "R11") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
           (reference "R7") (unit 1)
         )
@@ -3075,7 +3075,7 @@
           (reference "C2") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "C30") (unit 1)
         )
@@ -3103,7 +3103,7 @@
     )
     (pin "1" (uuid d497cc42-fb87-4307-a711-b09b36966083))
     (instances
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
           (reference "#PWR017") (unit 1)
         )
@@ -3143,7 +3143,7 @@
           (reference "C2") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "C30") (unit 1)
         )
@@ -3189,7 +3189,7 @@
           (reference "#PWR020") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "#PWR082") (unit 1)
         )
@@ -3223,7 +3223,7 @@
           (reference "R11") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
           (reference "R7") (unit 1)
         )
@@ -3259,7 +3259,7 @@
           (reference "#PWR015") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "#PWR062") (unit 1)
         )
@@ -3287,7 +3287,7 @@
     )
     (pin "1" (uuid c07dbae8-08cc-41e0-a35a-1d15c1fdca88))
     (instances
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
           (reference "#PWR026") (unit 1)
         )
@@ -3323,7 +3323,7 @@
           (reference "#PWR015") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "#PWR062") (unit 1)
         )
@@ -3356,7 +3356,7 @@
           (reference "#PWR015") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "#PWR062") (unit 1)
         )
@@ -3389,7 +3389,7 @@
           (reference "#PWR031") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "#PWR072") (unit 1)
         )
@@ -3419,7 +3419,7 @@
           (reference "#PWR015") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "#PWR062") (unit 1)
         )
@@ -3454,7 +3454,7 @@
     (pin "7" (uuid 8ab2b68a-646d-4a4c-a5e1-52813ae8955e))
     (pin "8" (uuid 077e5006-91be-48e8-b45b-033960968d25))
     (instances
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "U14") (unit 1)
         )
@@ -3488,7 +3488,7 @@
           (reference "C2") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "C30") (unit 1)
         )
@@ -3525,7 +3525,7 @@
           (reference "C2") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "C30") (unit 1)
         )
@@ -3558,7 +3558,7 @@
           (reference "#PWR015") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "#PWR062") (unit 1)
         )
@@ -3591,7 +3591,7 @@
           (reference "#PWR015") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "#PWR062") (unit 1)
         )
@@ -3666,7 +3666,7 @@
           (reference "J6") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "J1") (unit 1)
         )
@@ -3709,7 +3709,7 @@
           (reference "#PWR020") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "#PWR063") (unit 1)
         )
@@ -3743,7 +3743,7 @@
           (reference "C2") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/e191f86f-5b54-4b8b-aca6-37b81226f3b6"
           (reference "C30") (unit 1)
         )
@@ -3786,7 +3786,7 @@
           (reference "U6") (unit 1)
         )
       )
-      (project "AIRDOS04_base"
+      (project "AIRDOS04_sensor"
         (path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55/0c2aa1a0-2cd5-4b79-93d8-46f8a648ea33"
           (reference "U11") (unit 1)
         )
