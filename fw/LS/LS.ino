@@ -103,7 +103,7 @@ ISR(TIMER1_COMPA_vect)
 // Data out
 void DataOut()
 {
-  uint16_t noise = 3;
+  uint16_t noise = 8;
   uint32_t flux=0;
 
   for(int n=noise; n<(RANGE); n++)  
@@ -220,7 +220,7 @@ void setup()
   SPI.begin();
 
   //ADMUX = (INTERNAL2V56 << 6) | ((0 | 0x10) & 0x1F);
-  Serial.println("#Hmmm...");
+  Serial.println("#eHmmm...");
 
 }
 
@@ -232,40 +232,16 @@ void loop()
   {
     histogram[n]=0;
   }
-/*
-  while (true)
-  {
-    while((PINB & 1)==0);
-    while((PINB & 1)==1);
-    digitalWrite(DRESET, LOW);
-    //delayMicroseconds(40);
-  digitalWrite(DSET, LOW);
-    SPI.transfer16(0x0000);    
-  digitalWrite(DSET, HIGH);
-    digitalWrite(DRESET, HIGH);
-  }
-*/
-   
+
   // dummy conversion
-  digitalWrite(DRESET, LOW);
-  delayMicroseconds(4);
-  SPI.transfer16(0x0000);
   digitalWrite(DRESET, HIGH);
-  delayMicroseconds(4);
+  SPI.transfer16(0x8000);
+  digitalWrite(DRESET, LOW);
   
   // dosimeter integration
   while(true)
   {
-    while((PINB & 1)==0);
-    while((PINB & 1)==1);
-    //delayMicroseconds(4);
-    digitalWrite(DRESET, LOW);
-    uint16_t adcVal = SPI.transfer16(0x0000);
-    {
-      adcVal >>= 6;
-      if (histogram[adcVal]<255) histogram[adcVal]++;
-    }
-    if (store) 
+    while((PINB & 1)==0) if (store) 
     {
       store = false;
       digitalWrite(DRESET, LOW);
@@ -277,9 +253,21 @@ void loop()
         histogram[n]=0;
       }
       // dummy conversion
-      digitalWrite(DRESET, LOW);
+      digitalWrite(DRESET, HIGH);
       SPI.transfer16(0x0000); // 0x8000
+      digitalWrite(DRESET, LOW);
+      continue;
     };
+    //delayMicroseconds(4);
     digitalWrite(DRESET, HIGH);
+    uint16_t adcVal = SPI.transfer16(0x0000);
+    //if(adcVal>17000) 
+    {
+      //Serial.println(adcVal);
+      //adcVal -= 17001;
+      adcVal >>= 6;
+      if (histogram[adcVal]<255) histogram[adcVal]++;
+    }
+    digitalWrite(DRESET, LOW);
   }
 }

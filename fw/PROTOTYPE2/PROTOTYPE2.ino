@@ -3,7 +3,7 @@
 // Compiled with: Arduino 1.8.13
 // MightyCore 2.2.2 
 
-#define MAJOR 8   // Data format
+#define MAJOR 0   // Data format
 #define MINOR 0   // Features
 #include "githash.h"
 
@@ -65,15 +65,19 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 
 #define CONV        0    // PB0, ADC CONV signal
 #define DRESET      22   // PC6, D Reset
-#define DSET        21   // PC5, D Set
-#define SDpower1    1    // PB1
-#define SDpower2    2    // PB2
-#define SDpower3    3    // PB3
+#define DSET        23   // PC7, D Set
+#define SDpower     19   // PC3
 #define SS          4    // PB4
 #define MOSI        5    // PB5
 #define MISO        6    // PB6
 #define SCK         7    // PB7
-#define LED         23   // PC7
+#define LED1        12   // PD4
+#define LED2        13   // PD5
+#define LED3        14   // PD6
+#define BUZZER      15   // PD7
+#define POWER5V     26   // PA2
+#define POWER3V3    2    // PB2
+#define SPI_MUX_SEL 18   // PC2
 
 String filename = "";
 uint16_t fn;
@@ -128,7 +132,7 @@ void DataOut()
     flux += histogram[n]; 
   }
 
-  digitalWrite(LED, HIGH); 
+  digitalWrite(LED3, HIGH); 
 
   // make a string for assembling the data to log:
   String dataString = "";
@@ -174,7 +178,7 @@ void DataOut()
     // see if the card is present and can be initialized:
     if (!SD.begin(SS)) 
     {
-      Serial.println("#SD init false");
+      Serial1.println("#SD init false");
       SDinserted = false;
       // don't do anything more:
     }
@@ -193,7 +197,7 @@ void DataOut()
       // if the file isn't open, pop up an error:
       else 
       {
-        Serial.println("#SD false");
+        Serial1.println("#SD false");
         SDinserted = false;
       }
     }  
@@ -201,8 +205,8 @@ void DataOut()
     digitalWrite(SS, HIGH);         // Disable SD card
   }          
 
-  Serial.println(dataString);   // print to terminal 
-  digitalWrite(LED, LOW);     
+  Serial1.println(dataString);   // print to terminal 
+  digitalWrite(LED3, LOW);     
   
   count++;
   if (count > MAX_MEASUREMENTS) 
@@ -210,44 +214,60 @@ void DataOut()
     count = 0;
     fn++;
     filename = String(fn) + ".txt";        
-    Serial.print("#Filename,"); 
-    Serial.println(filename); 
+    Serial1.print("#Filename,"); 
+    Serial1.println(filename); 
   } 
 }    
 
 void setup()
 {
-  pinMode(LED, OUTPUT); 
-  digitalWrite(LED, HIGH); 
-
   // Open serial communications and wait for port to open:
-  Serial.begin(115200);
+  Serial1.begin(115200);
 
-  Serial.println("#Cvak...");
+  Serial1.println("#Cvak...");
   
   pinMode(DRESET, OUTPUT);   // peak detetor
   pinMode(DSET, OUTPUT);   
   pinMode(CONV, INPUT);   
 
-  pinMode(SDpower1, OUTPUT);  // SDcard interface
-  pinMode(SDpower2, OUTPUT);     
-  pinMode(SDpower3, OUTPUT);     
+  pinMode(SPI_MUX_SEL, OUTPUT);   // SDcard/ADC
+  digitalWrite(SPI_MUX_SEL, HIGH); // ADC    
+  
+  pinMode(SDpower, OUTPUT);  // SDcard interface
   pinMode(SS, OUTPUT);     
   pinMode(MOSI, INPUT);     
   pinMode(MISO, INPUT);     
   pinMode(SCK, OUTPUT);  
 
-  digitalWrite(SDpower1, HIGH);   // SD card power on
-  digitalWrite(SDpower2, HIGH);  
-  digitalWrite(SDpower3, HIGH);  
+  digitalWrite(SDpower, HIGH);   // SD card power on
   digitalWrite(SS, HIGH);         // Disable SD card
   digitalWrite(SCK, LOW);    
   digitalWrite(DSET, HIGH);       // Disable ADC
   digitalWrite(DRESET, LOW);       
+
+  for( uint8_t n=0; n<5; n++)
+  {
+    delay(80);  
+    pinMode(LED1, OUTPUT); 
+    digitalWrite(LED1, HIGH); 
+    delay(80);  
+    digitalWrite(LED1, LOW); 
+  }
+  digitalWrite(LED1, HIGH); 
+  
+  for( uint16_t n=0; n<200; n++)
+  {
+    delayMicroseconds(180);
+    pinMode(BUZZER, OUTPUT); 
+    digitalWrite(BUZZER, HIGH); 
+    delayMicroseconds(180);
+    pinMode(BUZZER, OUTPUT); 
+    digitalWrite(BUZZER, LOW); 
+  }
   
   Wire.setClock(100000);
 
-  Serial.println("#Hmmm...");
+  Serial1.println("#Hmmm...");
 
   //!!!! looking for zero
   {
@@ -305,7 +325,7 @@ void setup()
     // see if the card is present and can be initialized:
     if (!SD.begin(SS)) 
     {
-      Serial.println("#SD init false");
+      Serial1.println("#SD init false");
       SDinserted = false;
     }
     for (fn = 1; fn<MAXFILES; fn++) // find last file
@@ -315,14 +335,24 @@ void setup()
     }
     fn--;
     filename = String(fn) + ".txt";
+  
+    for( uint8_t n=0; n<5; n++)
+    {
+      delay(80);  
+      pinMode(LED2, OUTPUT); 
+      digitalWrite(LED2, HIGH); 
+      delay(80);  
+      digitalWrite(LED2, LOW); 
+    }
+    digitalWrite(LED2, HIGH); 
     
     // open the file. note that only one file can be open at a time,
     // so you have to close this one before opening another.
     File dataFile = SD.open(filename, FILE_WRITE);
 
     uint32_t filesize = dataFile.size();
-    Serial.print("#Filesize,");
-    Serial.println(filesize); 
+    Serial1.print("#Filesize,");
+    Serial1.println(filesize); 
     if (filesize > MAXFILESIZE)
     {
       dataFile.close();
@@ -330,8 +360,8 @@ void setup()
       filename = String(fn) + ".txt";      
       dataFile = SD.open(filename, FILE_WRITE);
     }
-    Serial.print("#Filename,");
-    Serial.println(filename); 
+    Serial1.print("#Filename,");
+    Serial1.println(filename); 
   
     // if the file is available, write to it:
     if (dataFile) 
@@ -342,23 +372,27 @@ void setup()
     // if the file isn't open, pop up an error:
     else 
     {
-      Serial.println("#SD false");
+      Serial1.println("#SD false");
       SDinserted = false;
     }
-    Serial.println(dataString);  // print SN to terminal 
+    Serial1.println(dataString);  // print SN to terminal 
   }    
-
-  
+ 
   for( uint8_t n=0; n<5; n++)
   {
-    delay(100);  
-    pinMode(LED, OUTPUT); 
-    digitalWrite(LED, HIGH); 
-    delay(100);  
-    pinMode(LED, OUTPUT); 
-    digitalWrite(LED, LOW); 
+    delay(80);  
+    pinMode(LED3, OUTPUT); 
+    digitalWrite(LED3, HIGH); 
+    delay(80);  
+    digitalWrite(LED3, LOW); 
   }
- 
+  digitalWrite(LED1, LOW); 
+  digitalWrite(LED2, LOW); 
+
+  store = false;
+
+  ADMUX = (INTERNAL2V56 << 6) | ((0 | 0x10) & 0x1F);
+
   cli(); // disable interrupts during setup
   // Configure Timer 1 interrupt
   // F_clock = 8 MHz, prescaler = 1024, Fs = 0.125 Hz
@@ -370,11 +404,11 @@ void setup()
   //OCR1A = (62500/2)-1;      // Set sampling frequency Fs, period 4 s
   TCNT1 = 0;          // reset Timer 1 counter
   TIMSK1 = 1<<OCIE1A; // Enable Timer 1 interrupt
-
-  store = false;
+  pinMode(POWER3V3, OUTPUT);    // Analog power 3.3 V
+  digitalWrite(POWER3V3, HIGH); // on 
+  pinMode(POWER5V, OUTPUT);     // Analog power 5 V
+  digitalWrite(POWER5V, HIGH);  // on
   sei(); // re-enable interrupts
-
-  ADMUX = (INTERNAL2V56 << 6) | ((0 | 0x10) & 0x1F);
 
 }
 
@@ -392,6 +426,7 @@ void loop()
   SPI.transfer16(0x8000);
   digitalWrite(DRESET, LOW);
   
+  store = false;
   // dosimeter integration
   while(true)
   {
@@ -408,13 +443,13 @@ void loop()
       }
       // dummy conversion
       digitalWrite(DRESET, HIGH);
-      SPI.transfer16(0x0000); // 0x8000
+      SPI.transfer16(0x8000); // 0x8000
       digitalWrite(DRESET, LOW);
       continue;
     };
     //delayMicroseconds(4);
     digitalWrite(DRESET, HIGH);
-    uint16_t adcVal = SPI.transfer16(0x0000);
+    uint16_t adcVal = SPI.transfer16(0x8000);
     //if(adcVal>17000) 
     {
       //Serial.println(adcVal);
