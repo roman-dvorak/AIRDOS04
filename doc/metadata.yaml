@@ -1,0 +1,26 @@
+description: Airborne cosmic radiation dosimeter designed for airliners dosimetry.
+github_branch: AIRDOS04A
+github_repo: AIRDOS04
+github_url: https://github.com/UniversalScientificTechnologies/AIRDOS04
+homepage: false
+images:
+- hw/sch_pcb/AIRDOS04_battery/doc/img/kicad_render_BATDATUNIT01_a.png
+- doc/gen/img/AIRDOS04_base-bottom.png
+- doc/gen/img/AIRDOS04_base-top.png
+- hw/sch_pcb/AIRDOS04_battery/hw/cam_profi/assembly/BATDATUNIT01-assembly_page_02.svg
+- hw/sch_pcb/AIRDOS04_battery/hw/cam_profi/assembly/BATDATUNIT01-assembly_page_01.svg
+- hw/sch_pcb/AIRDOS04_battery/doc/gen/BATDATUNIT01-sw_source.svg
+- hw/sch_pcb/AIRDOS04_battery/doc/gen/BATDATUNIT01-schematic.svg
+- hw/sch_pcb/AIRDOS04_battery/doc/gen/BATDATUNIT01-liion.svg
+- hw/cam_profi/docs/AIRDOS04A_base-assembly_page_02.svg
+- hw/cam_profi/docs/AIRDOS04A_base-assembly_page_01.svg
+- doc/gen/AIRDOS04_base-analogue_backend.svg
+- doc/gen/AIRDOS04_base-interface.svg
+- doc/gen/AIRDOS04_base-PIN_detector.svg
+- doc/gen/AIRDOS04_base-schematic.svg
+- doc/gen/img/AIRDOS04_base-top.svg
+mark: 50
+mod_ibom: hw/sch_pcb/AIRDOS04_battery/hw/cam_profi/BATDATUNIT01-ibom.html
+mod_scheme: doc/gen/AIRDOS04_base-schematic.pdf
+tags: []
+title: AIRDOS04
