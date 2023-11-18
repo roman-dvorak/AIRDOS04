@@ -124,6 +124,9 @@ ISR(TIMER1_COMPA_vect)
 // Data out
 void DataOut()
 {
+  digitalWrite(SDpower, HIGH);   // SD card power on
+  digitalWrite(SPI_MUX_SEL, LOW); // SDcard    
+
   uint16_t noise = 3;
   uint32_t flux=0;
 
@@ -176,7 +179,7 @@ void DataOut()
     
     // make sure that the default chip select pin is set to output
     // see if the card is present and can be initialized:
-    if (!SD.begin(SS)) 
+    if (!SD.begin(SS, SPI_HALF_SPEED)) 
     {
       Serial1.println("#SD init false");
       SDinserted = false;
@@ -217,6 +220,9 @@ void DataOut()
     Serial1.print("#Filename,"); 
     Serial1.println(filename); 
   } 
+  digitalWrite(SPI_MUX_SEL, HIGH); // ADC    
+  digitalWrite(SDpower, LOW);   // SD card power off
+  delay(1);
 }    
 
 void setup()
@@ -242,8 +248,8 @@ void setup()
   digitalWrite(SDpower, HIGH);   // SD card power on
   digitalWrite(SS, HIGH);         // Disable SD card
   digitalWrite(SCK, LOW);    
-  digitalWrite(DSET, HIGH);       // Disable ADC
-  digitalWrite(DRESET, LOW);       
+  digitalWrite(DSET, LOW);       // Disable ADC
+  digitalWrite(DRESET, HIGH);       
 
   for( uint8_t n=0; n<5; n++)
   {
@@ -320,10 +326,12 @@ void setup()
     serialhash += serialbyte;
   }
 
+  // Filename selection and initial write to SD card
   {    
+    digitalWrite(SPI_MUX_SEL, LOW); // SD card    
     // make sure that the default chip select pin is set to output
     // see if the card is present and can be initialized:
-    if (!SD.begin(SS)) 
+    if (!SD.begin(SS, SPI_HALF_SPEED)) 
     {
       Serial1.println("#SD init false");
       SDinserted = false;
@@ -376,6 +384,7 @@ void setup()
       SDinserted = false;
     }
     Serial1.println(dataString);  // print SN to terminal 
+    digitalWrite(SPI_MUX_SEL, HIGH); // ADC    
   }    
  
   for( uint8_t n=0; n<5; n++)
@@ -409,47 +418,49 @@ void setup()
   pinMode(POWER5V, OUTPUT);     // Analog power 5 V
   digitalWrite(POWER5V, HIGH);  // on
   sei(); // re-enable interrupts
-
 }
 
 
 
 void loop()
 {
-  for(int n=0; n<CHANNELS; n++)
+  for(int n=0; n<CHANNELS; n++) // reset histogram
   {
     histogram[n]=0;
   }
 
   // dummy conversion
-  digitalWrite(DRESET, HIGH);
-  SPI.transfer16(0x8000);
+  digitalWrite(DSET, HIGH);
   digitalWrite(DRESET, LOW);
+  SPI.transfer16(0x8000);
+  digitalWrite(DRESET, HIGH);
   
   store = false;
   // dosimeter integration
   while(true)
   {
-    while((PINB & 1)==0) if (store) 
+    while((PINB & 1)==0) // Waiting for signal drop
+    if (store) 
     {
       store = false;
-      digitalWrite(DRESET, LOW);
-      digitalWrite(DSET, HIGH);
+      //digitalWrite(DRESET, LOW);
+      //digitalWrite(DSET, HIGH);
       DataOut();
-      digitalWrite(DSET, LOW);
-      for(int n=0; n<CHANNELS; n++)
+      //digitalWrite(DSET, LOW);
+      for(int n=0; n<CHANNELS; n++) // reset histogram
       {
         histogram[n]=0;
       }
       // dummy conversion
-      digitalWrite(DRESET, HIGH);
+      digitalWrite(DSET, HIGH);
+      digitalWrite(DRESET, LOW); // L on CONV
       SPI.transfer16(0x8000); // 0x8000
-      digitalWrite(DRESET, LOW);
-      continue;
+      digitalWrite(DRESET, HIGH);
     };
-    //delayMicroseconds(4);
-    digitalWrite(DRESET, HIGH);
-    uint16_t adcVal = SPI.transfer16(0x8000);
+    // Signal is going down, we can run ADC
+    //delayMicroseconds(4); // This delay is done in cycle overhead
+    digitalWrite(DRESET, LOW); // L on CONV
+    uint16_t adcVal = SPI.transfer16(0x8000); // +/GND //!!!!!!!!!!!! 0x0000 +/-
     //if(adcVal>17000) 
     {
       //Serial.println(adcVal);
@@ -457,6 +468,6 @@ void loop()
       adcVal >>= 6;
       if (histogram[adcVal]<255) histogram[adcVal]++;
     }
-    digitalWrite(DRESET, LOW);
+    digitalWrite(DRESET, HIGH);
   }
 }
