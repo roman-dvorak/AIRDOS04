@@ -67,6 +67,7 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 #define DRESET      22   // PC6, D Reset
 #define DSET        23   // PC7, D Set
 #define SDpower     19   // PC3
+#define SDmode      3    // PB3
 #define SS          4    // PB4
 #define MOSI        5    // PB5
 #define MISO        6    // PB6
@@ -78,6 +79,7 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 #define POWER5V     26   // PA2
 #define POWER3V3    2    // PB2
 #define SPI_MUX_SEL 18   // PC2
+#define EXT_I2C_EN  20   // PC4
 
 String filename = "";
 uint16_t fn;
@@ -179,7 +181,7 @@ void DataOut()
     
     // make sure that the default chip select pin is set to output
     // see if the card is present and can be initialized:
-    if (!SD.begin(SS, SPI_HALF_SPEED)) 
+    if (!SD.begin(SS))//, SPI_HALF_SPEED)) 
     {
       Serial1.println("#SD init false");
       SDinserted = false;
@@ -240,6 +242,7 @@ void setup()
   digitalWrite(SPI_MUX_SEL, HIGH); // ADC    
   
   pinMode(SDpower, OUTPUT);  // SDcard interface
+  pinMode(SDmode, OUTPUT);  
   pinMode(SS, OUTPUT);     
   pinMode(MOSI, INPUT);     
   pinMode(MISO, INPUT);     
@@ -248,8 +251,10 @@ void setup()
   digitalWrite(SDpower, HIGH);   // SD card power on
   digitalWrite(SS, HIGH);         // Disable SD card
   digitalWrite(SCK, LOW);    
-  digitalWrite(DSET, LOW);       // Disable ADC
-  digitalWrite(DRESET, HIGH);       
+  //!!!digitalWrite(SDmode, HIGH);   // SD card reader on
+
+  pinMode(EXT_I2C_EN, OUTPUT);    // Disable external I2C
+  digitalWrite(EXT_I2C_EN, LOW);   
 
   for( uint8_t n=0; n<5; n++)
   {
@@ -259,7 +264,7 @@ void setup()
     delay(80);  
     digitalWrite(LED1, LOW); 
   }
-  digitalWrite(LED1, HIGH); 
+  //digitalWrite(LED1, HIGH); 
   
   for( uint16_t n=0; n<200; n++)
   {
@@ -270,11 +275,27 @@ void setup()
     pinMode(BUZZER, OUTPUT); 
     digitalWrite(BUZZER, LOW); 
   }
-  
+
   Wire.setClock(100000);
 
   Serial1.println("#Hmmm...");
 
+  pinMode(POWER3V3, OUTPUT);    // Analog power 3.3 V
+  digitalWrite(POWER3V3, HIGH); // on 
+  pinMode(POWER5V, OUTPUT);     // Analog power 5 V
+  digitalWrite(POWER5V, HIGH);  // on
+
+  digitalWrite(DSET, LOW);       // Disable ADC
+  digitalWrite(DRESET, HIGH);       
+
+  // SD card reader ON
+  /*
+  Wire.beginTransmission(0x70); // card reader address
+  Wire.write((uint8_t)0x00); // Start register
+  Wire.write((uint8_t)0b00010011); // 0b0001 0 01 1
+  Wire.endTransmission();
+  //*/  
+  
   //!!!! looking for zero
   {
     base_offset = 18500; // Calculate mean of n measurements
@@ -331,7 +352,7 @@ void setup()
     digitalWrite(SPI_MUX_SEL, LOW); // SD card    
     // make sure that the default chip select pin is set to output
     // see if the card is present and can be initialized:
-    if (!SD.begin(SS, SPI_HALF_SPEED)) 
+    if (!SD.begin(SS))//, SPI_HALF_SPEED)) 
     {
       Serial1.println("#SD init false");
       SDinserted = false;
@@ -386,7 +407,7 @@ void setup()
     Serial1.println(dataString);  // print SN to terminal 
     digitalWrite(SPI_MUX_SEL, HIGH); // ADC    
   }    
- 
+   
   for( uint8_t n=0; n<5; n++)
   {
     delay(80);  
@@ -413,10 +434,6 @@ void setup()
   //OCR1A = (62500/2)-1;      // Set sampling frequency Fs, period 4 s
   TCNT1 = 0;          // reset Timer 1 counter
   TIMSK1 = 1<<OCIE1A; // Enable Timer 1 interrupt
-  pinMode(POWER3V3, OUTPUT);    // Analog power 3.3 V
-  digitalWrite(POWER3V3, HIGH); // on 
-  pinMode(POWER5V, OUTPUT);     // Analog power 5 V
-  digitalWrite(POWER5V, HIGH);  // on
   sei(); // re-enable interrupts
 }
 
