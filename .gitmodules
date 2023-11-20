@@ -8,3 +8,12 @@
         path = hw/sch_pcb/AIRDOS04_socket
         url = git@github.com:mlab-modules/BATDATSOCKET01.git
 
+[submodule "hw/modules/BATDATUNIT01"]
+	path = hw/modules/BATDATUNIT01
+	url = git@github.com:mlab-modules/BATDATUNIT01.git
+[submodule "hw/modules/BATDATSOCKET01"]
+	path = hw/modules/BATDATSOCKET01
+	url = git@github.com:mlab-modules/BATDATSOCKET01.git
+[submodule "hw/modules/USTSIPIN03A"]
+	path = hw/modules/USTSIPIN03A
+	url = git@github.com:kaklik/USTSIPIN03
