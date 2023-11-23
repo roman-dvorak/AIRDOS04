@@ -1,4 +1,3 @@
-
 // AIRDOS04
 // Compiled with: Arduino 1.8.13
 // MightyCore 2.2.2 
@@ -210,6 +209,7 @@ void DataOut()
     digitalWrite(SS, HIGH);         // Disable SD card
   }          
 
+  Serial.println(dataString);   // print to terminal 
   Serial1.println(dataString);   // print to terminal 
   digitalWrite(LED3, LOW);     
   
@@ -230,6 +230,7 @@ void DataOut()
 void setup()
 {
   // Open serial communications and wait for port to open:
+  Serial.begin(115200);
   Serial1.begin(115200);
 
   Serial1.println("#Cvak...");
