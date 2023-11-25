@@ -4,8 +4,8 @@ pcb_width = 85.86 + 0.4;
 pcb_thickness = 1.6+0.2;
 pcb_above_ground = 12.6; 
 
-pcb_rail_thickness = 1.6+0.8+0.8+0.1;
-pcb_rail_depth = 0.5;
+pcb_rail_thickness = 1.6+1.5+1.5+0.1;
+pcb_rail_depth = 1.5;
 
 albase_length = 162;
 box_width = 95-0.5;
@@ -20,16 +20,17 @@ M3_nut_diameter = 6.4;
 
 module pcb_edge(){
     difference(){
-        translate([0, 0, 1]) cube([136.6+1, 1.6+0.75+0.75, 2], center=true);
-        translate([-1, 0, 1+0.4]) cube([136.6+1, 1.65, 2], center=true);
-        translate([0, 0.8+0.75, 0]) rotate([0, 90, 0]) cylinder(d=1, h=150, center=true, $fn=4);
-        translate([0, -0.8-0.75, 0]) rotate([0, 90, 0]) cylinder(d=1, h=150, center=true, $fn=4);
-        translate([136.6/2+0.75, 0.8+0.75, 0.8]) rotate([0, 0, 0]) cylinder(d=2, h=5, center=true, $fn=4);
-        translate([136.6/2+0.75, -0.8-0.75, 0.8]) rotate([0, 0, 0]) cylinder(d=2, h=5, center=true, $fn=4);
-        translate([136.6/2+0.75, -0.8-0.75, -1]) rotate([90, 0, 0]) rotate([0,0,-15]) cylinder(d=5, h=10, center=true, $fn=4);
+        translate([0, 0, 1.5]) cube([136.6+1, pcb_rail_thickness-0.1, 3], center=true);
+        translate([-1, 0, 2+pcb_rail_depth-0.3]) cube([136.6+1, 1.65, 4], center=true);
+        translate([0, pcb_rail_thickness/2, 0]) rotate([0, 90, 0]) cylinder(d=1, h=150, center=true, $fn=4);
+        translate([0, -pcb_rail_thickness/2, 0]) rotate([0, 90, 0]) cylinder(d=1, h=150, center=true, $fn=4);
+        translate([136.6/2+0.75, pcb_rail_thickness/2, 0.8]) rotate([0, 0, 0]) cylinder(d=2, h=5, center=true, $fn=4);
+        translate([136.6/2+0.75, -pcb_rail_thickness/2, 0.8]) rotate([0, 0, 0]) cylinder(d=2, h=5, center=true, $fn=4);
+        translate([136.6/2+0.75, -pcb_rail_thickness/2, -1]) rotate([90, 0, 0]) rotate([0,0,-15]) cylinder(d=5, h=10, center=true, $fn=4);
     }
 
 }
+
 
 //pcb_edge();
 
@@ -37,7 +38,7 @@ module rail(){
     
     difference(){
         union(){
-            translate([box_width/2-6, -albase_length/2, 0]) cube([6, albase_length, pcb_above_ground+pcb_thickness*2]);
+            translate([box_width/2-6, -albase_length/2, 0]) cube([6, albase_length, pcb_above_ground+pcb_rail_thickness+5]);
             translate([box_width/2-flange_width, -(albase_length)/2, 0]) cube([flange_width, 60, flange_th]);
             translate([box_width/2-flange_width, -(albase_length)/2, 0]) cube([flange_width, 20, pcb_above_ground]);
             translate([box_width/2-8, -(albase_length)/2, 3.5]) rotate([0, 45, 0]) cube([4, albase_length, 4]);
@@ -62,9 +63,16 @@ module rail(){
     translate([0, -(albase_length-40)/2, pcb_above_ground-(pcb_rail_thickness-pcb_thickness)/2])
         cube([pcb_width/2+pcb_rail_depth, albase_length, pcb_rail_thickness]);
     
+    hull(){
+        translate([0, (albase_length)/2-10, pcb_above_ground-(pcb_rail_thickness-pcb_thickness)/2])
+            cube([pcb_width/2+pcb_rail_depth, 10, pcb_rail_thickness]);
+        translate([0, (albase_length)/2, pcb_above_ground-(pcb_rail_thickness-pcb_thickness)/2-2])
+            cube([pcb_width/2+pcb_rail_depth+2, 10, pcb_rail_thickness+4]);
+    }
+    
     for(y = [5, 0], x=[10.16]) translate([mounting_holes_distance+x, (y+0.5)*10.16, -0.1]) {
         cylinder(d = M3_screw_diameter, h=5, $fn=30);
-        translate([0, 0, 3]) rotate([0, 0, 30]) cylinder(d=6.5, h=7, $fn=60);
+        translate([0, 0, 3]) rotate([0, 0, 30]) cylinder(d=6.5, h=7.5, $fn=60);
         }
         
     for(y = [-7], x=[10.16]) translate([mounting_holes_distance+x, (y+0.5)*10.16, -0.1]) {
@@ -72,9 +80,9 @@ module rail(){
         translate([0, 0, pcb_above_ground+0.1]) cylinder(d = 6.5, h=20, $fn=30);
         }
     
-    for(y = [-3], x=[0]) translate([mounting_holes_distance+x, (y+0.5)*10.16, -0.1]) {
+    for(y = [-8+4], x=[0]) translate([mounting_holes_distance+x, (y+0.5)*10.16, -0.1]) {
         cylinder(d = M3_screw_diameter, h=30, $fn=30);
-        translate([0, 0, 3]) rotate([0, 0, 30]) cylinder(d=6.5, h=3, $fn=60);
+            translate([0, 0, 3]) rotate([0, 0, 30]) cylinder(d=6.5, h=3, $fn=60);
         }
         for(y = [-8], x=[0]) translate([mounting_holes_distance+x, (y+0.5)*10.16, -0.1]) {
         cylinder(d = M3_screw_diameter, h=30, $fn=30);
@@ -110,7 +118,7 @@ module bottom_case(){
             translate([x*10.16*6-screw_shift, y*10.16*3.5+0, -0.1]) {
             translate([0, 0, 3.2])
                 cylinder(d=M3_screw_diameter, h=10, $fn=50);
-            cylinder(d=7, h=3, $fn=50);
+            cylinder(d=6.6, h=3, $fn=6);
         }
         
         
@@ -118,7 +126,7 @@ module bottom_case(){
         translate([45, batdat_case_width/2, batdat_case_thickness]) cube([13, 10, 5], center=true);
             
         
-        translate([0, 3, 0.3]) intersection(){
+        translate([0, 3, 0.4]) intersection(){
         for(x=[-8:7], y=[-4:3]) translate([x*7, y*8+(x%2==0? 4:0), 0]) cylinder(d=7.5, h=10, $fn=6);
         
         
@@ -148,8 +156,8 @@ module bottom_case(){
             
             
         for(x=[-1, 1], y=[-1, 1]) translate([x*10.16*6-screw_shift, y*10.16*3.5+0, -0.1]) {
-            cylinder(d=8, h=10, $fn=50);
-            cylinder(d1=12,d2=8, h=3, $fn=50);
+            cylinder(d=8, h=10, $fn=6);
+            cylinder(d1=12,d2=8, h=3, $fn=6);
         }
             
         }
@@ -161,9 +169,16 @@ module bottom_case(){
     
     }
     
+    // Podperne sloupky
+   for(y=[-31.6, -12.3, 9.4, 28.7, 48], x=[-0.5, 0.5]) translate([-y, x*55.6, 0]){
+    
+        cylinder(d = 6.5, h=2, $fn=30);
+        cylinder(d = 4.5, h=batdat_case_thickness, $fn=30);
+        cylinder(d = 3, h=batdat_case_thickness+2, $fn=30);
+    }
+    
     
 }
-
 
 //bottom_case();
 
@@ -210,10 +225,25 @@ module front_cover(){
         front_cover_empty();
         
         
-        for(x=leds_positions_top) translate([x, 1.6/2+0.8, 0]) scale([1, 1, 1]) cylinder(d=2,h=20, $fn=30, center=true);
-        for(x=leds_positions_bottom) translate([x, -1.6/2-0.8, 0]) scale([1, 1, 1]) cylinder(d=2,h=20, $fn=30, center=true);
+        for(x=leds_positions_top) translate([x, 1.6/2+0.6, 0]) scale([1, 1, 1]) cylinder(d1=1.6, d2=3,h=20, $fn=30, center=true);
+        for(x=leds_positions_bottom) translate([x, -1.6/2-0.6, 0]) scale([1, 1, 1]) cylinder(d1=1.6, d2=3,h=20, $fn=30, center=true);
         for(x=leds_button) translate([x, 1.6/2+1.75]) cylinder(d=2.2,h=20, $fn=30, center=true);
      
+  
+   // USB-C konektor
+    translate([-25.33, -pcb_thickness/2-2.6/2-0.25, 0]) minkowski(){
+        cube([8.5-2, 2.6-2, 10], center=true);
+        cylinder(d=2.3, h = 1, $fn=30);
+    }   
+    
+    
+    // Otvory pro stuhy
+    for(x=[0.5, -0.5]) 
+    translate([x*82, pcb_thickness/2+6/2, 0]) minkowski(){
+        cube([0.1, 5.5-1, 10], center=true);
+        cylinder(d=1, h = 1, $fn=30);
+    }   
+  
   
   // Otvory pro srouby na prisroubovani celicka
     translate([pcb_width/2, -pcb_above_ground+3, 0]) cylinder(d=M3_screw_diameter, h=10, center=true, $fn=60);
@@ -222,10 +252,15 @@ module front_cover(){
     }
 
         translate([0, 1.6/2, 0]) difference(){
-            translate([0, 2.5, 4]) cube([80.7, 5, 8], center=true);
+            union(){
+                translate([0, 2.5+0.1, 4]) cube([80.7, 5, 8], center=true);
+                translate([0, -1.5-1.6-0.1, 4]) cube([80.7, 3, 8], center=true);
+            }
+            
+                translate([0, -3, 2]) cube([31*2, 4, 15], center=true);
             difference(){
-                translate([0, 0.5, 2]) cube([29*2, 1.5, 4], center=true);
-                translate([10.5, 0.5, 2]) cube([15, 1.5, 4], center=true);
+                translate([0, 0.5, 2]) cube([31*2, 3, 15], center=true);
+                translate([10.5, 0.5, 2]) cube([15, 3, 15], center=true);
             }
             for(x=leds_button) translate([x, 1.75]) {
                 cylinder(d=2.2,h=20, $fn=30, center=true);
@@ -237,6 +272,7 @@ module front_cover(){
     }
 }
 
+front_cover();
 
 module rear_cover(){
 
@@ -269,4 +305,4 @@ module rear_cover(){
     }
 }
 
-rear_cover();
+//rear_cover();
