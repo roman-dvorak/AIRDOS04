@@ -19,8 +19,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: PROTOTYP3
-            type: PROTOTYP3
+          - name: PROTOTYPE3
+            type: PROTOTYPE3
             channels: 0
             fqbn: clock=8MHz_external
             
