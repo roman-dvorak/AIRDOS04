@@ -147,6 +147,8 @@ module bottom_case(){
                     cube([130, 77, 10], center=true);
                 translate([-10, 0, 2.5+batdat_case_thickness-5]) 
                     cube([130, 62, 5], center=true);
+                translate([-batdat_case_length/2, 0, 2.5+batdat_case_thickness-2.2]) 
+                    cube([20, 100, 5], center=true);
             }
             
         
@@ -155,9 +157,16 @@ module bottom_case(){
             
             
             
-        for(x=[-1, 1], y=[-1, 1]) translate([x*10.16*6-screw_shift, y*10.16*3.5+0, -0.1]) {
-            cylinder(d=8, h=10, $fn=6);
-            cylinder(d1=12,d2=8, h=3, $fn=6);
+        for(x=[1], y=[-1, 1]) translate([x*10.16*6-screw_shift, y*10.16*3.5+0, -0.1]) {
+            cylinder(d=8, h=10, $fn=60);
+            cylinder(d1=12,d2=8, h=3, $fn=60);
+        }
+        
+        
+            
+        for(x=[-1], y=[-1, 1]) translate([x*10.16*6-screw_shift, y*10.16*3.5+0, -0.1]) {
+            cylinder(d=8, h=5+2.1-2.2, $fn=60);
+            cylinder(d1=12,d2=8, h=3, $fn=60);
         }
             
         }
@@ -174,7 +183,7 @@ module bottom_case(){
     
         cylinder(d = 6.5, h=2, $fn=30);
         cylinder(d = 4.5, h=batdat_case_thickness, $fn=30);
-        cylinder(d = 3, h=batdat_case_thickness+2, $fn=30);
+        cylinder(d = 3, h=batdat_case_thickness+3, $fn=30);
     }
     
     
@@ -188,7 +197,6 @@ module bottom_case(){
 box_outer_w = 103+0.5;
 box_outer_h = 53+0.5;
 box_pcb_shift = 10;
-
 
 
 module front_cover_empty(){
@@ -227,13 +235,17 @@ module front_cover(){
         
         for(x=leds_positions_top) translate([x, 1.6/2+0.6, 0]) scale([1, 1, 1]) cylinder(d1=1.6, d2=3,h=20, $fn=30, center=true);
         for(x=leds_positions_bottom) translate([x, -1.6/2-0.6, 0]) scale([1, 1, 1]) cylinder(d1=1.6, d2=3,h=20, $fn=30, center=true);
-        for(x=leds_button) translate([x, 1.6/2+1.75]) cylinder(d=2.2,h=20, $fn=30, center=true);
+        for(x=leds_button) translate([x, 1.6/2+1.75]) cylinder(d=4,h=20, $fn=30, center=true);
      
   
    // USB-C konektor
     translate([-25.33, -pcb_thickness/2-2.6/2-0.25, 0]) minkowski(){
         cube([8.5-2, 2.6-2, 10], center=true);
         cylinder(d=2.3, h = 1, $fn=30);
+    }   
+    translate([-25.33, -pcb_thickness/2-2.6/2-0.25, 5-1.2]) minkowski(){
+        cube([8.5-2, 2.6-2, 9], center=true);
+        cylinder(d=3, h = 1, $fn=30);
     }   
     
     
@@ -246,15 +258,15 @@ module front_cover(){
   
   
   // Otvory pro srouby na prisroubovani celicka
-    translate([pcb_width/2, -pcb_above_ground+3, 0]) cylinder(d=M3_screw_diameter, h=10, center=true, $fn=60);
-    translate([-pcb_width/2, -pcb_above_ground+3, 0]) cylinder(d=M3_screw_diameter, h=10, center=true, $fn=60);
+    translate([pcb_width/2, -pcb_above_ground+3/2+0.5, 0]) cylinder(d=M3_screw_diameter, h=10, center=true, $fn=60);
+    translate([-pcb_width/2, -pcb_above_ground+3/2+0.5, 0]) cylinder(d=M3_screw_diameter, h=10, center=true, $fn=60);
 
     }
 
         translate([0, 1.6/2, 0]) difference(){
             union(){
                 translate([0, 2.5+0.1, 4]) cube([80.7, 5, 8], center=true);
-                translate([0, -1.5-1.6-0.1, 4]) cube([80.7, 2, 8], center=true);
+                translate([0, -1-1.6-0.1, 4]) cube([80.7, 2, 8], center=true);
             }
             
                 translate([0, -3, 2]) cube([31*2, 4, 15], center=true);
@@ -263,7 +275,7 @@ module front_cover(){
                 translate([10.5, 0.5, 2]) cube([15, 3, 15], center=true);
             }
             for(x=leds_button) translate([x, 1.75]) {
-                cylinder(d=2.2,h=20, $fn=30, center=true);
+                cylinder(d=4,h=20, $fn=30, center=true);
                 translate([0, 0, 4]) cylinder(d=7,h=20, $fn=30);
              }   
             for(x=[0.5, -0.5])  translate([x*10.16*7, 0, 4.9]) rotate([90, 0, 0]) cylinder(d=M3_screw_diameter, h=15, center=true, $fn=30);
@@ -274,15 +286,31 @@ module front_cover(){
 
 front_cover();
 
+
+module button(){
+    difference(){
+        union(){
+            cylinder(d=6.5, h=0.75+0.25, $fn=40);
+            cylinder(d=4-0.2, h = 7+0.25, $fn=40);
+        }
+        translate([-5, -10-1.5, 0]) cube([10, 10, 7-2]);
+        cylinder(d = 2.3, h = 0.4, $fn=40);
+    }
+};
+//translate([7.5, 2.5, 15]) button();
+
 module rear_cover(){
 
     difference(){
         front_cover_empty();
         
+        translate([0, 0, 2.5+4]) cube([200, 100, 5], center=true);
+        
         
   // Otvory pro srouby na prisroubovani celicka
-    translate([pcb_width/2, -pcb_above_ground+3, 0]) cylinder(d=M3_screw_diameter, h=10, center=true, $fn=60);
-    translate([-pcb_width/2, -pcb_above_ground+3, 0]) cylinder(d=M3_screw_diameter, h=10, center=true, $fn=60);
+   translate([-pcb_width/2, -pcb_above_ground+3/2+0.5, 0]) cylinder(d=M3_screw_diameter, h=10, center=true, $fn=60);
+   translate([pcb_width/2, -pcb_above_ground+3/2+0.5, 0]) cylinder(d=M3_screw_diameter, h=10, center=true, $fn=60);
+   
 
      
     for(x=[0.5, -0.5], y=[-0.5, 0.5]) translate([x*95, y*45.47, -1.7]) {
