@@ -209,7 +209,16 @@ void DataOut()
     digitalWrite(SS, HIGH);         // Disable SD card
   }          
 
-  Serial.println(dataString);   // print to terminal 
+  uint16_t i=0;
+  uint16_t len = dataString.length();
+  while(true)
+  {
+    Serial.print(dataString[i++]);
+    if (i>len) break;
+    delay(2);    
+  }
+  Serial.println();
+  //Serial.println(dataString);   // print to terminal 
   Serial1.println(dataString);   // print to terminal 
   digitalWrite(LED3, LOW);     
   
@@ -265,7 +274,7 @@ void setup()
     delay(80);  
     digitalWrite(LED1, LOW); 
   }
-  //digitalWrite(LED1, HIGH); 
+  digitalWrite(LED1, HIGH); 
   
   for( uint16_t n=0; n<200; n++)
   {
@@ -473,6 +482,7 @@ void loop()
       digitalWrite(DRESET, LOW); // L on CONV
       SPI.transfer16(0x0000); 
       digitalWrite(DRESET, HIGH);
+      TCNT1 = 0;          // reset Timer 1 counter
     };
     // Signal is going down, we can run ADC
     delayMicroseconds(4); // This delay is done in cycle overhead
