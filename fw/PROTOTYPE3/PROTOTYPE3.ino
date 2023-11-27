@@ -2,6 +2,7 @@
 // Compiled with: Arduino 1.8.13
 // MightyCore 2.2.2 
 
+
 #define MAJOR 0   // Data format
 #define MINOR 0   // Features
 #include "githash.h"
