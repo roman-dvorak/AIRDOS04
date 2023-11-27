@@ -1,0 +1,180 @@
+name: Build firmware
+
+on:
+  # Triggers the workflow on push or pull request events but only for the "SPACEDOS03A" branch
+  push:
+    #branches: [ "LABDOS01A" ]
+    paths:
+    - 'fw/**'
+    - '*/*.yml'    
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      build_type:
+        required: false
+        type: string
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: PROTOTYPE3
+            type: PROTOTYPE3
+            channels: 0
+            fqbn: clock=8MHz_external
+            
+          # - name: LABDOS_1024
+          #   type: LABDOS
+          #   channels: 1024
+          #   fqbn: clock=8MHz_external
+    
+          # - name: LABDOS_512_16Mhz
+          #   type: LABDOS
+          #   fqbn: clock=16MHz_external
+          #   channels: 512
+            
+          # - name: LABDOS_1024_16Mhz
+          #   type: LABDOS
+          #   fqbn: clock=16MHz_external
+          #   channels: 1024
+            
+          # - name: UAVDOS
+          #   type: UAVDOS
+          #   fqbn: clock=8MHz_external
+          #   channels: 0
+
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+          continue-on-error: true
+          with:
+            submodules: True
+        
+        - name: Update githash.h and compile  
+          run: |
+            BUILD_TYPE="${{ inputs.build_type }}"
+            BT="CIBuild"
+            if [ "$BUILD_TYPE" = "B" ]; then
+              BT="Beta"
+            fi
+            if [ "$BUILD_TYPE" = "R" ]; then
+              BT="Release"
+            fi 
+
+            PREVMAJOR=`cat fw/${{ matrix.type }}/nextversion|grep MAJOR|cut -d ' ' -f 2`
+            PREVMINOR=`cat fw/${{ matrix.type }}/nextversion|grep MINOR|cut -d ' ' -f 2`
+            NEXTRELEASE=`cat fw/${{ matrix.type }}/nextversion|grep RELEASE|cut -d ' ' -f 2`
+            NEXTBUILD=`cat fw/${{ matrix.type }}/nextversion|grep BUILD|cut -d ' ' -f 2`
+
+            CURMAJOR=`cat fw/${{ matrix.type }}/${{ matrix.type }}.ino|grep MAJOR|head -n 1|cut -d ' ' -f 3`
+            CURMINOR=`cat fw/${{ matrix.type }}/${{ matrix.type }}.ino|grep MINOR|head -n 1|cut -d ' ' -f 3`
+
+            if [ "$CURMAJOR" = "$PREVMAJOR" ] && [ "$CURMINOR" = "$PREVMINOR" ]; then
+              echo "Same version"
+            else
+              echo "New version, set release to 0"
+              NEXTRELEASE=0
+            fi
+
+            echo "// This file is overwritten by github actions, do not update it manually" > githash.h
+            echo "String githash = \"${{ github.sha }},${BT}\";" >> githash.h
+            echo "#define GHRELEASE ${NEXTRELEASE}" >> githash.h
+            echo "#define GHBUILD ${NEXTBUILD}" >> githash.h
+            echo "#define GHBUILDTYPE ${BT}" >> githash.h
+
+            mv githash.h fw/${{ matrix.type }}/
+
+            sudo snap install arduino-cli
+            arduino-cli core update-index --additional-urls https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json,https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json > /dev/null
+            arduino-cli core install MightyCore:avr --additional-urls https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json,https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json > /dev/null
+            
+            PLATFORM=MightyCore:avr
+            arduino-cli compile --verbose --warnings all --fqbn MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }}" --build-path fw/${{ matrix.type }}/build/  fw/${{ matrix.type }}
+
+            cd fw/${{ matrix.type }}/build/
+            find -type f -name "*.hex" -exec bash -c 'mv $0 fw_${{ matrix.type }}_${{ matrix.name }}.'"${NEXTBUILD}-${BT}"'$(echo $0|sed -e "s/\.\///1"|sed -e "s/${{ matrix.type }}\.ino//g")' {} \;
+            cd ../../..
+
+            rm fw/build -r || true
+            mv fw/${{ matrix.type }}/build fw/build
+
+            NEXTBUILD=`echo $NEXTBUILD"+1"|bc`
+
+            if [ "$BUILD_TYPE" = "R" ]; then
+              NEXTRELEASE=`echo $NEXTRELEASE"+1"|bc`
+            fi
+            echo "#this file is maintained by github actions" > nextversion
+            echo "MAJOR ${CURMAJOR}" >> nextversion 
+            echo "MINOR ${CURMINOR}" >> nextversion 
+            echo "RELEASE ${NEXTRELEASE}" >> nextversion 
+            echo "BUILD ${NEXTBUILD}" >> nextversion 
+
+            echo "// This file is overwritten by github actions, do not update it manually" > githash.h
+            echo "String githash = \"${{ github.sha }},User\";" >> githash.h
+            echo "#define GHRELEASE ${NEXTRELEASE}" >> githash.h
+            echo "#define GHBUILD 0" >> githash.h
+            echo "#define GHBUILDTYPE User" >> githash.h
+      
+            mv nextversion fw/${{ matrix.type }}/
+            mv githash.h fw/${{ matrix.type }}/
+            touch root
+
+        - name: Store data
+          uses: actions/upload-artifact@v3
+          with:
+            name: fw_${{ matrix.type }}_${{ matrix.name }}
+            path: |
+              fw/build/*.hex
+              fw/${{ matrix.type }}/nextversion
+              fw/${{ matrix.type }}/githash.h
+              root
+            retention-days: 1
+
+  commit:
+    if: github.event_name != 'release' #&& github.event.action == 'created'
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        continue-on-error: true
+        with:
+          submodules: True
+
+      - run: |
+          rm fw/build -r || true
+          mkdir fw/build
+          mkdir fw/artifacts
+
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.0.2
+        with:
+          path: 'fw/artifacts/'
+
+
+      - name: Update git hash
+        run: |
+          for d in `ls fw/artifacts`;
+          do
+            cp -R fw/artifacts/$d/* ./ ||true
+          done
+
+          rm -rf fw/artifacts
+          rm -rf root
+                          
+          git status
+
+      - name: Get last commit message
+        id: last-commit-message
+        run: |
+          echo "msg=$(git log -1 --pretty=%s)" >> $GITHUB_OUTPUT
+          
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: ${{ steps.last-commit-message.outputs.msg }}, extended build
+          file_pattern: 'fw/build/* fw/LABDOS/githash.h fw/LABDOS/nextversion fw/UAVDOS/githash.h fw/UAVDOS/nextversion'
+          #commit_options: '--amend --no-edit'
+          #push_options: '--force'
+          skip_fetch: true
+
