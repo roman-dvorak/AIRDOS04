@@ -26,6 +26,8 @@ for d in devices:
 # Vypnuti LEDEk (resp. prepnuti do RX/TX modu)
 device.send_feature_report([0xA1, 0x08, 0x04])  # Nastavit GPIOA do TX_LED
 device.send_feature_report([0xA1, 0x09, 0x05])  # Nastavit GPIOG do RX_LEDdevice.send_feature_report([0xB0, 0x00, 0x00, 0b00100000, 0b00100000])
+# Nastaveni RTS/CTS
+device.send_feature_report([0xA1, 0x03, 0x01])
 br = 115200
 brb = (br).to_bytes(4, byteorder="little")
 payload = [0xA1, 0x42] + list(brb)

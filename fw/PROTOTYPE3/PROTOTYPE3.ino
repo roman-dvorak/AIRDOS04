@@ -80,6 +80,8 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 #define POWER3V3    2    // PB2
 #define SPI_MUX_SEL 18   // PC2
 #define EXT_I2C_EN  20   // PC4
+#define ACONNECT    28   // PA4 = LOW = analogue frontend connected
+#define RTS         21   // PC5
 
 String filename = "";
 uint16_t fn;
@@ -116,11 +118,14 @@ void readRTC()
 }
 
 bool store = false;
+uint8_t ainserted = 0;
 
 // Timer 1 interrupt service routine (ISR)
 ISR(TIMER1_COMPA_vect)
 {
   store = true;
+  if ((LOW == digitalRead(ACONNECT)) && (0 == ainserted)) ainserted = 1;
+  if (HIGH == digitalRead(ACONNECT)) ainserted = 0;
 }
 
 // Data out
@@ -214,9 +219,9 @@ void DataOut()
   uint16_t len = dataString.length();
   while(true)
   {
-    Serial.print(dataString[i++]);
+    if (!digitalRead(RTS)) {delayMicroseconds(50);Serial.print(dataString[i++]);}
     if (i>len) break;
-    delay(2);    
+    //delay(2);    
   }
   Serial.println();
   //Serial.println(dataString);   // print to terminal 
@@ -245,6 +250,10 @@ void setup()
 
   Serial1.println("#Cvak...");
   
+  pinMode(ACONNECT, INPUT);   // detection of analog frontend
+
+  pinMode(RTS, INPUT);   // UART handshake
+
   pinMode(DRESET, OUTPUT);   // peak detetor
   pinMode(DSET, OUTPUT);   
   pinMode(CONV, INPUT);   
@@ -470,6 +479,19 @@ void loop()
     while((PINB & 1)==0) // Waiting for signal drop
     if (store) 
     {
+      if(1 == ainserted)
+      {
+        ainserted = 2;
+        for( uint16_t n=0; n<200; n++)
+        {
+          delayMicroseconds(180);
+          pinMode(BUZZER, OUTPUT); 
+          digitalWrite(BUZZER, HIGH); 
+          delayMicroseconds(180);
+          pinMode(BUZZER, OUTPUT); 
+          digitalWrite(BUZZER, LOW); 
+        }
+      }
       store = false;
       digitalWrite(DRESET, HIGH);
       digitalWrite(DSET, LOW);
