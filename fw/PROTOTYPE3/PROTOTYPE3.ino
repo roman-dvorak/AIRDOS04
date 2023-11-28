@@ -80,7 +80,7 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 #define POWER3V3    2    // PB2
 #define SPI_MUX_SEL 18   // PC2
 #define EXT_I2C_EN  20   // PC4
-#define ACONNECT    28   // PA4 = LOW = analogue frontend connected
+#define ACONNECT    27   // PA3 = LOW = analogue frontend connected
 #define RTS         21   // PC5
 
 String filename = "";
@@ -124,8 +124,8 @@ uint8_t ainserted = 0;
 ISR(TIMER1_COMPA_vect)
 {
   store = true;
-  if ((LOW == digitalRead(ACONNECT)) && (0 == ainserted)) ainserted = 1;
-  if (HIGH == digitalRead(ACONNECT)) ainserted = 0;
+  //!!!!!if ((LOW == digitalRead(ACONNECT)) && (0 == ainserted)) ainserted = 1;
+  //!!!!!if (HIGH == digitalRead(ACONNECT)) ainserted = 0;
 }
 
 // Data out
@@ -219,7 +219,8 @@ void DataOut()
   uint16_t len = dataString.length();
   while(true)
   {
-    if (!digitalRead(RTS)) {delayMicroseconds(50);Serial.print(dataString[i++]);}
+    for(uint8_t n=0; n<255; n++) if (!digitalRead(RTS)) break;
+    {delayMicroseconds(50);Serial.print(dataString[i++]);}
     if (i>len) break;
     //delay(2);    
   }
@@ -479,9 +480,8 @@ void loop()
     while((PINB & 1)==0) // Waiting for signal drop
     if (store) 
     {
-      if(1 == ainserted)
+      if (digitalRead(ACONNECT))
       {
-        ainserted = 2;
         for( uint16_t n=0; n<200; n++)
         {
           delayMicroseconds(180);
@@ -491,7 +491,13 @@ void loop()
           pinMode(BUZZER, OUTPUT); 
           digitalWrite(BUZZER, LOW); 
         }
+        // Power off
+        Wire.beginTransmission(0x6A); // I2C address
+        Wire.write((uint8_t)0x18); // Start register
+        Wire.write((uint8_t)0x0A); // 
+        Wire.endTransmission();
       }
+
       store = false;
       digitalWrite(DRESET, HIGH);
       digitalWrite(DSET, LOW);
@@ -505,6 +511,7 @@ void loop()
       digitalWrite(DRESET, LOW); // L on CONV
       SPI.transfer16(0x0000); 
       digitalWrite(DRESET, HIGH);
+
       TCNT1 = 0;          // reset Timer 1 counter
     };
     // Signal is going down, we can run ADC
