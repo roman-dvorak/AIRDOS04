@@ -82,6 +82,7 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 #define EXT_I2C_EN  20   // PC4
 #define ACONNECT    27   // PA3 = LOW = analogue frontend connected
 #define RTS         21   // PC5
+#define BTN_USER_B  31   // PA7
 
 String filename = "";
 uint16_t fn;
@@ -250,6 +251,9 @@ void setup()
   Serial1.begin(115200);
 
   Serial1.println("#Cvak...");
+  
+  pinMode(BTN_USER_B, OUTPUT);    // Hold Power
+  digitalWrite(BTN_USER_B, HIGH); 
   
   pinMode(ACONNECT, INPUT);   // detection of analog frontend
 
