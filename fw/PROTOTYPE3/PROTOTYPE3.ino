@@ -84,6 +84,8 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 #define RTS         21   // PC5
 #define BTN_USER_B  31   // PA7
 
+#define BQ34Z100 0x55
+
 String filename = "";
 uint16_t fn;
 uint16_t count = 0;
@@ -117,6 +119,30 @@ void readRTC()
   tm += bcdToDec(Wire.read()) * 10000;
   tm = tm * 60 * 60 + tm_min * 60 + tm_sec;
 }
+
+int16_t readBat(int8_t regaddr)
+{
+  Wire.beginTransmission(BQ34Z100);
+  Wire.write(regaddr);
+  Wire.endTransmission();
+
+  Wire.requestFrom(BQ34Z100,1);
+
+  unsigned int low = Wire.read();
+
+  Wire.beginTransmission(BQ34Z100);
+  Wire.write(regaddr+1);
+  Wire.endTransmission();
+
+  Wire.requestFrom(BQ34Z100,1);
+
+  unsigned int high = Wire.read();
+
+  unsigned int high1 = high<<8;
+
+  return (high1 + low);
+}
+
 
 bool store = false;
 uint8_t ainserted = 0;
@@ -159,6 +185,16 @@ void DataOut()
   dataString += String(tm_s100); 
   dataString += ",";
   dataString += String(flux);
+  dataString += ",";
+  dataString += String(readBat(0x8));   // mV - U
+  dataString += ",";
+  dataString += String(readBat(0xa));  // mA - I
+  dataString += ",";
+  dataString += String(readBat(0x4));   // mAh - remaining capacity
+  dataString += ",";
+  dataString += String(readBat(0x6));   // mAh - full charge
+  dataString += ",";
+  dataString += String(readBat(0xc) * 0.1 - 273.15);   // temperature
   
   for(uint16_t n=0; n<(RANGE); n++)  
   {
