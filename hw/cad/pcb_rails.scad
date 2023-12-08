@@ -20,8 +20,8 @@ M3_nut_diameter = 6.4;
 
 module pcb_edge(){
     difference(){
-        translate([0, 0, 1.5]) cube([136.6+1, pcb_rail_thickness-0.1, 3], center=true);
-        translate([-1, 0, 2+pcb_rail_depth-0.3]) cube([136.6+1, 1.65, 4], center=true);
+        translate([0, 0, 1.5]) cube([136.6+1, pcb_rail_thickness-0.2, 3], center=true);
+        translate([-1, 0, 2+pcb_rail_depth-0.1]) cube([136.6+1, 1.65, 4], center=true);
         translate([0, pcb_rail_thickness/2, 0]) rotate([0, 90, 0]) cylinder(d=1, h=150, center=true, $fn=4);
         translate([0, -pcb_rail_thickness/2, 0]) rotate([0, 90, 0]) cylinder(d=1, h=150, center=true, $fn=4);
         translate([136.6/2+0.75, pcb_rail_thickness/2, 0.8]) rotate([0, 0, 0]) cylinder(d=2, h=5, center=true, $fn=4);
@@ -39,6 +39,9 @@ module rail(){
     difference(){
         union(){
             translate([box_width/2-6, -albase_length/2, 0]) cube([6, albase_length, pcb_above_ground+pcb_rail_thickness+5]);
+            
+            translate([box_width/2-6, albase_length/2-15, 0]) cube([6, 15, pcb_above_ground+pcb_rail_thickness+5+10]);
+            
             translate([box_width/2-flange_width, -(albase_length)/2, 0]) cube([flange_width, 60, flange_th]);
             translate([box_width/2-flange_width, -(albase_length)/2, 0]) cube([flange_width, 20, pcb_above_ground]);
             translate([box_width/2-8, -(albase_length)/2, 3.5]) rotate([0, 45, 0]) cube([4, albase_length, 4]);
@@ -72,7 +75,7 @@ module rail(){
     
     for(y = [5, 0], x=[10.16]) translate([mounting_holes_distance+x, (y+0.5)*10.16, -0.1]) {
         cylinder(d = M3_screw_diameter, h=5, $fn=30);
-        translate([0, 0, 3]) rotate([0, 0, 30]) cylinder(d=6.5, h=7.5, $fn=60);
+        translate([0, 0, 2]) rotate([0, 0, 30]) cylinder(d=7.5, h=7.5, $fn=60);
         }
         
     for(y = [-7], x=[10.16]) translate([mounting_holes_distance+x, (y+0.5)*10.16, -0.1]) {
@@ -82,7 +85,7 @@ module rail(){
     
     for(y = [-8+4], x=[0]) translate([mounting_holes_distance+x, (y+0.5)*10.16, -0.1]) {
         cylinder(d = M3_screw_diameter, h=30, $fn=30);
-            translate([0, 0, 3]) rotate([0, 0, 30]) cylinder(d=6.5, h=3, $fn=60);
+            translate([0, 0, 2]) rotate([0, 0, 30]) cylinder(d=7.5, h=3, $fn=60);
         }
         for(y = [-8], x=[0]) translate([mounting_holes_distance+x, (y+0.5)*10.16, -0.1]) {
         cylinder(d = M3_screw_diameter, h=30, $fn=30);
@@ -215,10 +218,26 @@ module front_cover_empty(){
     
     translate([0, 0, 5+5]) cube([200, 200, 10], center=true);
         
-    minkowski(){
+    translate([0, 0, 1.25]) minkowski(){
         cylinder(d=8, h=10, $fn=30);
         cube([box_outer_w-8+0.6, box_outer_h-8+0.6, .1], center=true);
     }
+    
+    
+    // Vyrez pro celou sirku ALBASE
+    translate([0, -5, 0]) minkowski(){
+        cylinder(d=8, h=10, $fn=30);
+        cube([box_outer_w-8+0.6, 25-8+0.6, .1], center=true);
+    }
+    
+    
+    translate([0, 0, 0]) minkowski(){
+        cylinder(d=2, h=10, $fn=30);
+        cube([box_outer_w-8+0.6, box_outer_h-8+0.6, .1], center=true);
+    }
+    
+       
+    
     }
 }
 
@@ -284,7 +303,7 @@ module front_cover(){
     }
 }
 
-front_cover();
+//front_cover();
 
 
 module button(){
@@ -302,8 +321,13 @@ module button(){
 module rear_cover(){
 
     difference(){
-        front_cover_empty();
+        union(){
+            front_cover_empty();    
+            //cube([, 5, 1.5]);
         
+        }
+        
+        // Snizeni rantlu.. 
         translate([0, 0, 2.5+4]) cube([200, 100, 5], center=true);
         
         
@@ -333,4 +357,4 @@ module rear_cover(){
     }
 }
 
-//rear_cover();
+rear_cover();
