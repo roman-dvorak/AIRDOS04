@@ -655,12 +655,19 @@ void loop()
         digitalWrite(LED2, digitalRead(ACONNECT)); 
         if (digitalRead(ACONNECT))
         {
+          Wire.beginTransmission(0x51); // 1 kHz to #INTA
+          Wire.write(0x28); 
+          Wire.write(0x05);             // COF
+          Wire.endTransmission();
+          
+          delay(100);
+
           for( uint16_t n=0; n<200; n++)
           {
-            delayMicroseconds(180);
+            delayMicroseconds(250);
             pinMode(BUZZER, OUTPUT); 
             digitalWrite(BUZZER, HIGH); 
-            delayMicroseconds(180);
+            delayMicroseconds(250);
             pinMode(BUZZER, OUTPUT); 
             digitalWrite(BUZZER, LOW); 
           }
