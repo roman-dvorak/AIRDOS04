@@ -243,8 +243,6 @@ void DataOut()
     flux += histogram[n]; 
   }
 
-  digitalWrite(LED3, HIGH); 
-
   // make a string for assembling the data to log:
   String dataString = "";
 
@@ -284,6 +282,7 @@ void DataOut()
   if (SDinserted)
   {
     //PORTB = 0b11111110; // SD card power on
+    digitalWrite(LED3, HIGH); 
     
     // make sure that the default chip select pin is set to output
     // see if the card is present and can be initialized:
@@ -314,21 +313,25 @@ void DataOut()
     }  
   //PORTB = 0b00000000; // SD card power off
     digitalWrite(SS, HIGH);         // Disable SD card
-  }          
-
-  uint16_t i=0;
-  uint16_t len = dataString.length();
-  while(true)
-  {
-    for(uint8_t n=0; n<255; n++) if (!digitalRead(RTS)) break;
-    {delayMicroseconds(50);Serial.print(dataString[i++]);}
-    if (i>len) break;
-    //delay(2);    
+  }   
+  else
+  {       
+    digitalWrite(LED2, HIGH); 
+    // Debug output if SD card is not inserted
+    uint16_t i=0;
+    uint16_t len = dataString.length();
+    while(true)
+    {
+      for(uint8_t n=0; n<255; n++) if (!digitalRead(RTS)) break;
+      {delayMicroseconds(50);Serial.print(dataString[i++]);}
+      if (i>len) break;
+      //delay(2);    
+    }
+    Serial.println();             // print to HID
+    Serial1.println(dataString);  // print to debug terminal 
   }
-  Serial.println();
-  //Serial.println(dataString);   // print to terminal 
-  Serial1.println(dataString);   // print to terminal 
   digitalWrite(LED3, LOW);     
+  digitalWrite(LED2, LOW);     
   
   count++;
   if (count > MAX_MEASUREMENTS) 
@@ -428,16 +431,14 @@ void setup()
       Wire.endTransmission();
 
       delay(1000);
-      while (true)
-      {
-        delay(500);
-        Wire.beginTransmission(0x6A); // Read charger status
-        Wire.write(0x21);
-        Wire.endTransmission();
-        Wire.requestFrom(0x6A,1);
-        uint8_t ch_status = Wire.read();  
-        if ((ch_status & 1) != 0) resetFunc();   // Reset if VBUS status changed
-      }
+
+      // Power off
+      Wire.beginTransmission(0x6A); // I2C address
+      Wire.write((uint8_t)0x18); // Start register
+      Wire.write((uint8_t)0x0A); // 
+      Wire.endTransmission();
+
+      while (true); // After removing USB the reset proceeds
     }
   }
     
@@ -651,6 +652,7 @@ void loop()
       if (store >= 2) // Data out every 10 s
       {
         store = 0;
+        digitalWrite(LED2, digitalRead(ACONNECT)); 
         if (digitalRead(ACONNECT))
         {
           for( uint16_t n=0; n<200; n++)
