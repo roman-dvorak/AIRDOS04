@@ -9,6 +9,10 @@
 _autosave-*
 *.tmp
 
+
+*.blend1
+
+
 # Netlist files (exported from Eeschema)
 #*.net
 
