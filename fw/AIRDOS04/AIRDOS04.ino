@@ -377,9 +377,9 @@ void setup()
   pinMode(SCK, OUTPUT);  
 
   digitalWrite(SDpower, HIGH);   // SD card power on
-  digitalWrite(SS, HIGH);         // Disable SD card
+  digitalWrite(SS, HIGH);        // Disable SD card
   digitalWrite(SCK, LOW);    
-  digitalWrite(SDmode, LOW);   // SD card reader oscilator off
+  digitalWrite(SDmode, LOW);     // SD card reader oscilator off
 
   /* DEBUG Charger status
       while (true)
@@ -395,6 +395,29 @@ void setup()
         Serial1.println(ch_status,HEX);  
       }
   */
+
+  // Setup battery charger
+  Wire.beginTransmission(0x6A); // I2C address
+  Wire.write((uint8_t)0x02); // Start register
+  Wire.write((uint8_t)(int(800/40))<<5); // 800 mA
+  Wire.endTransmission();
+  Wire.beginTransmission(0x6A); // I2C address
+  Wire.write((uint8_t)0x14); // Start register
+  Wire.write((uint8_t)0b00100010); 
+  Wire.write((uint8_t)0b00011101); 
+  Wire.write((uint8_t)0b10100000); 
+  Wire.write((uint8_t)0b01010110); 
+  Wire.write((uint8_t)0b00000000); 
+  Wire.write((uint8_t)0b00000001); 
+  Wire.endTransmission();
+  Wire.beginTransmission(0x6A); // I2C address
+  Wire.write((uint8_t)0x1a); // Start register
+  Wire.write((uint8_t)0b10111111); // NTC
+  Wire.endTransmission();
+  Wire.beginTransmission(0x6A); // I2C address
+  Wire.write((uint8_t)0x26); // Start register
+  Wire.write((uint8_t)0b10001100); // ADC
+  Wire.endTransmission();
       
   if (digitalRead(ACONNECT))  // Analog board disconnected
   {
