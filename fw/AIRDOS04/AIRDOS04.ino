@@ -354,10 +354,7 @@ void setup()
   Serial1.begin(115200);
 
   Serial1.println("#Cvak...");
-  
-  //pinMode(BTN_USER_B, OUTPUT);    // Hold Power
-  // digitalWrite(BTN_USER_B, HIGH); 
-  
+    
   pinMode(ACONNECT, INPUT);      // detection of analog frontend
   pinMode(ENUM_FTDI_USB, INPUT); // detection of USB
   pinMode(RTS, INPUT);           // UART handshake
@@ -380,21 +377,6 @@ void setup()
   digitalWrite(SS, HIGH);        // Disable SD card
   digitalWrite(SCK, LOW);    
   digitalWrite(SDmode, LOW);     // SD card reader oscilator off
-
-  /* DEBUG Charger status
-      while (true)
-      {
-        delay(1000);
-        Wire.beginTransmission(0x6A); // Read charger status
-        Wire.write(0x21);
-        Wire.endTransmission();
-      
-        Wire.requestFrom(0x6A,1);
-      
-        uint8_t ch_status = Wire.read();  
-        Serial1.println(ch_status,HEX);  
-      }
-  */
 
   // Setup battery charger
   Wire.beginTransmission(0x6A); // I2C address
@@ -448,7 +430,7 @@ void setup()
         digitalWrite(BUZZER, LOW); 
       }
       // SD card reader on
-      Wire.beginTransmission(0x70); // card reader address
+      Wire.beginTransmission(0x71); // card reader address
       Wire.write((uint8_t)0x00); // Start register
       Wire.write((uint8_t)0b00010011); // 0b0001 0 01 1
       Wire.endTransmission();
