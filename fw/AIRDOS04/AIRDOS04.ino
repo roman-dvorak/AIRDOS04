@@ -3,7 +3,7 @@
 // MightyCore 2.2.2 
 
 
-#define MAJOR 0   // Data format
+#define MAJOR 1   // Data format
 #define MINOR 0   // Features
 #include "githash.h"
 
@@ -77,8 +77,11 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 #define SPI_MUX_SEL 18   // PC2
 #define EXT_I2C_EN  20   // PC4
 #define ACONNECT    27   // PA3 = LOW = analogue frontend connected
-#define RTS         21   // PC5
+#define CTS         28   // PA4
+#define RTS         29   // PA5
+//#define BTN_USER_A  30   // PA6
 //#define BTN_USER_B  31   // PA7
+#define ENUM_FTDI_USB 21 // PC5 = LOW = USB connected
 
 #define BQ34Z100 0x55
 
@@ -89,6 +92,8 @@ uint8_t lo, hi;
 uint16_t u_sensor;
 boolean SDinserted = true;
 uint8_t histogram[CHANNELS];
+
+void(* resetFunc) (void) = 0; //declare reset function at address 0
 
 uint8_t bcdToDec(uint8_t b)
 {
@@ -139,14 +144,14 @@ int16_t readBat(int8_t regaddr)
 
 
 uint8_t store = 0;
-uint8_t batt = 12;
+uint8_t batt = 0;
 uint8_t ainserted = 0;
 
 // Timer 1 interrupt service routine (ISR)
 ISR(TIMER1_COMPA_vect)
 {
   store++;
-  batt--;
+  batt++;
   TCNT1 = 0; // Reset Counter
 }
 
@@ -163,8 +168,6 @@ void BattOut()
   {
     flux += histogram[n]; 
   }
-
-  digitalWrite(LED3, HIGH); 
 
   // make a string for assembling the data to log:
   String dataString = "";
@@ -232,7 +235,7 @@ void DataOut()
   digitalWrite(SDpower, HIGH);   // SD card power on
   digitalWrite(SPI_MUX_SEL, LOW); // SDcard    
 
-  uint16_t noise = 9;
+  uint16_t noise = 4;
   uint32_t flux=0;
 
   for(uint16_t n=noise; n<(CHANNELS); n++)  
@@ -256,16 +259,6 @@ void DataOut()
   dataString += String(tm_s100); 
   dataString += ",";
   dataString += String(flux);
-  dataString += ",";
-  dataString += String(readBat(0x8));   // mV - U
-  dataString += ",";
-  dataString += String(readBat(0xa));  // mA - I
-  dataString += ",";
-  dataString += String(readBat(0x4));   // mAh - remaining capacity
-  dataString += ",";
-  dataString += String(readBat(0x6));   // mAh - full charge
-  dataString += ",";
-  dataString += String(readBat(0xc) * 0.1 - 273.15);   // temperature
   
   for(uint16_t n=0; n<(CHANNELS); n++)  
   {
@@ -362,9 +355,9 @@ void setup()
   //pinMode(BTN_USER_B, OUTPUT);    // Hold Power
   // digitalWrite(BTN_USER_B, HIGH); 
   
-  pinMode(ACONNECT, INPUT);   // detection of analog frontend
-
-  pinMode(RTS, INPUT);   // UART handshake
+  pinMode(ACONNECT, INPUT);      // detection of analog frontend
+  pinMode(ENUM_FTDI_USB, INPUT); // detection of USB
+  pinMode(RTS, INPUT);           // UART handshake
 
   pinMode(DRESET, OUTPUT);   // peak detetor
   pinMode(DSET, OUTPUT);   
@@ -383,8 +376,71 @@ void setup()
   digitalWrite(SDpower, HIGH);   // SD card power on
   digitalWrite(SS, HIGH);         // Disable SD card
   digitalWrite(SCK, LOW);    
-  //!!!digitalWrite(SDmode, HIGH);   // SD card reader on
+  digitalWrite(SDmode, LOW);   // SD card reader oscilator off
 
+  /* DEBUG Charger status
+      while (true)
+      {
+        delay(1000);
+        Wire.beginTransmission(0x6A); // Read charger status
+        Wire.write(0x21);
+        Wire.endTransmission();
+      
+        Wire.requestFrom(0x6A,1);
+      
+        uint8_t ch_status = Wire.read();  
+        Serial1.println(ch_status,HEX);  
+      }
+  */
+      
+  if (digitalRead(ACONNECT))  // Analog board disconnected
+  {
+    delay(1000);
+    if (!digitalRead(ENUM_FTDI_USB))
+    {
+      // SD card reader ON
+      digitalWrite(SDmode, HIGH);   // SD card reader oscilator on
+      
+      pinMode(LED1, OUTPUT); 
+      digitalWrite(LED1, HIGH); 
+      for( uint16_t n=0; n<200; n++)
+      {
+        delayMicroseconds(250);
+        pinMode(BUZZER, OUTPUT); 
+        digitalWrite(BUZZER, HIGH); 
+        delayMicroseconds(250);
+        pinMode(BUZZER, OUTPUT); 
+        digitalWrite(BUZZER, LOW); 
+      };
+      for( uint16_t n=0; n<200; n++)
+      {
+        delayMicroseconds(180);
+        pinMode(BUZZER, OUTPUT); 
+        digitalWrite(BUZZER, HIGH); 
+        delayMicroseconds(180);
+        pinMode(BUZZER, OUTPUT); 
+        digitalWrite(BUZZER, LOW); 
+      }
+      // SD card reader on
+      Wire.beginTransmission(0x70); // card reader address
+      Wire.write((uint8_t)0x00); // Start register
+      Wire.write((uint8_t)0b00010011); // 0b0001 0 01 1
+      Wire.endTransmission();
+
+      delay(1000);
+      while (true)
+      {
+        delay(500);
+        Wire.beginTransmission(0x6A); // Read charger status
+        Wire.write(0x21);
+        Wire.endTransmission();
+        Wire.requestFrom(0x6A,1);
+        uint8_t ch_status = Wire.read();  
+        if ((ch_status & 1) != 0) resetFunc();   // Reset if VBUS status changed
+      }
+    }
+  }
+    
   pinMode(EXT_I2C_EN, OUTPUT);    // Enable external I2C
   digitalWrite(EXT_I2C_EN, HIGH);   
 
@@ -419,14 +475,6 @@ void setup()
 
   digitalWrite(DSET, LOW);       // Disable ADC
   digitalWrite(DRESET, HIGH);       
-
-  // SD card reader ON
-  /*
-  Wire.beginTransmission(0x70); // card reader address
-  Wire.write((uint8_t)0x00); // Start register
-  Wire.write((uint8_t)0b00010011); // 0b0001 0 01 1
-  Wire.endTransmission();
-  //*/  
   
   // Initiation of RTC
   Wire.beginTransmission(0x51); // init clock
@@ -459,7 +507,7 @@ void setup()
   Wire.endTransmission();
   
   // make a string for device identification output
-  String dataString = "$DOS,AIRDOS04," + FWversion + "," + githash + ","; // FW version and Git hash
+  String dataString = "$DOS,AIRDOS04," + FWversion + ",0," + githash + ","; // FW version and Git hash
   
   Wire.beginTransmission(0x59);                   // request SN from EEPROM - analog board
   Wire.write((int)0x08); // MSB
@@ -594,19 +642,15 @@ void loop()
   digitalWrite(DRESET, HIGH);
   
   store = 0;
+  batt = 0;
   // dosimeter integration
   while(true)
   {
     while((PINB & 1)==0) // Waiting for signal drop
-    {
-      if (0 == batt)
+    {     
+      if (store >= 2) // Data out every 10 s
       {
-        BattOut();
-        batt == 12;
-      };
-      
-      if (2 == store) 
-      {
+        store = 0;
         if (digitalRead(ACONNECT))
         {
           for( uint16_t n=0; n<200; n++)
@@ -625,7 +669,6 @@ void loop()
           Wire.endTransmission();
         }
   
-        store = 0;
         digitalWrite(DRESET, HIGH);
         digitalWrite(DSET, LOW);
         DataOut();
@@ -633,14 +676,22 @@ void loop()
         {
           histogram[n]=0;
         }
+  
+        if (batt >= 12) // Battery status every 60 s
+        {
+          batt = 0;
+          BattOut();
+        };
+
         // dummy conversion
         digitalWrite(DSET, HIGH);
         digitalWrite(DRESET, LOW); // L on CONV
         SPI.transfer16(0x0000); 
         digitalWrite(DRESET, HIGH);
-  
+
         TCNT1 = 0;          // reset Timer 1 counter
       }
+
     };
     // Signal is going down, we can run ADC
     // delayMicroseconds(4); // This delay is done in cycle overhead
