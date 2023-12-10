@@ -173,7 +173,7 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: ${{ steps.last-commit-message.outputs.msg }}, extended build
-          file_pattern: 'fw/build/* fw/${{ matrix.type }}/githash.h fw/${{ matrix.type }}/nextversion'
+          file_pattern: 'fw/build/* fw/PROTOTYPE3/githash.h fw/PROTOTYPE3/nextversion'
           #commit_options: '--amend --no-edit'
           #push_options: '--force'
           skip_fetch: true
