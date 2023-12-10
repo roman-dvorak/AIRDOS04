@@ -400,51 +400,86 @@ void setup()
   Wire.write((uint8_t)0x26); // Start register
   Wire.write((uint8_t)0b10001100); // ADC
   Wire.endTransmission();
-      
+
+  boolean SDreader = false;    
   if (digitalRead(ACONNECT))  // Analog board disconnected
-  {
-    delay(1000);
-    if (!digitalRead(ENUM_FTDI_USB))
+  {  
+    while(true)
     {
-      // SD card reader ON
-      digitalWrite(SDmode, HIGH);   // SD card reader oscilator on
-      
-      pinMode(LED1, OUTPUT); 
-      digitalWrite(LED1, HIGH); 
-      for( uint16_t n=0; n<200; n++)
+      uint8_t vbus;
+      uint8_t vbus_old = 0;
+      while(true)
       {
-        delayMicroseconds(250);
-        pinMode(BUZZER, OUTPUT); 
-        digitalWrite(BUZZER, HIGH); 
-        delayMicroseconds(250);
-        pinMode(BUZZER, OUTPUT); 
-        digitalWrite(BUZZER, LOW); 
-      };
-      for( uint16_t n=0; n<200; n++)
-      {
-        delayMicroseconds(180);
-        pinMode(BUZZER, OUTPUT); 
-        digitalWrite(BUZZER, HIGH); 
-        delayMicroseconds(180);
-        pinMode(BUZZER, OUTPUT); 
-        digitalWrite(BUZZER, LOW); 
+        // Is VBUS (USB) present?
+        Wire.beginTransmission(0x6A);      // ADC of VBUS
+        Wire.write(0x2D); // MSB 0.264 V/bit
+        Wire.endTransmission();
+        Wire.requestFrom(0x6A, 1);    
+        vbus = Wire.read() & 0x7F;
+        if (vbus_old == vbus) break; // is the value stable?
+        vbus_old = vbus;
+        delay(1000);
       }
-      // SD card reader on
-      Wire.beginTransmission(0x71); // card reader address
-      Wire.write((uint8_t)0x00); // Start register
-      Wire.write((uint8_t)0b00010011); // 0b0001 0 01 1
-      Wire.endTransmission();
 
-      delay(1000);
+      if (vbus < 17) // < 4.5 V
+      {
+        Wire.beginTransmission(0x51); // 1 kHz to #INTA
+        Wire.write(0x28); 
+        Wire.write(0x05);             // COF
+        Wire.endTransmission();
+        
+        for( uint16_t n=0; n<200; n++)
+        {
+          delayMicroseconds(250);
+          pinMode(BUZZER, OUTPUT); 
+          digitalWrite(BUZZER, HIGH); 
+          delayMicroseconds(250);
+          pinMode(BUZZER, OUTPUT); 
+          digitalWrite(BUZZER, LOW); 
+        }
+        // Power off
+        Wire.beginTransmission(0x6A); // I2C address
+        Wire.write((uint8_t)0x18); // Start register
+        Wire.write((uint8_t)0x0A); // 
+        Wire.endTransmission();
+        delay(5000);
+      }          
+    
 
-      // Power off
-      Wire.beginTransmission(0x6A); // I2C address
-      Wire.write((uint8_t)0x18); // Start register
-      Wire.write((uint8_t)0x0A); // 
-      Wire.endTransmission();
-
-      while (true); // After removing USB the reset proceeds
-    }
+      if (!SDreader)
+      {
+        SDreader = true;
+        // SD card reader ON
+        digitalWrite(SDmode, HIGH);   // SD card reader oscilator on
+        
+        pinMode(LED1, OUTPUT); 
+        digitalWrite(LED1, HIGH); 
+        for( uint16_t n=0; n<200; n++)
+        {
+          delayMicroseconds(250);
+          pinMode(BUZZER, OUTPUT); 
+          digitalWrite(BUZZER, HIGH); 
+          delayMicroseconds(250);
+          pinMode(BUZZER, OUTPUT); 
+          digitalWrite(BUZZER, LOW); 
+        };
+        for( uint16_t n=0; n<200; n++)
+        {
+          delayMicroseconds(180);
+          pinMode(BUZZER, OUTPUT); 
+          digitalWrite(BUZZER, HIGH); 
+          delayMicroseconds(180);
+          pinMode(BUZZER, OUTPUT); 
+          digitalWrite(BUZZER, LOW); 
+        }
+        // SD card reader on
+        Wire.beginTransmission(0x71); // card reader address
+        Wire.write((uint8_t)0x00); // Start register
+        Wire.write((uint8_t)0b00010011); // 0b0001 0 01 1
+        Wire.endTransmission();
+      }
+    };
+    delay(1000);
   }
     
   pinMode(EXT_I2C_EN, OUTPUT);    // Enable external I2C
@@ -658,15 +693,13 @@ void loop()
       {
         store = 0;
         digitalWrite(LED2, digitalRead(ACONNECT)); 
-        if (digitalRead(ACONNECT))
+        if (digitalRead(ACONNECT))  // Analog part is disconnected?
         {
           Wire.beginTransmission(0x51); // 1 kHz to #INTA
           Wire.write(0x28); 
           Wire.write(0x05);             // COF
           Wire.endTransmission();
           
-          delay(100);
-
           for( uint16_t n=0; n<200; n++)
           {
             delayMicroseconds(250);
@@ -681,7 +714,8 @@ void loop()
           Wire.write((uint8_t)0x18); // Start register
           Wire.write((uint8_t)0x0A); // 
           Wire.endTransmission();
-        }
+          while(true);
+        };
   
         digitalWrite(DRESET, HIGH);
         digitalWrite(DSET, LOW);
