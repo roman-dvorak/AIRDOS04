@@ -19,8 +19,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: PROTOTYPE3
-            type: PROTOTYPE3
+          - name: AIRDOS04
+            type: AIRDOS04
             channels: 0
             fqbn: clock=8MHz_external
             
@@ -49,7 +49,7 @@ jobs:
           uses: actions/checkout@v3
           continue-on-error: true
           with:
-            submodules: True
+            submodules: False
         
         - name: Update githash.h and compile  
           run: |
@@ -173,7 +173,7 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: ${{ steps.last-commit-message.outputs.msg }}, extended build
-          file_pattern: 'fw/build/* fw/LABDOS/githash.h fw/LABDOS/nextversion fw/UAVDOS/githash.h fw/UAVDOS/nextversion'
+          file_pattern: 'fw/build/* fw/AIRDOS04/githash.h fw/AIRDOS04/nextversion'
           #commit_options: '--amend --no-edit'
           #push_options: '--force'
           skip_fetch: true
