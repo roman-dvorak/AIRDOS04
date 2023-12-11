@@ -1,7 +1,6 @@
-// AIRDOS04
+#define TYPE "AIRDOS04A"
 // Compiled with: Arduino 1.8.13
 // MightyCore 2.2.2 
-
 
 #define MAJOR 1   // Data format
 #define MINOR 0   // Features
@@ -563,7 +562,7 @@ while(true)
   Wire.endTransmission();
   
   // make a string for device identification output
-  String dataString = "$DOS,AIRDOS04," + FWversion + ",0," + githash + ","; // FW version and Git hash
+  String dataString = "$DOS,"TYPE"," + FWversion + ",0," + githash + ","; // FW version and Git hash
   
   Wire.beginTransmission(0x59);                   // request SN from EEPROM - analog board
   Wire.write((int)0x08); // MSB
