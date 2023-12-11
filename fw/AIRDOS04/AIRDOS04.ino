@@ -386,7 +386,7 @@ void setup()
   Wire.beginTransmission(0x6A); // I2C address
   Wire.write((uint8_t)0x14); // Start register
   Wire.write((uint8_t)0b00100010); 
-  Wire.write((uint8_t)0b00011101); 
+  Wire.write((uint8_t)0b00011001); 
   Wire.write((uint8_t)0b10100000); 
   Wire.write((uint8_t)0b01010110); 
   Wire.write((uint8_t)0b00000000); 
@@ -400,6 +400,21 @@ void setup()
   Wire.write((uint8_t)0x26); // Start register
   Wire.write((uint8_t)0b10001100); // ADC
   Wire.endTransmission();
+
+  /* DEBUG VBUS voltage
+uint8_t vbus;
+while(true)
+{
+  // Is VBUS (USB) present?
+  Wire.beginTransmission(0x6A);      // ADC of VBUS
+  Wire.write(0x2D); // MSB 0.264 V/bit
+  Wire.endTransmission();
+  Wire.requestFrom(0x6A, 1);    
+  vbus = Wire.read() & 0x7F;
+  Serial1.println(vbus);
+  delay(1000);
+}
+   //*/
 
   boolean SDreader = false;    
   if (digitalRead(ACONNECT))  // Analog board disconnected
@@ -714,7 +729,8 @@ void loop()
           Wire.write((uint8_t)0x18); // Start register
           Wire.write((uint8_t)0x0A); // 
           Wire.endTransmission();
-          while(true);
+          delay(10000);
+          //while(true);
         };
   
         digitalWrite(DRESET, HIGH);
