@@ -313,7 +313,7 @@ void DataOut()
   //PORTB = 0b00000000; // SD card power off
     digitalWrite(SS, HIGH);         // Disable SD card
   }   
-  else
+//  else
   {       
     digitalWrite(LED2, HIGH); 
     // Debug output if SD card is not inserted
