@@ -351,6 +351,7 @@ void setup()
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
   Serial1.begin(115200);
+  Wire.setClock(100000);
 
   Serial1.println("#Cvak...");
     
@@ -380,11 +381,11 @@ void setup()
   // Setup battery charger
   Wire.beginTransmission(0x6A); // I2C address
   Wire.write((uint8_t)0x02); // Start register
-  Wire.write((uint8_t)(int(800/40))<<5); // 800 mA
+  Wire.write((uint8_t)(int(440/40))<<5); // 440 mA
   Wire.endTransmission();
   Wire.beginTransmission(0x6A); // I2C address
   Wire.write((uint8_t)0x14); // Start register
-  Wire.write((uint8_t)0b00100010); 
+  Wire.write((uint8_t)0b00100110); 
   Wire.write((uint8_t)0b00011001); 
   Wire.write((uint8_t)0b10100000); 
   Wire.write((uint8_t)0b01010110); 
@@ -400,17 +401,19 @@ void setup()
   Wire.write((uint8_t)0b10001100); // ADC
   Wire.endTransmission();
 
+
   /* DEBUG VBUS voltage
 uint8_t vbus;
 while(true)
 {
   // Is VBUS (USB) present?
   Wire.beginTransmission(0x6A);      // ADC of VBUS
-  Wire.write(0x2D); // MSB 0.264 V/bit
+  //Wire.write(0x2D); // MSB 0.264 V/bit
+  Wire.write(0x1E); 
   Wire.endTransmission();
   Wire.requestFrom(0x6A, 1);    
-  vbus = Wire.read() & 0x7F;
-  Serial1.println(vbus);
+  vbus = Wire.read();
+  Serial1.println(vbus, HEX);
   delay(1000);
 }
    //*/
@@ -518,8 +521,6 @@ while(true)
     pinMode(BUZZER, OUTPUT); 
     digitalWrite(BUZZER, LOW); 
   }
-
-  Wire.setClock(100000);
 
   Serial1.println("#Hmmm...");
 
@@ -713,6 +714,8 @@ void loop()
           Wire.write(0x28); 
           Wire.write(0x05);             // COF
           Wire.endTransmission();
+
+          delay(3000);
           
           for( uint16_t n=0; n<200; n++)
           {
