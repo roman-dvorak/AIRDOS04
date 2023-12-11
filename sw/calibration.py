@@ -59,10 +59,10 @@ while True:
         wave['field'] = [int(item) if item.isdigit() else 0 for item in text.split(',')[4:]]
 
         #print(str(text).split(',')[4:-1])
-        #print(wave)
+        print(text)
 
         
-        if (n>0):
+        if (n>1):
             spectrum['sum'] = spectrum['sum'] + wave['field']
             #print(wave)
 
