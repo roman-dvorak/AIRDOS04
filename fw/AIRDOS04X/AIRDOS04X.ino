@@ -1,5 +1,6 @@
-#define TYPE "AIRDOS04A"
-#define DIGTYPE "BATDATUNIT01B-EXT"
+#define TYPE "AIRDOS04X"
+#define DIGTYPE "BATDATUNIT01B"
+#define ADCTYPE "USTSIPIN03A"
 // Compiled with: Arduino 1.8.13
 // MightyCore 2.2.2 
 
@@ -88,10 +89,12 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 String filename = "";
 uint16_t fn;
 uint16_t count = 0;
-uint8_t lo, hi;
-uint16_t u_sensor;
 boolean SDinserted = true;
 uint8_t histogram[CHANNELS];
+uint8_t ADCconf1;
+uint8_t ADCconf2;
+uint8_t DIGconf1;
+uint8_t DIGconf2;
 
 void(* resetFunc) (void) = 0; //declare reset function at address 0
 
@@ -386,7 +389,36 @@ void setup()
   Wire.write((uint8_t)0x15); // Start register
   Wire.write((uint8_t)0b10011001); // Disable charging LED
   Wire.endTransmission();
-
+/*
+  for (uint16_t MSB=0; MSB<=256; MSB++)
+  {
+    uint8_t c=0;
+    Serial1.print(MSB, HEX);
+    Serial1.print("\t");
+    for (uint16_t LSB=0; LSB<256; LSB++)
+    {
+      Wire.beginTransmission(0x50);                   // request configuration from EEPROM - digital board
+      Wire.write(MSB); // MSB
+      Wire.write(LSB); // LSB
+      Wire.endTransmission();
+      Wire.requestFrom((uint8_t)0x50, (uint8_t)1);    
+      Serial1.print(" ");
+      uint8_t ble;
+      ble = (uint8_t) Wire.read();
+      Serial1.print(ble, HEX);
+      if (ble < 0xFF) delay(200); 
+      //Serial1.println('....');
+      c++;
+      if (c == 32) 
+      {
+        Serial1.println();
+        Serial1.print("\t"); 
+        c=0;       
+      }
+    }
+    Serial1.println();  
+  }
+*/
   /* DEBUG VBUS voltage
 uint8_t vbus;
 while(true)
@@ -551,11 +583,11 @@ while(true)
   // make a string for device identification output
   String dataString = "$DOS,"TYPE"," + FWversion + ",0," + githash + ","; // FW version and Git hash
   
-  Wire.beginTransmission(0x59);                   // request SN from EEPROM - analog board
+  Wire.beginTransmission(0x5B);                   // request SN from EEPROM - analog board
   Wire.write((int)0x08); // MSB
   Wire.write((int)0x00); // LSB
   Wire.endTransmission();
-  Wire.requestFrom((uint8_t)0x59, (uint8_t)16);    
+  Wire.requestFrom((uint8_t)0x5B, (uint8_t)16);    
   for (int8_t reg=0; reg<16; reg++)
   { 
     uint8_t serialbyte = Wire.read(); // receive a byte
@@ -575,6 +607,39 @@ while(true)
     if (serialbyte<0x10) dataString += "0";
     dataString += String(serialbyte,HEX);    
   }
+  dataString += ","; 
+  Wire.beginTransmission(0x50);                   // request configuration from EEPROM - digital board
+  Wire.write((int)0x00); // MSB
+  Wire.write((int)0x00); // LSB
+  Wire.endTransmission();
+  Wire.requestFrom((uint8_t)0x50, (uint8_t)2);    
+  DIGconf1 = Wire.read();
+  DIGconf2 = Wire.read();
+  dataString += String(DIGconf1,HEX);    
+  dataString += String(DIGconf2,HEX);    
+
+  dataString += "\r\n$ADC,"ADCTYPE","; 
+  Wire.beginTransmission(0x5B);                   // request SN from EEPROM - analog board
+  Wire.write((int)0x08); // MSB
+  Wire.write((int)0x00); // LSB
+  Wire.endTransmission();
+  Wire.requestFrom((uint8_t)0x5B, (uint8_t)16);    
+  for (int8_t reg=0; reg<16; reg++)
+  { 
+    uint8_t serialbyte = Wire.read(); // receive a byte
+    if (serialbyte<0x10) dataString += "0";
+    dataString += String(serialbyte,HEX);    
+  };
+  dataString += ","; 
+  Wire.beginTransmission(0x53);                   // request configuration from EEPROM - analog board
+  Wire.write((int)0x00); // MSB
+  Wire.write((int)0x00); // LSB
+  Wire.endTransmission();
+  Wire.requestFrom((uint8_t)0x53, (uint8_t)2);    
+  ADCconf1 = Wire.read();
+  ADCconf2 = Wire.read();
+  dataString += String(ADCconf1,HEX);    
+  dataString += String(ADCconf2,HEX);    
 
   // Filename selection and initial write to SD card
   {    
