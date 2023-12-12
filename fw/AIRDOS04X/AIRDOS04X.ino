@@ -1,4 +1,5 @@
 #define TYPE "AIRDOS04A"
+#define DIGTYPE "BATDATUNIT01B-EXT"
 // Compiled with: Arduino 1.8.13
 // MightyCore 2.2.2 
 
@@ -78,7 +79,7 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 #define ACONNECT    27   // PA3 = LOW = analogue frontend connected
 #define CTS         28   // PA4
 #define RTS         29   // PA5
-//#define BTN_USER_A  30   // PA6
+#define BTN_USER_A  30   // PA6
 //#define BTN_USER_B  31   // PA7
 #define ENUM_FTDI_USB 21 // PC5 = LOW = USB connected
 
@@ -359,6 +360,8 @@ void setup()
   pinMode(ENUM_FTDI_USB, INPUT); // detection of USB
   pinMode(RTS, INPUT);           // UART handshake
 
+  pinMode(BTN_USER_A, INPUT);   // Button st the front panel
+  
   pinMode(DRESET, OUTPUT);   // peak detetor
   pinMode(DSET, OUTPUT);   
   pinMode(CONV, INPUT);   
@@ -381,7 +384,7 @@ void setup()
   // Setup battery charger
   Wire.beginTransmission(0x6A); // I2C address
   Wire.write((uint8_t)0x15); // Start register
-  Wire.write((uint8_t)0b10011001); 
+  Wire.write((uint8_t)0b10011001); // Disable charging LED
   Wire.endTransmission();
 
   /* DEBUG VBUS voltage
@@ -400,85 +403,86 @@ while(true)
 }
    //*/
 
-  boolean SDreader = false;    
   if (digitalRead(ACONNECT))  // Analog board disconnected
   {  
+    boolean SDreader = true;    // wanted SD reader mode  
+    boolean USBchanged = true;  // USB devaci need to be changed
+
     while(true)
-    {
-      uint8_t vbus;
-      uint8_t vbus_old = 0;
-      while(true)
+    {    
+      if (USBchanged)
       {
-        // Is VBUS (USB) present?
-        Wire.beginTransmission(0x6A);      // ADC of VBUS
-        Wire.write(0x2D); // MSB 0.264 V/bit
-        Wire.endTransmission();
-        Wire.requestFrom(0x6A, 1);    
-        vbus = Wire.read() & 0x7F;
-        if (vbus_old == vbus) break; // is the value stable?
-        vbus_old = vbus;
+        USBchanged = false;
+        if (SDreader)
+        {
+          // SD card reader ON
+          digitalWrite(SDmode, HIGH);   // SD card reader oscilator on
+          
+          pinMode(LED1, OUTPUT); 
+          digitalWrite(LED1, HIGH); 
+          for( uint16_t n=0; n<200; n++)
+          {
+            delayMicroseconds(250);
+            pinMode(BUZZER, OUTPUT); 
+            digitalWrite(BUZZER, HIGH); 
+            delayMicroseconds(250);
+            pinMode(BUZZER, OUTPUT); 
+            digitalWrite(BUZZER, LOW); 
+          };
+          for( uint16_t n=0; n<200; n++)
+          {
+            delayMicroseconds(180);
+            pinMode(BUZZER, OUTPUT); 
+            digitalWrite(BUZZER, HIGH); 
+            delayMicroseconds(180);
+            pinMode(BUZZER, OUTPUT); 
+            digitalWrite(BUZZER, LOW); 
+          }
+          // SD card reader on
+          Wire.beginTransmission(0x71); // card reader address
+          Wire.write((uint8_t)0x00); // Start register
+          Wire.write((uint8_t)0b00010011); // 0b0001 0 01 1
+          Wire.endTransmission();  
+        }
+        else
+        {
+          pinMode(LED1, OUTPUT); 
+          digitalWrite(LED1, LOW); 
+          for( uint16_t n=0; n<200; n++)
+          {
+            delayMicroseconds(180);
+            pinMode(BUZZER, OUTPUT); 
+            digitalWrite(BUZZER, HIGH); 
+            delayMicroseconds(180);
+            pinMode(BUZZER, OUTPUT); 
+            digitalWrite(BUZZER, LOW); 
+          }
+          for( uint16_t n=0; n<200; n++)
+          {
+            delayMicroseconds(250);
+            pinMode(BUZZER, OUTPUT); 
+            digitalWrite(BUZZER, HIGH); 
+            delayMicroseconds(250);
+            pinMode(BUZZER, OUTPUT); 
+            digitalWrite(BUZZER, LOW); 
+          };
+          // SD card reader off
+          Wire.beginTransmission(0x71); // card reader address
+          Wire.write((uint8_t)0x00); // Start register
+          Wire.write((uint8_t)0b00010000); // 0b0001 0 00 0
+          Wire.endTransmission();
+          // SD card reader OFF
+          digitalWrite(SDmode, LOW);   // SD card reader oscilator off
+        }
         delay(1000);
-      }
-
-      if (vbus < 17) // < 4.5 V
+      };
+            
+      if (!digitalRead(BTN_USER_A))
       {
-        Wire.beginTransmission(0x51); // 1 kHz to #INTA
-        Wire.write(0x28); 
-        Wire.write(0x05);             // COF
-        Wire.endTransmission();
-        
-        for( uint16_t n=0; n<200; n++)
-        {
-          delayMicroseconds(250);
-          pinMode(BUZZER, OUTPUT); 
-          digitalWrite(BUZZER, HIGH); 
-          delayMicroseconds(250);
-          pinMode(BUZZER, OUTPUT); 
-          digitalWrite(BUZZER, LOW); 
-        }
-        // Power off
-        Wire.beginTransmission(0x6A); // I2C address
-        Wire.write((uint8_t)0x18); // Start register
-        Wire.write((uint8_t)0x0A); // 
-        Wire.endTransmission();
-        delay(5000);
-      }          
-    
-
-      if (!SDreader)
-      {
-        SDreader = true;
-        // SD card reader ON
-        digitalWrite(SDmode, HIGH);   // SD card reader oscilator on
-        
-        pinMode(LED1, OUTPUT); 
-        digitalWrite(LED1, HIGH); 
-        for( uint16_t n=0; n<200; n++)
-        {
-          delayMicroseconds(250);
-          pinMode(BUZZER, OUTPUT); 
-          digitalWrite(BUZZER, HIGH); 
-          delayMicroseconds(250);
-          pinMode(BUZZER, OUTPUT); 
-          digitalWrite(BUZZER, LOW); 
-        };
-        for( uint16_t n=0; n<200; n++)
-        {
-          delayMicroseconds(180);
-          pinMode(BUZZER, OUTPUT); 
-          digitalWrite(BUZZER, HIGH); 
-          delayMicroseconds(180);
-          pinMode(BUZZER, OUTPUT); 
-          digitalWrite(BUZZER, LOW); 
-        }
-        // SD card reader on
-        Wire.beginTransmission(0x71); // card reader address
-        Wire.write((uint8_t)0x00); // Start register
-        Wire.write((uint8_t)0b00010011); // 0b0001 0 01 1
-        Wire.endTransmission();
+        SDreader = !SDreader;
+        USBchanged = true;
       }
-    };
-    delay(1000);
+    }
   }
     
   pinMode(EXT_I2C_EN, OUTPUT);    // Enable external I2C
@@ -559,7 +563,7 @@ while(true)
     dataString += String(serialbyte,HEX);    
   }
 
-  dataString += "\r\n$DIG,"; 
+  dataString += "\r\n$DIG,"DIGTYPE","; 
   Wire.beginTransmission(0x58);                   // request SN from EEPROM - digital board
   Wire.write((int)0x08); // MSB
   Wire.write((int)0x00); // LSB
