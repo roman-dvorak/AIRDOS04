@@ -15,4 +15,4 @@ The upgraded version of [AIRDOS02](https://github.com/UniversalScientificTechnol
   * Maintenance interval (data download, battery recharge)  30 days or more
   * Maintenance duration under 5 minutes
   * Approx size LxWxH 166 mm x 107 mm x 57 mm (two  of these fit to Aircraft printed manual bay)
-  * Weight under 0.85 kg (Without batteries)
+  * Weight under 0.88 kg (With accumulators)
