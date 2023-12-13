@@ -434,7 +434,7 @@ while(true)
     Wire.endTransmission();
     Wire.requestFrom(0x6A, 1);    
     Wire.read() & 0x7F;
-    delay(1000); // Vaiting for stable voltage
+    delay(3000); // Vaiting for stable voltage
     while(true)
     {
       uint8_t vbus;
