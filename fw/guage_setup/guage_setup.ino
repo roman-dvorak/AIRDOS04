@@ -244,7 +244,7 @@ void PrintBatteryStatus()
 
 void setup()
 {
-  Wire.setClock(10000);
+  Wire.setClock(100000);
 
   // Open serial communications
   Serial.begin(115200);
@@ -288,7 +288,27 @@ void loop()
   dataString += char(readb(0x68));
   dataString += char(readb(0x69));
   dataString += char(readb(0x6a));
-  */
+  Serial1.println(dataString);   // print to terminal (additional 700 ms in DEBUG mode)
+  //*/
+/*
+a. Write the first 2 bytes of the UNSEAL key using the Control(0x0414) command.
+(wr 0x00 0x14 0x04)
+b. Write the second 2 bytes of the UNSEAL key using the Control(0x3672) command.
+(wr 0x00 0x72 0x36)
+ */
+  // unseal
+  Wire.beginTransmission(BQ34Z100);
+  Wire.write(0x00);
+  Wire.write(0x14);
+  Wire.write(0x04);
+  Wire.endTransmission();
+  Wire.beginTransmission(BQ34Z100);
+  Wire.write(0x00);
+  Wire.write(0x72);
+  Wire.write(0x36);
+  Wire.endTransmission();
+
+
 
   dataString = "$FLASH,";
   for (uint8_t n=32; n<43; n++) dataString += char(ReadFlashByte(48, n));   // Part type
