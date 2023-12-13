@@ -816,7 +816,8 @@ void loop()
           Wire.write((uint8_t)0x18); // Start register
           Wire.write((uint8_t)0x0A); // 
           Wire.endTransmission();
-          delay(10000);
+          resetFunc();
+          //delay(10000);
           //while(true);
         };
   
