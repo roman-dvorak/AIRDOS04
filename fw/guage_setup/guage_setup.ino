@@ -244,11 +244,11 @@ void PrintBatteryStatus()
 
 void setup()
 {
-  Wire.setClock(100000);
+  Wire.setClock(10000);
 
   // Open serial communications
-  Serial.begin(9600);
-  Serial1.begin(9600);
+  Serial.begin(115200);
+  Serial1.begin(115200);
 
   Serial1.println("#Cvak...");
 
@@ -304,9 +304,9 @@ void loop()
   Serial1.print("LED CONF: ");
   Serial1.println(ReadFlashByte(64,4), HEX);
   Serial1.print("Design Capacity: ");
-  Serial1.println(ReadFlashByte(48,11)*256 + ReadFlashByte(48,12));
+  Serial1.println((uint16_t)((uint8_t)ReadFlashByte(48,11)*256 + (uint8_t)ReadFlashByte(48,12)));
   Serial1.print("Design Energy: ");
-  Serial1.println(ReadFlashByte(48,13)*256 + ReadFlashByte(48,14));
+  Serial1.println((uint16_t)((uint8_t)ReadFlashByte(48,13)*256 + (uint8_t)ReadFlashByte(48,14)));
   Serial1.print("Bat. low alert: ");
   Serial1.print("Cell BL Set Volt Threshold: ");
   Serial1.println(ReadFlashByte(49,8)*256 + ReadFlashByte(49,9));
@@ -323,8 +323,8 @@ void loop()
   Serial1.print("Cycle Delta: ");
   Serial1.println(ReadFlashByte(49,21));
   WriteFlashByte(64,4,0x73);    // 7+1 LEDs and I2C interface
-  WriteFlashByte(48,11,0x0d);   // Design Capacity 3500 mAh = 0xbb8 (default 1000 mAh = 0x3e8)
-  WriteFlashByte(48,12,0xac);   // Must be written in this order, I do not know why
+  WriteFlashByte(48,11,0x3A);   // Design Capacity 15000 mAh = 0x3a98 (default 1000 mAh = 0x3e8)
+  WriteFlashByte(48,12,0x98);   // Must be written in this order, I do not know why
   WriteFlashByte(48,13,0xD8);   // Design Energy 55500 mWh = 0xD8CC (default 5400 mWh = 0x1518)
   WriteFlashByte(48,14,0xCC);
   //WriteFlashByte(83,0,0x20);   // Set Chem ID  TODO, check register adresses. 
@@ -345,9 +345,9 @@ void loop()
   Serial1.print("LED CONF: ");
   Serial1.println(ReadFlashByte(64,4), HEX);
   Serial1.print("Design Capacity: ");
-  Serial1.println(ReadFlashByte(48,11)*256 + ReadFlashByte(48,12));
+  Serial1.println((uint16_t)((uint8_t)ReadFlashByte(48,11)*256 + (uint8_t)ReadFlashByte(48,12)));
   Serial1.print("Design Energy: ");
-  Serial1.println(ReadFlashByte(48,13)*256 + ReadFlashByte(48,14));
+  Serial1.println((uint16_t)((uint8_t)ReadFlashByte(48,13)*256 + (uint8_t)ReadFlashByte(48,14)));
   Serial1.print("Bat. low alert: ");
   Serial1.print("Cell BL Set Volt Threshold: ");
   Serial1.println(ReadFlashByte(49,8)*256 + ReadFlashByte(49,9));
