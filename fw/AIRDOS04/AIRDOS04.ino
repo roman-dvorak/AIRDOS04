@@ -59,6 +59,8 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 #include <Wire.h>           
 #include <SD.h>             
 #include <SPI.h>
+#include <SHT31.h>
+#include <MS5611.h>
 
 #define CONV        0    // PB0, MOLEX B0, D Q, ADC CONV signal
 #define DRESET      22   // PC6, MOLEX C0, D #Reset
@@ -148,29 +150,114 @@ int16_t readBat(int8_t regaddr)
 
 uint8_t store = 0;
 uint8_t batt = 0;
+uint8_t env = 0;
 uint8_t ainserted = 0;
 
 // Timer 1 interrupt service routine (ISR)
 ISR(TIMER1_COMPA_vect)
 {
   store++;
-  batt++;
   TCNT1 = 0; // Reset Counter
 }
 
+// Enviromental sensors out
+void EnvOut()
+{
+  digitalWrite(SDpower, HIGH);   // SD card power on
+  digitalWrite(SPI_MUX_SEL, LOW); // SDcard    
+
+  pinMode(POWER3V3, OUTPUT);    // Analog power 3.3 V
+  digitalWrite(POWER3V3, HIGH); // on 
+  pinMode(EXT_I2C_EN, OUTPUT);    // Enable external I2C
+  digitalWrite(EXT_I2C_EN, HIGH);   
+
+  // make a string for assembling the data to log:
+  String dataString = "";
+
+  readRTC();
+  
+  // make a string for assembling the data to log:
+  dataString += "$ENV,";
+  dataString += String(count); 
+  dataString += ",";  
+  dataString += String(tm); 
+  dataString += ".";
+  dataString += String(tm_s100); 
+  dataString += ",";
+
+  SHT31 sht(0x44);
+  sht.begin();
+  sht.read();         //  default = true/fast       slow = false
+
+  dataString += String(sht.getTemperature(), 1);
+  dataString += String(",");
+  dataString += String(sht.getHumidity(), 1);
+  dataString += String(",");
+
+  SHT31 sht2(0x45);
+  sht2.begin();
+  sht2.read();         //  default = true/fast       slow = false
+
+  dataString += String(sht2.getTemperature(), 1);
+  dataString += String(",");
+  dataString += String(sht2.getHumidity(), 1);
+  dataString += String(",");
+
+  MS5611 MS5611(0x77);
+  MS5611.begin();
+  MS5611.read();           //  note no error checking => "optimistic".
+
+  dataString += String(MS5611.getTemperature(), 2);
+  dataString += String(",");
+  dataString += String(MS5611.getPressure(), 2);
+  
+  pinMode(EXT_I2C_EN, OUTPUT);    // Disable external I2C
+  digitalWrite(EXT_I2C_EN, LOW);   
+  pinMode(POWER3V3, OUTPUT);    // Analog power 3.3 V
+  digitalWrite(POWER3V3, LOW);  // off 
+
+  if (SDinserted)
+  {    
+    // make sure that the default chip select pin is set to output
+    // see if the card is present and can be initialized:
+    if (!SD.begin(SS))//, SPI_HALF_SPEED)) 
+    {
+      Serial1.println("#SD init false");
+      SDinserted = false;
+      // don't do anything more:
+    }
+    else
+    {
+      // open the file. note that only one file can be open at a time,
+      // so you have to close this one before opening another.
+      File dataFile = SD.open(filename, FILE_WRITE);
+    
+      // if the file is available, write to it:
+      if (dataFile) 
+      {
+        dataFile.println(dataString);  // write to SDcard (800 ms)     
+        dataFile.close();
+      }  
+      // if the file isn't open, pop up an error:
+      else 
+      {
+        Serial1.println("#SD false");
+        SDinserted = false;
+      }
+    }  
+    digitalWrite(SS, HIGH);         // Disable SD card
+  }          
+
+  digitalWrite(SPI_MUX_SEL, HIGH); // ADC    
+  digitalWrite(SDpower, LOW);   // SD card power off
+  delay(1);
+} 
+   
 // Battery status out
 void BattOut()
 {
   digitalWrite(SDpower, HIGH);   // SD card power on
   digitalWrite(SPI_MUX_SEL, LOW); // SDcard    
-
-  uint16_t noise = 9;
-  uint32_t flux=0;
-
-  for(uint16_t n=noise; n<(CHANNELS); n++)  
-  {
-    flux += histogram[n]; 
-  }
 
   // make a string for assembling the data to log:
   String dataString = "";
@@ -372,6 +459,11 @@ void setup()
   pinMode(SPI_MUX_SEL, OUTPUT);   // SDcard/ADC
   digitalWrite(SPI_MUX_SEL, HIGH); // ADC    
   
+  pinMode(POWER3V3, OUTPUT);    // Analog power 3.3 V
+  digitalWrite(POWER3V3, HIGH); // on 
+  pinMode(POWER5V, OUTPUT);     // Analog power 5 V
+  digitalWrite(POWER5V, HIGH);  // on
+
   pinMode(SDpower, OUTPUT);  // SDcard interface
   pinMode(SDmode, OUTPUT);  
   pinMode(SS, OUTPUT);     
@@ -576,11 +668,6 @@ while(true)
 
   Serial1.println("#Hmmm...");
 
-  pinMode(POWER3V3, OUTPUT);    // Analog power 3.3 V
-  digitalWrite(POWER3V3, HIGH); // on 
-  pinMode(POWER5V, OUTPUT);     // Analog power 5 V
-  digitalWrite(POWER5V, HIGH);  // on
-
   digitalWrite(DSET, LOW);       // Disable ADC
   digitalWrite(DRESET, HIGH);       
   
@@ -639,6 +726,10 @@ while(true)
   { 
     uint8_t serialbyte = Wire.read(); // receive a byte
     if (serialbyte<0x10) dataString += "0";
+    pinMode(POWER3V3, OUTPUT);    // Analog power 3.3 V
+    digitalWrite(POWER3V3, HIGH); // on 
+    pinMode(POWER5V, OUTPUT);     // Analog power 5 V
+    digitalWrite(POWER5V, HIGH);  // on
     dataString += String(serialbyte,HEX);    
   }
   dataString += ","; 
@@ -784,6 +875,7 @@ void loop()
   
   store = 0;
   batt = 0;
+  env = 0;
   // dosimeter integration
   while(true)
   {
@@ -792,6 +884,9 @@ void loop()
       if (store >= 2) // Data out every 10 s
       {
         store = 0;
+        batt++;
+        env++;
+
         digitalWrite(LED2, digitalRead(ACONNECT)); 
         if (digitalRead(ACONNECT))  // Analog part is disconnected?
         {
@@ -827,9 +922,15 @@ void loop()
         for(int n=0; n<CHANNELS; n++) // reset histogram
         {
           histogram[n]=0;
-        }
+        };
   
-        if (batt >= 12) // Battery status every 60 s
+        if (env >= 5*6) // Environment out every 5 minutes
+        {
+          env = 0;
+          EnvOut();
+        };
+        
+        if (batt >= 6) // Battery status every 60 s
         {
           batt = 0;
           BattOut();
