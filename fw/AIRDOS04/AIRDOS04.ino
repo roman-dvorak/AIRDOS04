@@ -930,7 +930,7 @@ void loop()
           EnvOut();
         };
         
-        if (batt >= 6) // Battery status every 60 s
+        if (batt >= 30*6) // Battery status every 30 minutes
         {
           batt = 0;
           BattOut();
