@@ -24,3 +24,12 @@ The upgraded version of [AIRDOS02](https://github.com/UniversalScientificTechnol
     * Operation humidity conditions: non-condensing, 20% to 80% RH
 
 
+## The detailed documentation of the used Hardware components
+
+  * [BATDATUNIT01](https://github.com/mlab-modules/BATDATUNIT01)
+  * [BATDATSOCKET01](https://github.com/mlab-modules/BATDATSOCKET01)
+  * [USTSIPIN03](https://github.com/ust-modules/USTSIPIN03)
+  
+
+
+
