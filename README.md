@@ -9,7 +9,7 @@ The upgraded version of [AIRDOS02](https://github.com/UniversalScientificTechnol
   * Deposited energy ranges from 60 keV to 7 MeV
   * Energy measurement resolution 15 ±2 keV
   * Service interface:  USB-C connector (charging and data download)
-  * Optional GPS interface
+  * Optional GPS interface (with revised BATDATUNIT01)
   * Energy source: 18650 Li-ion cells conforms with [≤ 100 Wh / 2g restrictions](https://www.iata.org/contentassets/6fea26dd84d24b26a7a1fd5788561d6e/passenger-lithium-battery.pdf)
   * Radiation spectra integration time 10 s
   * Maintenance interval (data download, battery recharge)  30 days
