@@ -1,5 +1,7 @@
 # AIRDOS04 - Airborne cosmic radiation dosimeter designed for airliner dosimetry
 
+![AIRDOS04](doc/img/AIRDOS04.jpg)
+
 The upgraded version of [AIRDOS02](https://github.com/UniversalScientificTechnologies/AIRDOS02). The instrument is designed primarily for the dosimetry of cabin crew and flight attendants of commercial flights. A detailed description of the use is in the [user manual](https://docs.dos.ust.cz/airdos/AIRDOS04).
 
 ## Technical parameters
