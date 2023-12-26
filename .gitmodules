@@ -1,19 +1,12 @@
 [submodule "doc/assets"]
 	path = doc/assets
 	url = git@github.com:UniversalScientificTechnologies/USTassets.git
-[submodule "hw/sch_pcb/AIRDOS04_battery"]
-	path = hw/sch_pcb/AIRDOS04_battery
-	url = git@github.com:mlab-modules/BATDATUNIT01.git
-[submodule "hw/sch_pcb/AIRDOS04_socket"]
-        path = hw/sch_pcb/AIRDOS04_socket
-        url = git@github.com:mlab-modules/BATDATSOCKET01.git
-
 [submodule "hw/modules/BATDATUNIT01"]
 	path = hw/modules/BATDATUNIT01
 	url = git@github.com:mlab-modules/BATDATUNIT01.git
 [submodule "hw/modules/BATDATSOCKET01"]
 	path = hw/modules/BATDATSOCKET01
 	url = git@github.com:mlab-modules/BATDATSOCKET01.git
-[submodule "hw/modules/USTSIPIN03A"]
-	path = hw/modules/USTSIPIN03A
-	url = git@github.com:kaklik/USTSIPIN03
+[submodule "hw/modules/USTSIPIN03"]
+	path = hw/modules/USTSIPIN03
+	url = git@github.com:ust-modules/USTSIPIN03.git
