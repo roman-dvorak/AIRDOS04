@@ -55,6 +55,19 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
                       +--------+
 */
 
+/*
+Using library Wire at version 1.1 in folder: /home/kacer/.arduino15/packages/MightyCore/hardware/avr/2.2.2/libraries/Wire 
+Using library SD at version 1.2.4 in folder: /home/kacer/Arduino/libraries/SD 
+Using library SPI at version 1.0 in folder: /home/kacer/.arduino15/packages/MightyCore/hardware/avr/2.2.2/libraries/SPI 
+
+Using library SHT31 at version 0.5.0 in folder: /home/kacer/Arduino/libraries/SHT31 
+https://github.com/RobTillaart/SHT31
+
+Using library MS5611 at version 0.4.0 in folder: /home/kacer/Arduino/libraries/MS5611 
+https://github.com/RobTillaart/MS5611
+
+ */
+
 #include "wiring_private.h"
 #include <Wire.h>           
 #include <SD.h>             
