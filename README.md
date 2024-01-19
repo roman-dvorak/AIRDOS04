@@ -28,12 +28,18 @@ The device is designed as open-source hardware and software and is released unde
     * Operation temperature range: 0°C to 50°C (32°F to 122°F)
     * Operation humidity conditions: non-condensing, 20% to 80% RH
 
+
+## Example data
+
+
+![AIRDOS04 radiation spectra measurement](doc/img/AIRDOS04_radiation_spectra.png)
+
+
+![AIRDOS04 flight dose rate measurement](doc/img/AIRDOS04_doserate.png)
+
+
 ## The detailed documentation of the used Hardware components
 
   * [BATDATUNIT01](https://github.com/mlab-modules/BATDATUNIT01)
   * [BATDATSOCKET01](https://github.com/mlab-modules/BATDATSOCKET01)
   * [USTSIPIN03](https://github.com/ust-modules/USTSIPIN03)
-  
-
-
-
