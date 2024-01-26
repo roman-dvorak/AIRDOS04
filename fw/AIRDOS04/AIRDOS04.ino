@@ -5,7 +5,7 @@
 // MightyCore 2.2.2 
 
 #define MAJOR 1   // Data format
-#define MINOR 0   // Features
+#define MINOR 1   // Features
 #include "githash.h"
 
 //#define CALIBRATION
