@@ -12,8 +12,12 @@ import time
 import datetime
 import hid
 
-VID = 0x0403
-PID = 0x6030
+#VID = 0x0403
+#PID = 0x6030
+
+VID = 0x1209 # assigned to AIRDOS
+PID = 0x7AA0
+
 I2C_INTERFACE = 0
 
 
@@ -335,25 +339,25 @@ device.open(VID, PID)
 
 devices = hid.enumerate()
 
-for d in devices:
-    print(d)
-    if d['vendor_id'] == VID and d['product_id'] == PID:
-        print("Nalezeno zařízení:", d)
-
-        if d['interface_number'] == I2C_INTERFACE:
-            try:
-                print(d['path'])
-                device = hid.device()
-                device.open_path(d['path'])
-            finally:
-                print("Vybrane zarizeni", device)
-                #device.close()
+#for d in devices:
+#    print(d)
+#    if d['vendor_id'] == VID and d['product_id'] == PID:
+#        print("Nalezeno zařízení:", d)
+#
+#        if d['interface_number'] == I2C_INTERFACE:
+#            try:
+#                print(d['path'])
+#                device = hid.device()
+#                device.open_path(d['path'])
+#            finally:
+#                print("Vybrane zarizeni", device)
+#                #device.close()
 
 
 c = FT260HidDriver(18, device)
 
 # Vypnout bateriovy modul
-if 0:
-    c.write_byte_data(addr_charger, 0x18, 0x0a)
-
+print('Vypinam AIRDOS04')
+c.write_byte_data(addr_charger, 0x18, 0x0a)
+device.close()
 
