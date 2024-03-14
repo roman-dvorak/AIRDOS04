@@ -356,6 +356,8 @@ devices = hid.enumerate()
 
 c = FT260HidDriver(18, device)
 
+c.write_byte_data(addr_switch, 0x01, 0x03) # nastavit I2C switch do USB
+
 # Vypnout bateriovy modul
 print('Vypinam AIRDOS04')
 c.write_byte_data(addr_charger, 0x18, 0x0a)
