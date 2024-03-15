@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # coding: utf-8
 
 # Jak zabranit, aby se kernel pripojoval k  USB-HID I2C k `hid-ft260` driveru. 
