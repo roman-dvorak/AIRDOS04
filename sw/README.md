@@ -7,9 +7,11 @@ A utility designed to control the AIRDOS04 dosimeter from the Linux command line
 The utility needs access rights to hid device. Create the file  `/etc/udev/rules.d/99-batdatunit.rules` with the following content:
 
 ```
- ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0403", ATTR{idProduct}=="6030", OPTIONS+="ignore_device"
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0403", ATTR{idProduct}=="6030", OPTIONS+="ignore_device"
+KERNEL=="hidraw*", ATTRS{idVendor}=="0403", MODE="6030", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="7aa0", GROUP="plugdev", MODE="0660"
 ```
-
+The user needs to be a member of `plugdev` system group. 
 
 ### Usage
 
