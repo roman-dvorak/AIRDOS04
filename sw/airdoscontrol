@@ -1,13 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-# Jak zabranit, aby se kernel pripojoval k  USB-HID I2C k `hid-ft260` driveru.
-#
-# `/etc/udev/rules.d/99-batdatunit.rules`
-# ```
-# ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0403", ATTR{idProduct}=="6030", OPTIONS+="ignore_device"
-# ```
-
 import time
 import datetime
 import hid
@@ -356,7 +349,11 @@ def main():
     args = parser.parse_args()
 
     device = hid.device()
-    device.open(VID, PID)
+    try:
+        device.open(VID, PID)
+    except OSError:
+        print("Failed to open the device. Please ensure it is connected and try again.")
+        return
 
     if args.command == 'shutdown':
         shutdown(device)
@@ -364,6 +361,8 @@ def main():
         set_rtc()
     elif args.command == 'set-thresholds':
         set_thresholds()
+
+    device.close()
 
 if __name__ == '__main__':
     main()
