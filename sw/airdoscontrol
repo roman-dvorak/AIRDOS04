@@ -6,11 +6,11 @@ import datetime
 import hid
 import argparse
 
-#VID = 0x0403
-#PID = 0x6030
-
-VID = 0x1209 # assigned to AIRDOS
-PID = 0x7AA0
+# Define multiple VID/PID pairs
+device_ids = [
+    (0x1209, 0x7AA0),  # assigned to AIRDOS
+    (0x0403, 0x6030),  # VID/PID of original FT260
+]
 
 I2C_INTERFACE = 0
 
@@ -50,9 +50,9 @@ class FT260HidDriver():
     def initialize_ftdi(self):
         # TODO pripojeni k HID, nyni to mam jako self.device
 
-        print(f'Device manufacturer: {self.device.get_manufacturer_string()}')
-        print(f'Product: {self.device.get_product_string()}')
-        print(f'Serial Number: {self.device.get_serial_number_string()}')
+#        print(f'Device manufacturer: {self.device.get_manufacturer_string()}')
+#        print(f'Product: {self.device.get_product_string()}')
+#        print(f'Serial Number: {self.device.get_serial_number_string()}')
 
         self.device.set_nonblocking(0)
 
@@ -349,10 +349,20 @@ def main():
     args = parser.parse_args()
 
     device = hid.device()
-    try:
-        device.open(VID, PID)
-    except OSError:
-        print("Failed to open the device. Please ensure it is connected and try again.")
+    device_opened = False
+
+    # Attempt to open the device with each VID/PID pair
+    for vid, pid in device_ids:
+        try:
+            device.open(vid, pid)
+            device_opened = True
+            print(f"Device opened with VID:PID = {hex(vid)}:{hex(pid)}")
+            break
+        except OSError:
+            continue  # Try the next VID/PID pair if the current one fails
+
+    if not device_opened:
+        print("Failed to open any device. Please ensure a compatible device is connected and try again.")
         return
 
     if args.command == 'shutdown':
