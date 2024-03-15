@@ -11,7 +11,9 @@ ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0403", ATTR{idProduct}=="6030"
 KERNEL=="hidraw*", ATTRS{idVendor}=="0403", MODE="6030", GROUP="plugdev"
 SUBSYSTEM=="usb", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="7aa0", GROUP="plugdev", MODE="0660"
 ```
-The user needs to be a member of `plugdev` system group. 
+Then use `sudo udevadm control --reload-rules && sudo udevadm trigger` to update udev access rights. 
+
+The user also needs to be a member of `plugdev` system group. e.g. `sudo usermod -a -G plugdev $USER`
 
 ### Usage
 
