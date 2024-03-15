@@ -13,7 +13,7 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="7aa0", GROUP="plug
 ```
 Then use `sudo udevadm control --reload-rules && sudo udevadm trigger` to update udev access rights. 
 
-The user also needs to be a member of `plugdev` system group. e.g. `sudo usermod -a -G plugdev $USER`
+The user also needs to be a `plugdev` system group member. e.g. `sudo usermod -a -G plugdev $USER`
 
 ### Usage
 
@@ -21,8 +21,7 @@ The user also needs to be a member of `plugdev` system group. e.g. `sudo usermod
 
     airdoscontrol shutdown
 
-This command would be straightforward with no additional options required.
-
+This command would be straightforward with no additional options required. The AIRDOS is then powered off immediately after disconnection of the USB cable. It could be powered on only by use a button or plugging the USB-C cable back again. Please take a look at the [AIRDOS manual](https://docs.dos.ust.cz/airdos/AIRDOS04) for details.
 
 #### Set internal RTC (Real-Time Clock)
 
