@@ -4,14 +4,14 @@ A utility designed to control the AIRDOS04 dosimeter from the Linux command line
 
     airdoscontrol [command] [options]
 
-The utility needs access rights to hid device. Create the file  `/etc/udev/rules.d/99-batdatunit.rules` with the following content:
+The utility needs correct [system access rights](https://linuxconfig.org/tutorial-on-how-to-write-basic-udev-rules-in-linux) to the hid device. Create the file  `/etc/udev/rules.d/99-batdatunit.rules` in your Linux system with the following content:
 
 ```
 ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0403", ATTR{idProduct}=="6030", OPTIONS+="ignore_device"
 KERNEL=="hidraw*", ATTRS{idVendor}=="0403", MODE="6030", GROUP="plugdev"
 SUBSYSTEM=="usb", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="7aa0", GROUP="plugdev", MODE="0660"
 ```
-Then use `sudo udevadm control --reload-rules && sudo udevadm trigger` to update udev access rights. 
+Then use `sudo udevadm control --reload-rules && sudo udevadm trigger` command to update udev access rights. 
 
 The user also needs to be a `plugdev` system group member. e.g. `sudo usermod -a -G plugdev $USER`
 
