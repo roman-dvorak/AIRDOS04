@@ -1,9 +1,17 @@
-## airdoscontrol
+## airdoscontrol - AIRDOS04 command line utility
 
-A utility designed to control the AIRDOS04 dosimeter from the [Linux command line](https://ubuntu.com/tutorials/command-line-for-beginners#1-overview).
+A utility designed to control the AIRDOS04 dosimeter from the [Unix command line](https://ubuntu.com/tutorials/command-line-for-beginners#1-overview). The  generic usage is the following
 
-    airdoscontrol [command] [options]
+    ./airdoscontrol [command] [options]
 
+The airdos control is tested on the Ubuntu Linux distribution. However, it should work on any Unix-like OS like MacOS for example, although the installation procedure may differ in details. 
+
+### Installation and prerequisites 
+
+Download and save the [airdoscontrol](https://raw.githubusercontent.com/UniversalScientificTechnologies/AIRDOS04/AIRDOS04A/sw/airdoscontrol) somewhere in your Linux computer. Then make it executable by setting the executable flag on the downloaded file.   
+
+    chmod u+x airdoscontrol
+ 
 The utility needs correct [system access rights](https://linuxconfig.org/tutorial-on-how-to-write-basic-udev-rules-in-linux) to the hid device. Create the file  `/etc/udev/rules.d/99-batdatunit.rules` in your Linux system with the following content:
 
 ```
