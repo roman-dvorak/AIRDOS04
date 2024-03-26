@@ -1,6 +1,6 @@
 ## airdoscontrol
 
-A utility designed to control the AIRDOS04 dosimeter from the Linux command line.
+A utility designed to control the AIRDOS04 dosimeter from the [Linux command line](https://ubuntu.com/tutorials/command-line-for-beginners#1-overview).
 
     airdoscontrol [command] [options]
 
@@ -17,11 +17,13 @@ The user also needs to be a `plugdev` system group member. e.g. `sudo usermod -a
 
 ### Usage
 
+Connect the AIRDOS04 to the computer using the USB-C to USB-A cable. NOTE: The BATDATUNIT01 should be inserted in AIRDOS04 for USB communication. 
+
 #### Shutdown the AIRDOS Device
 
     airdoscontrol shutdown
 
-This command would be straightforward with no additional options required. The AIRDOS is then powered off immediately after disconnection of the USB cable. It could be powered on only by use a button or plugging the USB-C cable back again. Please take a look at the [AIRDOS manual](https://docs.dos.ust.cz/airdos/AIRDOS04) for details.
+This command would be straightforward with no additional options required. The AIRDOS is then powered off immediately after disconnection of the USB cable. It could be powered on only by a button or plugging the USB-C cable back. Please look in the [AIRDOS manual](https://docs.dos.ust.cz/airdos/AIRDOS04) for details.
 
 #### Set internal RTC (Real-Time Clock)
 
