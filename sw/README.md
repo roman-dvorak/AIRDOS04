@@ -12,7 +12,7 @@ Download and save the [airdoscontrol](https://raw.githubusercontent.com/Universa
 
     chmod u+x airdoscontrol
  
-The utility needs correct [system access rights](https://linuxconfig.org/tutorial-on-how-to-write-basic-udev-rules-in-linux) to the hid device. Create the file  `/etc/udev/rules.d/99-batdatunit.rules` in your Linux system with the following content:
+In case you do not want tu use [sudo](https://www.howtoforge.com/sudo-beginners-guide/) every time, the utility needs correct [system access rights](https://linuxconfig.org/tutorial-on-how-to-write-basic-udev-rules-in-linux) to the hid device. To fix that create the file  `/etc/udev/rules.d/99-batdatunit.rules` in your Linux system with the following content:
 
 ```
 ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0403", ATTR{idProduct}=="6030", OPTIONS+="ignore_device"
