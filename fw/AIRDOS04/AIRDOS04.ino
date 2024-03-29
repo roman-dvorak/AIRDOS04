@@ -469,7 +469,7 @@ void setup()
   pinMode(DSET, OUTPUT);
   pinMode(CONV, INPUT);
 
-  pinMode(BUZZER_PIN, OUTPUT); // Set the buzzer pin as an output
+  pinMode(BUZZER, OUTPUT); // Set the buzzer pin as an output
 
   pinMode(SPI_MUX_SEL, OUTPUT);   // SDcard/ADC
   digitalWrite(SPI_MUX_SEL, HIGH); // ADC
