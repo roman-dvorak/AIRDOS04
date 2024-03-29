@@ -968,7 +968,7 @@ void loop()
 
     adcVal >>= 6;
 
-    if (adcVal>3) digitalWrite(BUZZER, HIGH); // buzzer click on ADC conversion. 
+    if (adcVal>5) digitalWrite(BUZZER, HIGH); // buzzer click on ADC conversion. 
     if (histogram[adcVal]<255) histogram[adcVal]++;
     digitalWrite(DRESET, HIGH);
 
