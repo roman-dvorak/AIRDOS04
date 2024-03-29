@@ -966,9 +966,9 @@ void loop()
     digitalWrite(DRESET, LOW); // L on CONV
     uint16_t adcVal = SPI.transfer16(0x0000); // 0c8000 +/GND, 0x0000 +/-
 
-    digitalWrite(BUZZER, HIGH); // buzzer click on ADC conversion. 
-
     adcVal >>= 6;
+
+    if (adcVal>10) digitalWrite(BUZZER, HIGH); // buzzer click on ADC conversion. 
     if (histogram[adcVal]<255) histogram[adcVal]++;
     digitalWrite(DRESET, HIGH);
 
