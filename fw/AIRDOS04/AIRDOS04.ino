@@ -700,10 +700,10 @@ while(true)
   Wire.write((uint8_t)0x00); // 0x29
   Wire.write((uint8_t)0x00); // 0x2a
   Wire.endTransmission();
-  Wire.beginTransmission(0x51); // reset clock
+/*  Wire.beginTransmission(0x51); // reset clock
   Wire.write(0x2f);
   Wire.write(0x2c);
-  Wire.endTransmission();
+  Wire.endTransmission(); */
   Wire.beginTransmission(0x51); // start stop-watch
   Wire.write(0x28);
   Wire.write(0x97);
