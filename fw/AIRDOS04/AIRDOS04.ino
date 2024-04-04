@@ -9,6 +9,8 @@
 #include "githash.h"
 
 //#define CALIBRATION
+//#define RADIATION_CLICK
+
 
 #define XSTR(s) STR(s)
 #define STR(s) #s
@@ -966,12 +968,16 @@ void loop()
     digitalWrite(DRESET, LOW); // L on CONV
     uint16_t adcVal = SPI.transfer16(0x0000); // 0c8000 +/GND, 0x0000 +/-
 
-    if (adcVal>320) digitalWrite(BUZZER, HIGH); // buzzer click on ADC conversion. 
+    #ifdef RADIATION_CLICK
+      if (adcVal>320) digitalWrite(BUZZER, HIGH); // buzzer click on ADC conversion. 
+    #endif
     
     adcVal >>= 6;
     if (histogram[adcVal]<255) histogram[adcVal]++;
     digitalWrite(DRESET, HIGH);
 
-    digitalWrite(BUZZER, LOW);
+    #ifdef RADIATION_CLICK
+      digitalWrite(BUZZER, LOW);
+    #endif
   }
 }
