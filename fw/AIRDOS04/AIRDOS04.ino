@@ -565,7 +565,7 @@ while(true)
       {
         Wire.beginTransmission(0x51); // 1 kHz to #INTA
         Wire.write(0x28);
-        Wire.write(0x05);             // COF
+        Wire.write(0x95);             // COF
         Wire.endTransmission();
 
         for( uint16_t n=0; n<200; n++)
@@ -691,7 +691,7 @@ while(true)
 
   Wire.beginTransmission(0x51); // disable output n INTA
   Wire.write((uint8_t)0x28); // Start register
-  Wire.write((uint8_t)0x07); // 0x28 RTC mode, no periodic interrupts, CLK pin off
+  Wire.write((uint8_t)0x97); // 0x28 RTC mode, no periodic interrupts, CLK pin off
 
   // Initiation of RTC
   /*Wire.beginTransmission(0x51); // init clock
@@ -914,7 +914,7 @@ void loop()
         {
           Wire.beginTransmission(0x51); // 1024 Hz to #INTA
           Wire.write(0x28);
-          Wire.write(0x05);             // COF
+          Wire.write(0x95);             // COF
           Wire.endTransmission();
 
           delay(3000);
