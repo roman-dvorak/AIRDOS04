@@ -690,8 +690,9 @@ while(true)
 
 
   Wire.beginTransmission(0x51); // disable output n INTA
-  Wire.write((uint8_t)0x28); // Start register
-  Wire.write((uint8_t)0x97); // 0x28 RTC mode, no periodic interrupts, CLK pin off
+  Wire.write((uint8_t)0x27); // Start register
+  Wire.write((uint8_t)0x00); // 0x27 Enable CLK output on INTA pin, using bits set in reg 0x28
+  Wire.write((uint8_t)0x97); // 0x28 stop-watch mode, no periodic interrupts, INTA in high-Z
 
   // Initiation of RTC
   /*Wire.beginTransmission(0x51); // init clock
