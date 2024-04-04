@@ -798,7 +798,7 @@ while(true)
        filename = String(fn) + ".txt";
        if (SD.exists(filename) == 0) break;
     }
-    fn--;
+//    fn--;  
     filename = String(fn) + ".txt";
 
     for( uint8_t n=0; n<5; n++)
