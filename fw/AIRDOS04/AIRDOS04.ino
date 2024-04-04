@@ -689,7 +689,7 @@ while(true)
   digitalWrite(DRESET, HIGH);
 
   // Initiation of RTC
-  Wire.beginTransmission(0x51); // init clock
+  /*Wire.beginTransmission(0x51); // init clock
   Wire.write((uint8_t)0x23); // Start register
   Wire.write((uint8_t)0x00); // 0x23
   Wire.write((uint8_t)0x00); // 0x24 Two's complement offset value
@@ -700,10 +700,10 @@ while(true)
   Wire.write((uint8_t)0x00); // 0x29
   Wire.write((uint8_t)0x00); // 0x2a
   Wire.endTransmission();
-/*  Wire.beginTransmission(0x51); // reset clock
+  Wire.beginTransmission(0x51); // reset clock
   Wire.write(0x2f);
   Wire.write(0x2c);
-  Wire.endTransmission(); */
+  Wire.endTransmission(); 
   Wire.beginTransmission(0x51); // start stop-watch
   Wire.write(0x28);
   Wire.write(0x97);
@@ -716,7 +716,7 @@ while(true)
   Wire.write((uint8_t)0x00); // 0x03
   Wire.write((uint8_t)0x00); // 0x04
   Wire.write((uint8_t)0x00); // 0x05
-  Wire.endTransmission();
+  Wire.endTransmission();*/
 
   // make a string for device identification output
   String dataString = "$DOS,"TYPE"," + FWversion + ",0," + githash + ","; // FW version and Git hash
@@ -798,7 +798,7 @@ while(true)
        filename = String(fn) + ".txt";
        if (SD.exists(filename) == 0) break;
     }
-//    fn--;  
+//    fn--;
     filename = String(fn) + ".txt";
 
     for( uint8_t n=0; n<5; n++)
@@ -969,9 +969,9 @@ void loop()
     uint16_t adcVal = SPI.transfer16(0x0000); // 0c8000 +/GND, 0x0000 +/-
 
     #ifdef RADIATION_CLICK
-      if (adcVal>320) digitalWrite(BUZZER, HIGH); // buzzer click on ADC conversion. 
+      if (adcVal>320) digitalWrite(BUZZER, HIGH); // buzzer click on ADC conversion.
     #endif
-    
+
     adcVal >>= 6;
     if (histogram[adcVal]<255) histogram[adcVal]++;
     digitalWrite(DRESET, HIGH);
