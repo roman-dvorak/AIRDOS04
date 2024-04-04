@@ -688,6 +688,11 @@ while(true)
   digitalWrite(DSET, LOW);       // Disable ADC
   digitalWrite(DRESET, HIGH);
 
+
+  Wire.beginTransmission(0x51); // disable output n INTA
+  Wire.write((uint8_t)0x28); // Start register
+  Wire.write((uint8_t)0x07); // 0x28 RTC mode, no periodic interrupts, CLK pin off
+
   // Initiation of RTC
   /*Wire.beginTransmission(0x51); // init clock
   Wire.write((uint8_t)0x23); // Start register
@@ -703,7 +708,7 @@ while(true)
   Wire.beginTransmission(0x51); // reset clock
   Wire.write(0x2f);
   Wire.write(0x2c);
-  Wire.endTransmission(); 
+  Wire.endTransmission();
   Wire.beginTransmission(0x51); // start stop-watch
   Wire.write(0x28);
   Wire.write(0x97);
@@ -907,7 +912,7 @@ void loop()
         digitalWrite(LED2, digitalRead(ACONNECT));
         if (digitalRead(ACONNECT))  // Analog part is disconnected?
         {
-          Wire.beginTransmission(0x51); // 1 kHz to #INTA
+          Wire.beginTransmission(0x51); // 1024 Hz to #INTA
           Wire.write(0x28);
           Wire.write(0x05);             // COF
           Wire.endTransmission();
