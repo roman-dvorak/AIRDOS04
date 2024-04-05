@@ -563,6 +563,7 @@ while(true)
 
       if (vbus < 17) // < 4.5 V
       {
+        // discharge analog board detection signal
         Wire.beginTransmission(0x51); // 1 kHz to #INTA
         Wire.write(0x28);
         Wire.write(0x95);             // COF
@@ -582,7 +583,14 @@ while(true)
         Wire.write((uint8_t)0x18); // Start register
         Wire.write((uint8_t)0x0A); //
         Wire.endTransmission();
-        delay(1000);
+        delay(3000);
+
+        // end discharging of analog board detection signal
+        Wire.beginTransmission(0x51); // High-Z on #INTA
+        Wire.write((uint8_t)0x27); // Start register
+        Wire.write((uint8_t)0x03); // 0x27 High-Z on INTA pin.
+        Wire.write(0x95);             // COF
+        Wire.endTransmission();
       }
 
       if (USBchanged)
@@ -691,7 +699,7 @@ while(true)
 
   Wire.beginTransmission(0x51); // disable output n INTA
   Wire.write((uint8_t)0x27); // Start register
-  Wire.write((uint8_t)0x00); // 0x27 Enable CLK output on INTA pin, using bits set in reg 0x28
+  Wire.write((uint8_t)0x03); // 0x27 High-Z on INTA pin
   Wire.write((uint8_t)0x97); // 0x28 stop-watch mode, no periodic interrupts, INTA in high-Z
 
   // Initiation of RTC
@@ -914,7 +922,8 @@ void loop()
         if (digitalRead(ACONNECT))  // Analog part is disconnected?
         {
           Wire.beginTransmission(0x51); // 1024 Hz to #INTA
-          Wire.write(0x28);
+          Wire.write((uint8_t)0x27); // Start register
+          Wire.write((uint8_t)0x00); // 0x27 Enable CLX output on INTA pin, using bits set in reg 0x28
           Wire.write(0x95);             // COF
           Wire.endTransmission();
 
@@ -929,6 +938,14 @@ void loop()
             pinMode(BUZZER, OUTPUT);
             digitalWrite(BUZZER, LOW);
           }
+
+          Wire.beginTransmission(0x51); // High-Z on #INTA
+          Wire.write((uint8_t)0x27); // Start register
+          Wire.write((uint8_t)0x03); // 0x27 High-Z on INTA pin.
+          Wire.write(0x95);             // COF
+          Wire.endTransmission();
+
+
           // Power off
           Wire.beginTransmission(0x6A); // I2C address
           Wire.write((uint8_t)0x18); // Start register
