@@ -9,20 +9,20 @@
 #include "githash.h"
 
 //#define CALIBRATION
-//#define RADIATION_CLICK
+#define RADIATION_CLICK
 
 
 #define XSTR(s) STR(s)
 #define STR(s) #s
 
-#define CHANNELS 1024 // number of channels in buffer for histogram
+#define CHANNELS 1024 // number of channels in the buffer for histogram
 
 String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(GHRELEASE)"-"XSTR(GHBUILD)"-"XSTR(GHBUILDTYPE);
 
 #define MAXFILESIZE MAX_MEASUREMENTS * BYTES_MEASUREMENT // in bytes, 4 MB per day, 28 MB per week, 122 MB per month
 #define MAX_MEASUREMENTS 11000ul // in measurement cycles, 5 500 per day
 #define BYTES_MEASUREMENT 531ul // number of bytes per one measurement
-#define MAXFILES 200 // maximal number of files on SD card
+#define MAXFILES 200 // maximal number of files on the SD card
 
 /*
 ISP
