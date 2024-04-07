@@ -4,6 +4,13 @@
 
 The upgraded version of [AIRDOS02](https://github.com/UniversalScientificTechnologies/AIRDOS02) airborne detector. The instrument is designed primarily for the dosimetry of cabin crew and flight attendants of commercial flights. A detailed description of the use is in the [user manual](https://docs.dos.ust.cz/airdos/AIRDOS04).
 
+## Design features 
+
+  - Rechargeable accumulators integrated with data storage in the hot-swap module called [BATDATUNIT01](https://docs.dos.ust.cz/airdos/BATDATUNIT01)
+    - The changeable module allows new possible features in the future like GNSS-based position logging with a revised module 
+  - One month of continuous logging for a single accumulator charge
+  - Easy activation by insertion of BATDATUNIT module to the device
+
 ## Where to get it?
 
 AIRDOS04 is commercially available from [Universal Scientific Technologies s.r.o.](https://www.ust.cz/), write an email to sale@ust.cz.
@@ -11,12 +18,11 @@ The device is designed as open-source hardware and software and is released unde
 
 ## Technical parameters
 
-  * Silicon PIN diode detector with at least 44 mm³ detection volume
+  * Silicon PIN diode detector with 44 mm³ detection volume
   * The effective number of energy channels is 470 ±3
   * Deposited energy ranges from 60 keV to 7 MeV
   * Energy measurement resolution 15 ±2 keV
   * Service interface:  USB-C connector (charging and data download)
-  * Optional GPS interface (with revised BATDATUNIT01)
   * Energy source: 18650 Li-ion cells conforms with [≤ 100 Wh / 2g restrictions](https://www.iata.org/contentassets/6fea26dd84d24b26a7a1fd5788561d6e/passenger-lithium-battery.pdf)
   * Radiation spectra integration time 10 s
   * Maintenance interval (data download, battery recharge)  30 days
