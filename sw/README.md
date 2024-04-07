@@ -11,7 +11,11 @@ The airdos control is tested on the Ubuntu Linux distribution. However, it shoul
 Download and save the [airdoscontrol](https://raw.githubusercontent.com/UniversalScientificTechnologies/AIRDOS04/AIRDOS04A/sw/airdoscontrol) somewhere in your Linux computer. Then make it executable by setting the executable flag on the downloaded file.   
 
     chmod u+x airdoscontrol
- 
+
+The airdos control uses [hidapi library](https://pypi.org/project/hidapi/) to communicate with AIRDOS, therefore please check that hidapi is installed or install it by 
+
+    sudo python3 -m pip install hidapi 
+
 The utility needs correct [system access rights](https://linuxconfig.org/tutorial-on-how-to-write-basic-udev-rules-in-linux) to the hid device. Create the file  `/etc/udev/rules.d/99-batdatunit.rules` in your Linux system with the following content:
 
 ```
