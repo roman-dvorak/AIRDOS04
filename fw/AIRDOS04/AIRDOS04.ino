@@ -2,27 +2,29 @@
 #define DIGTYPE "BATDATUNIT01B"
 #define ADCTYPE "USTSIPIN03A"
 // Compiled with: Arduino 1.8.13
-// MightyCore 2.2.2 
+// MightyCore 2.2.2
 
 #define MAJOR 1   // Data format
 #define MINOR 1   // Features
 #include "githash.h"
 
 //#define CALIBRATION
+#define RADIATION_CLICK
+
 
 #define XSTR(s) STR(s)
 #define STR(s) #s
 
-#define CHANNELS 1024 // number of channels in buffer for histogram 
+#define CHANNELS 1024 // number of channels in the buffer for histogram
 
-String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(GHRELEASE)"-"XSTR(GHBUILD)"-"XSTR(GHBUILDTYPE); 
+String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(GHRELEASE)"-"XSTR(GHBUILD)"-"XSTR(GHBUILDTYPE);
 
 #define MAXFILESIZE MAX_MEASUREMENTS * BYTES_MEASUREMENT // in bytes, 4 MB per day, 28 MB per week, 122 MB per month
 #define MAX_MEASUREMENTS 11000ul // in measurement cycles, 5 500 per day
 #define BYTES_MEASUREMENT 531ul // number of bytes per one measurement
-#define MAXFILES 200 // maximal number of files on SD card
+#define MAXFILES 200 // maximal number of files on the SD card
 
-/* 
+/*
 ISP
 ---
 PD0     RX
@@ -30,7 +32,7 @@ PD1     TX
 RESET#  through 50M capacitor to RST#
 
 
-                     Mighty 1284p    
+                     Mighty 1284p
                       +---\/---+
            (D 0) PB0 1|        |40 PA0 (AI 0 / D24)
            (D 1) PB1 2|        |39 PA1 (AI 1 / D25)
@@ -56,21 +58,21 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 */
 
 /*
-Using library Wire at version 1.1 in folder: /home/kacer/.arduino15/packages/MightyCore/hardware/avr/2.2.2/libraries/Wire 
-Using library SD at version 1.2.4 in folder: /home/kacer/Arduino/libraries/SD 
-Using library SPI at version 1.0 in folder: /home/kacer/.arduino15/packages/MightyCore/hardware/avr/2.2.2/libraries/SPI 
+Using library Wire at version 1.1 in folder: /home/kacer/.arduino15/packages/MightyCore/hardware/avr/2.2.2/libraries/Wire
+Using library SD at version 1.2.4 in folder: /home/kacer/Arduino/libraries/SD
+Using library SPI at version 1.0 in folder: /home/kacer/.arduino15/packages/MightyCore/hardware/avr/2.2.2/libraries/SPI
 
-Using library SHT31 at version 0.5.0 in folder: /home/kacer/Arduino/libraries/SHT31 
+Using library SHT31 at version 0.5.0 in folder: /home/kacer/Arduino/libraries/SHT31
 https://github.com/RobTillaart/SHT31
 
-Using library MS5611 at version 0.4.0 in folder: /home/kacer/Arduino/libraries/MS5611 
+Using library MS5611 at version 0.4.0 in folder: /home/kacer/Arduino/libraries/MS5611
 https://github.com/RobTillaart/MS5611
 
  */
 
 #include "wiring_private.h"
-#include <Wire.h>           
-#include <SD.h>             
+#include <Wire.h>
+#include <SD.h>
 #include <SPI.h>
 #include <SHT31.h>
 #include <MS5611.h>
@@ -126,7 +128,7 @@ void readRTC()
   Wire.beginTransmission(0x51);
   Wire.write(0);
   Wire.endTransmission();
-  
+
   Wire.requestFrom(0x51, 6);
   tm_s100 = bcdToDec(Wire.read());
   uint8_t tm_sec = bcdToDec(Wire.read() & 0x7f);
@@ -177,25 +179,25 @@ ISR(TIMER1_COMPA_vect)
 void EnvOut()
 {
   digitalWrite(SDpower, HIGH);   // SD card power on
-  digitalWrite(SPI_MUX_SEL, LOW); // SDcard    
+  digitalWrite(SPI_MUX_SEL, LOW); // SDcard
 
   pinMode(POWER3V3, OUTPUT);    // Analog power 3.3 V
-  digitalWrite(POWER3V3, HIGH); // on 
+  digitalWrite(POWER3V3, HIGH); // on
   pinMode(EXT_I2C_EN, OUTPUT);    // Enable external I2C
-  digitalWrite(EXT_I2C_EN, HIGH);   
+  digitalWrite(EXT_I2C_EN, HIGH);
 
   // make a string for assembling the data to log:
   String dataString = "";
 
   readRTC();
-  
+
   // make a string for assembling the data to log:
   dataString += "$ENV,";
-  dataString += String(count); 
-  dataString += ",";  
-  dataString += String(tm); 
+  dataString += String(count);
+  dataString += ",";
+  dataString += String(tm);
   dataString += ".";
-  dataString += String(tm_s100); 
+  dataString += String(tm_s100);
   dataString += ",";
 
   SHT31 sht(0x44);
@@ -223,17 +225,17 @@ void EnvOut()
   dataString += String(MS5611.getTemperature(), 2);
   dataString += String(",");
   dataString += String(MS5611.getPressure(), 2);
-  
+
   pinMode(EXT_I2C_EN, OUTPUT);    // Disable external I2C
-  digitalWrite(EXT_I2C_EN, LOW);   
+  digitalWrite(EXT_I2C_EN, LOW);
   pinMode(POWER3V3, OUTPUT);    // Analog power 3.3 V
-  digitalWrite(POWER3V3, LOW);  // off 
+  digitalWrite(POWER3V3, LOW);  // off
 
   if (SDinserted)
-  {    
+  {
     // make sure that the default chip select pin is set to output
     // see if the card is present and can be initialized:
-    if (!SD.begin(SS))//, SPI_HALF_SPEED)) 
+    if (!SD.begin(SS))//, SPI_HALF_SPEED))
     {
       Serial1.println("#SD init false");
       SDinserted = false;
@@ -244,46 +246,46 @@ void EnvOut()
       // open the file. note that only one file can be open at a time,
       // so you have to close this one before opening another.
       File dataFile = SD.open(filename, FILE_WRITE);
-    
+
       // if the file is available, write to it:
-      if (dataFile) 
+      if (dataFile)
       {
-        dataFile.println(dataString);  // write to SDcard (800 ms)     
+        dataFile.println(dataString);  // write to SDcard (800 ms)
         dataFile.close();
-      }  
+      }
       // if the file isn't open, pop up an error:
-      else 
+      else
       {
         Serial1.println("#SD false");
         SDinserted = false;
       }
-    }  
+    }
     digitalWrite(SS, HIGH);         // Disable SD card
-  }          
+  }
 
-  digitalWrite(SPI_MUX_SEL, HIGH); // ADC    
+  digitalWrite(SPI_MUX_SEL, HIGH); // ADC
   digitalWrite(SDpower, LOW);   // SD card power off
   delay(1);
-} 
-   
+}
+
 // Battery status out
 void BattOut()
 {
   digitalWrite(SDpower, HIGH);   // SD card power on
-  digitalWrite(SPI_MUX_SEL, LOW); // SDcard    
+  digitalWrite(SPI_MUX_SEL, LOW); // SDcard
 
   // make a string for assembling the data to log:
   String dataString = "";
 
   readRTC();
-  
+
   // make a string for assembling the data to log:
   dataString += "$BATT,";
-  dataString += String(count); 
-  dataString += ",";  
-  dataString += String(tm); 
+  dataString += String(count);
+  dataString += ",";
+  dataString += String(tm);
   dataString += ".";
-  dataString += String(tm_s100); 
+  dataString += String(tm_s100);
   dataString += ",";
   dataString += String(readBat(0x8));   // mV - U
   dataString += ",";
@@ -294,12 +296,12 @@ void BattOut()
   dataString += String(readBat(0x6));   // mAh - full charge
   dataString += ",";
   dataString += String(readBat(0xc) * 0.1 - 273.15);   // temperature
-  
+
   if (SDinserted)
-  {    
+  {
     // make sure that the default chip select pin is set to output
     // see if the card is present and can be initialized:
-    if (!SD.begin(SS))//, SPI_HALF_SPEED)) 
+    if (!SD.begin(SS))//, SPI_HALF_SPEED))
     {
       Serial1.println("#SD init false");
       SDinserted = false;
@@ -310,86 +312,86 @@ void BattOut()
       // open the file. note that only one file can be open at a time,
       // so you have to close this one before opening another.
       File dataFile = SD.open(filename, FILE_WRITE);
-    
+
       // if the file is available, write to it:
-      if (dataFile) 
+      if (dataFile)
       {
-        dataFile.println(dataString);  // write to SDcard (800 ms)     
+        dataFile.println(dataString);  // write to SDcard (800 ms)
         dataFile.close();
-      }  
+      }
       // if the file isn't open, pop up an error:
-      else 
+      else
       {
         Serial1.println("#SD false");
         SDinserted = false;
       }
-    }  
+    }
     digitalWrite(SS, HIGH);         // Disable SD card
-  }          
+  }
 
-  digitalWrite(SPI_MUX_SEL, HIGH); // ADC    
+  digitalWrite(SPI_MUX_SEL, HIGH); // ADC
   digitalWrite(SDpower, LOW);   // SD card power off
   delay(1);
-}    
+}
 
 // Data out
 void DataOut()
 {
   digitalWrite(SDpower, HIGH);   // SD card power on
-  digitalWrite(SPI_MUX_SEL, LOW); // SDcard    
+  digitalWrite(SPI_MUX_SEL, LOW); // SDcard
 
   uint16_t noise = 4;
   uint32_t flux=0;
 
-  for(uint16_t n=noise; n<(CHANNELS); n++)  
+  for(uint16_t n=noise; n<(CHANNELS); n++)
   {
-    flux += histogram[n]; 
+    flux += histogram[n];
   }
 
   // make a string for assembling the data to log:
   String dataString = "";
 
   readRTC();
-  
+
   // make a string for assembling the data to log:
   dataString += "$HIST,";
-  dataString += String(count); 
-  dataString += ",";  
-  dataString += String(tm); 
+  dataString += String(count);
+  dataString += ",";
+  dataString += String(tm);
   dataString += ".";
-  dataString += String(tm_s100); 
+  dataString += String(tm_s100);
   dataString += ",";
   dataString += String(flux);
-  
-  for(uint16_t n=0; n<(CHANNELS); n++)  
+
+  for(uint16_t n=0; n<(CHANNELS); n++)
   {
-/* 
+/*
  if (n>600)
     {
     dataString += "\t,";
     dataString += String(n);
-    dataString += "*";      
-      
+    dataString += "*";
+
     }
 */
 #ifdef CALIBRATION
     dataString += "\t,";
     dataString += String(n);
-    dataString += "*";      
+    dataString += "*";
 #else
     dataString += ",";
-#endif      
-    dataString += String(histogram[n]); 
+#endif
+    dataString += String(histogram[n]);
   }
 
   if (SDinserted)
   {
     //PORTB = 0b11111110; // SD card power on
-    digitalWrite(LED3, HIGH); 
-    
+    digitalWrite(LED3, HIGH);
+
     // make sure that the default chip select pin is set to output
     // see if the card is present and can be initialized:
-    if (!SD.begin(SS))//, SPI_HALF_SPEED)) 
+    if (!SD.begin(SS))//, SPI_HALF_SPEED))
     {
       Serial1.println("#SD init false");
       SDinserted = false;
@@ -400,26 +402,26 @@ void DataOut()
       // open the file. note that only one file can be open at a time,
       // so you have to close this one before opening another.
       File dataFile = SD.open(filename, FILE_WRITE);
-    
+
       // if the file is available, write to it:
-      if (dataFile) 
+      if (dataFile)
       {
-        dataFile.println(dataString);  // write to SDcard (800 ms)     
+        dataFile.println(dataString);  // write to SDcard (800 ms)
         dataFile.close();
-      }  
+      }
       // if the file isn't open, pop up an error:
-      else 
+      else
       {
         Serial1.println("#SD false");
         SDinserted = false;
       }
-    }  
+    }
   //PORTB = 0b00000000; // SD card power off
     digitalWrite(SS, HIGH);         // Disable SD card
-  }   
+  }
   else
-  {       
-    digitalWrite(LED2, HIGH); 
+  {
+    digitalWrite(LED2, HIGH);
     // Debug output if SD card is not inserted
     uint16_t i=0;
     uint16_t len = dataString.length();
@@ -428,27 +430,27 @@ void DataOut()
       for(uint8_t n=0; n<255; n++) if (!digitalRead(RTS)) break;
       {delayMicroseconds(50);Serial.print(dataString[i++]);}
       if (i>len) break;
-      //delay(2);    
+      //delay(2);
     }
     Serial.println();             // print to HID
-    Serial1.println(dataString);  // print to debug terminal 
+    Serial1.println(dataString);  // print to debug terminal
   }
-  digitalWrite(LED3, LOW);     
-  digitalWrite(LED2, LOW);     
-  
+  digitalWrite(LED3, LOW);
+  digitalWrite(LED2, LOW);
+
   count++;
-  if (count > MAX_MEASUREMENTS) 
+  if (count > MAX_MEASUREMENTS)
   {
     count = 0;
     fn++;
-    filename = String(fn) + ".txt";        
-    Serial1.print("#Filename,"); 
-    Serial1.println(filename); 
-  } 
-  digitalWrite(SPI_MUX_SEL, HIGH); // ADC    
+    filename = String(fn) + ".txt";
+    Serial1.print("#Filename,");
+    Serial1.println(filename);
+  }
+  digitalWrite(SPI_MUX_SEL, HIGH); // ADC
   digitalWrite(SDpower, LOW);   // SD card power off
   delay(1);
-}    
+}
 
 void setup()
 {
@@ -458,7 +460,7 @@ void setup()
   Wire.setClock(100000);
 
   Serial1.println("#Cvak...");
-    
+
   pinMode(ACONNECT, INPUT);      // detection of analog frontend
   pinMode(ENUM_FTDI_USB, INPUT); // detection of USB
   pinMode(RTS, INPUT);           // UART handshake
@@ -466,27 +468,29 @@ void setup()
   pinMode(BTN_USER_A, INPUT);   // Button st the front panel
 
   pinMode(DRESET, OUTPUT);   // peak detetor
-  pinMode(DSET, OUTPUT);   
-  pinMode(CONV, INPUT);   
+  pinMode(DSET, OUTPUT);
+  pinMode(CONV, INPUT);
+
+  pinMode(BUZZER, OUTPUT); // Set the buzzer pin as an output
 
   pinMode(SPI_MUX_SEL, OUTPUT);   // SDcard/ADC
-  digitalWrite(SPI_MUX_SEL, HIGH); // ADC    
-  
+  digitalWrite(SPI_MUX_SEL, HIGH); // ADC
+
   pinMode(POWER3V3, OUTPUT);    // Analog power 3.3 V
-  digitalWrite(POWER3V3, HIGH); // on 
+  digitalWrite(POWER3V3, HIGH); // on
   pinMode(POWER5V, OUTPUT);     // Analog power 5 V
   digitalWrite(POWER5V, HIGH);  // on
 
   pinMode(SDpower, OUTPUT);  // SDcard interface
-  pinMode(SDmode, OUTPUT);  
-  pinMode(SS, OUTPUT);     
-  pinMode(MOSI, INPUT);     
-  pinMode(MISO, INPUT);     
-  pinMode(SCK, OUTPUT);  
+  pinMode(SDmode, OUTPUT);
+  pinMode(SS, OUTPUT);
+  pinMode(MOSI, INPUT);
+  pinMode(MISO, INPUT);
+  pinMode(SCK, OUTPUT);
 
   digitalWrite(SDpower, HIGH);   // SD card power on
   digitalWrite(SS, HIGH);        // Disable SD card
-  digitalWrite(SCK, LOW);    
+  digitalWrite(SCK, LOW);
   digitalWrite(SDmode, LOW);     // SD card reader oscilator off
 
   // Setup battery charger
@@ -496,12 +500,12 @@ void setup()
   Wire.endTransmission();
   Wire.beginTransmission(0x6A); // I2C address
   Wire.write((uint8_t)0x14); // Start register
-  Wire.write((uint8_t)0b00100110); 
-  Wire.write((uint8_t)0b00011001); 
-  Wire.write((uint8_t)0b10100000); 
-  Wire.write((uint8_t)0b01010110); 
-  Wire.write((uint8_t)0b00000000); 
-  Wire.write((uint8_t)0b00000001); 
+  Wire.write((uint8_t)0b00100110);
+  Wire.write((uint8_t)0b00011001);
+  Wire.write((uint8_t)0b10100000);
+  Wire.write((uint8_t)0b01010110);
+  Wire.write((uint8_t)0b00000000);
+  Wire.write((uint8_t)0b00000001);
   Wire.endTransmission();
   Wire.beginTransmission(0x6A); // I2C address
   Wire.write((uint8_t)0x1a); // Start register
@@ -520,9 +524,9 @@ while(true)
   // Is VBUS (USB) present?
   Wire.beginTransmission(0x6A);      // ADC of VBUS
   //Wire.write(0x2D); // MSB 0.264 V/bit
-  Wire.write(0x1E); 
+  Wire.write(0x1E);
   Wire.endTransmission();
-  Wire.requestFrom(0x6A, 1);    
+  Wire.requestFrom(0x6A, 1);
   vbus = Wire.read();
   Serial1.println(vbus, HEX);
   delay(1000);
@@ -530,14 +534,14 @@ while(true)
    //*/
 
   if (digitalRead(ACONNECT))  // Analog board disconnected
-  {  
-    boolean SDreader = true;    // wanted SD reader mode  
+  {
+    boolean SDreader = true;    // wanted SD reader mode
     boolean USBchanged = true;  // USB devaci need to be changed
 
     Wire.beginTransmission(0x6A);      // ADC of VBUS
     Wire.write(0x2D); // MSB 0.264 V/bit
     Wire.endTransmission();
-    Wire.requestFrom(0x6A, 1);    
+    Wire.requestFrom(0x6A, 1);
     Wire.read() & 0x7F;
     delay(3000); // Vaiting for stable voltage
     while(true)
@@ -550,7 +554,7 @@ while(true)
         Wire.beginTransmission(0x6A);      // ADC of VBUS
         Wire.write(0x2D); // MSB 0.264 V/bit
         Wire.endTransmission();
-        Wire.requestFrom(0x6A, 1);    
+        Wire.requestFrom(0x6A, 1);
         vbus = Wire.read() & 0x7F;
         //if (vbus_old == vbus) break; // is the value stable?
         //vbus_old = vbus;
@@ -559,28 +563,36 @@ while(true)
 
       if (vbus < 17) // < 4.5 V
       {
+        // discharge analog board detection signal
         Wire.beginTransmission(0x51); // 1 kHz to #INTA
-        Wire.write(0x28); 
-        Wire.write(0x05);             // COF
+        Wire.write(0x28);
+        Wire.write(0x95);             // COF
         Wire.endTransmission();
-        
+
         for( uint16_t n=0; n<200; n++)
         {
           delayMicroseconds(250);
-          pinMode(BUZZER, OUTPUT); 
-          digitalWrite(BUZZER, HIGH); 
+          pinMode(BUZZER, OUTPUT);
+          digitalWrite(BUZZER, HIGH);
           delayMicroseconds(250);
-          pinMode(BUZZER, OUTPUT); 
-          digitalWrite(BUZZER, LOW); 
+          pinMode(BUZZER, OUTPUT);
+          digitalWrite(BUZZER, LOW);
         }
         // Power off
         Wire.beginTransmission(0x6A); // I2C address
         Wire.write((uint8_t)0x18); // Start register
-        Wire.write((uint8_t)0x0A); // 
+        Wire.write((uint8_t)0x0A); //
         Wire.endTransmission();
-        delay(1000);
-      }          
-    
+        delay(3000);
+
+        // end discharging of analog board detection signal
+        Wire.beginTransmission(0x51); // High-Z on #INTA
+        Wire.write((uint8_t)0x27); // Start register
+        Wire.write((uint8_t)0x03); // 0x27 High-Z on INTA pin.
+        Wire.write(0x95);             // COF
+        Wire.endTransmission();
+      }
+
       if (USBchanged)
       {
         USBchanged = false;
@@ -588,54 +600,54 @@ while(true)
         {
           // SD card reader ON
           digitalWrite(SDmode, HIGH);   // SD card reader oscilator on
-          
-          pinMode(LED1, OUTPUT); 
-          digitalWrite(LED1, HIGH); 
+
+          pinMode(LED1, OUTPUT);
+          digitalWrite(LED1, HIGH);
           for( uint16_t n=0; n<200; n++)
           {
             delayMicroseconds(250);
-            pinMode(BUZZER, OUTPUT); 
-            digitalWrite(BUZZER, HIGH); 
+            pinMode(BUZZER, OUTPUT);
+            digitalWrite(BUZZER, HIGH);
             delayMicroseconds(250);
-            pinMode(BUZZER, OUTPUT); 
-            digitalWrite(BUZZER, LOW); 
+            pinMode(BUZZER, OUTPUT);
+            digitalWrite(BUZZER, LOW);
           };
           for( uint16_t n=0; n<200; n++)
           {
             delayMicroseconds(180);
-            pinMode(BUZZER, OUTPUT); 
-            digitalWrite(BUZZER, HIGH); 
+            pinMode(BUZZER, OUTPUT);
+            digitalWrite(BUZZER, HIGH);
             delayMicroseconds(180);
-            pinMode(BUZZER, OUTPUT); 
-            digitalWrite(BUZZER, LOW); 
+            pinMode(BUZZER, OUTPUT);
+            digitalWrite(BUZZER, LOW);
           }
           // SD card reader on
           Wire.beginTransmission(0x71); // card reader address
           Wire.write((uint8_t)0x00); // Start register
           Wire.write((uint8_t)0b00010011); // 0b0001 0 01 1
-          Wire.endTransmission();  
+          Wire.endTransmission();
         }
         else
         {
-          pinMode(LED1, OUTPUT); 
-          digitalWrite(LED1, LOW); 
+          pinMode(LED1, OUTPUT);
+          digitalWrite(LED1, LOW);
           for( uint16_t n=0; n<200; n++)
           {
             delayMicroseconds(180);
-            pinMode(BUZZER, OUTPUT); 
-            digitalWrite(BUZZER, HIGH); 
+            pinMode(BUZZER, OUTPUT);
+            digitalWrite(BUZZER, HIGH);
             delayMicroseconds(180);
-            pinMode(BUZZER, OUTPUT); 
-            digitalWrite(BUZZER, LOW); 
+            pinMode(BUZZER, OUTPUT);
+            digitalWrite(BUZZER, LOW);
           }
           for( uint16_t n=0; n<200; n++)
           {
             delayMicroseconds(250);
-            pinMode(BUZZER, OUTPUT); 
-            digitalWrite(BUZZER, HIGH); 
+            pinMode(BUZZER, OUTPUT);
+            digitalWrite(BUZZER, HIGH);
             delayMicroseconds(250);
-            pinMode(BUZZER, OUTPUT); 
-            digitalWrite(BUZZER, LOW); 
+            pinMode(BUZZER, OUTPUT);
+            digitalWrite(BUZZER, LOW);
           };
           // SD card reader off
           Wire.beginTransmission(0x71); // card reader address
@@ -647,7 +659,7 @@ while(true)
         }
         delay(1000);
       };
-            
+
       if (!digitalRead(BTN_USER_A))
       {
         SDreader = !SDreader;
@@ -655,37 +667,43 @@ while(true)
       }
     }
   }
-    
+
   pinMode(EXT_I2C_EN, OUTPUT);    // Enable external I2C
-  digitalWrite(EXT_I2C_EN, HIGH);   
+  digitalWrite(EXT_I2C_EN, HIGH);
 
   for( uint8_t n=0; n<5; n++)
   {
-    delay(80);  
-    pinMode(LED1, OUTPUT); 
-    digitalWrite(LED1, HIGH); 
-    delay(80);  
-    digitalWrite(LED1, LOW); 
+    delay(80);
+    pinMode(LED1, OUTPUT);
+    digitalWrite(LED1, HIGH);
+    delay(80);
+    digitalWrite(LED1, LOW);
   }
-  digitalWrite(LED1, HIGH); 
-  
+  digitalWrite(LED1, HIGH);
+
   for( uint16_t n=0; n<200; n++)
   {
     delayMicroseconds(180);
-    pinMode(BUZZER, OUTPUT); 
-    digitalWrite(BUZZER, HIGH); 
+    pinMode(BUZZER, OUTPUT);
+    digitalWrite(BUZZER, HIGH);
     delayMicroseconds(180);
-    pinMode(BUZZER, OUTPUT); 
-    digitalWrite(BUZZER, LOW); 
+    pinMode(BUZZER, OUTPUT);
+    digitalWrite(BUZZER, LOW);
   }
 
   Serial1.println("#Hmmm...");
 
   digitalWrite(DSET, LOW);       // Disable ADC
-  digitalWrite(DRESET, HIGH);       
-  
+  digitalWrite(DRESET, HIGH);
+
+
+  Wire.beginTransmission(0x51); // disable output n INTA
+  Wire.write((uint8_t)0x27); // Start register
+  Wire.write((uint8_t)0x03); // 0x27 High-Z on INTA pin
+  Wire.write((uint8_t)0x97); // 0x28 stop-watch mode, no periodic interrupts, INTA in high-Z
+
   // Initiation of RTC
-  Wire.beginTransmission(0x51); // init clock
+  /*Wire.beginTransmission(0x51); // init clock
   Wire.write((uint8_t)0x23); // Start register
   Wire.write((uint8_t)0x00); // 0x23
   Wire.write((uint8_t)0x00); // 0x24 Two's complement offset value
@@ -697,94 +715,94 @@ while(true)
   Wire.write((uint8_t)0x00); // 0x2a
   Wire.endTransmission();
   Wire.beginTransmission(0x51); // reset clock
-  Wire.write(0x2f); 
+  Wire.write(0x2f);
   Wire.write(0x2c);
   Wire.endTransmission();
   Wire.beginTransmission(0x51); // start stop-watch
-  Wire.write(0x28); 
+  Wire.write(0x28);
   Wire.write(0x97);
   Wire.endTransmission();
   Wire.beginTransmission(0x51); // reset stop-watch
   Wire.write((uint8_t)0x00); // Start register
   Wire.write((uint8_t)0x00); // 0x00
-  Wire.write((uint8_t)0x00); // 0x01 
-  Wire.write((uint8_t)0x00); // 0x02 
+  Wire.write((uint8_t)0x00); // 0x01
+  Wire.write((uint8_t)0x00); // 0x02
   Wire.write((uint8_t)0x00); // 0x03
   Wire.write((uint8_t)0x00); // 0x04
   Wire.write((uint8_t)0x00); // 0x05
-  Wire.endTransmission();
-  
+  Wire.endTransmission();*/
+
   // make a string for device identification output
   String dataString = "$DOS,"TYPE"," + FWversion + ",0," + githash + ","; // FW version and Git hash
-  
+
   Wire.beginTransmission(0x5B);                   // request SN from EEPROM - analog board
   Wire.write((int)0x08); // MSB
   Wire.write((int)0x00); // LSB
   Wire.endTransmission();
-  Wire.requestFrom((uint8_t)0x5B, (uint8_t)16);    
+  Wire.requestFrom((uint8_t)0x5B, (uint8_t)16);
   for (int8_t reg=0; reg<16; reg++)
-  { 
+  {
     uint8_t serialbyte = Wire.read(); // receive a byte
     if (serialbyte<0x10) dataString += "0";
-    dataString += String(serialbyte,HEX);    
+    dataString += String(serialbyte,HEX);
   }
 
-  dataString += "\r\n$DIG,"DIGTYPE","; 
+  dataString += "\r\n$DIG,"DIGTYPE",";
   Wire.beginTransmission(0x58);                   // request SN from EEPROM - digital board
   Wire.write((int)0x08); // MSB
   Wire.write((int)0x00); // LSB
   Wire.endTransmission();
-  Wire.requestFrom((uint8_t)0x58, (uint8_t)16);    
+  Wire.requestFrom((uint8_t)0x58, (uint8_t)16);
   for (int8_t reg=0; reg<16; reg++)
-  { 
+  {
     uint8_t serialbyte = Wire.read(); // receive a byte
     if (serialbyte<0x10) dataString += "0";
     pinMode(POWER3V3, OUTPUT);    // Analog power 3.3 V
-    digitalWrite(POWER3V3, HIGH); // on 
+    digitalWrite(POWER3V3, HIGH); // on
     pinMode(POWER5V, OUTPUT);     // Analog power 5 V
     digitalWrite(POWER5V, HIGH);  // on
-    dataString += String(serialbyte,HEX);    
+    dataString += String(serialbyte,HEX);
   }
-  dataString += ","; 
+  dataString += ",";
   Wire.beginTransmission(0x50);                   // request configuration from EEPROM - digital board
   Wire.write((int)0x00); // MSB
   Wire.write((int)0x00); // LSB
   Wire.endTransmission();
-  Wire.requestFrom((uint8_t)0x50, (uint8_t)2);    
+  Wire.requestFrom((uint8_t)0x50, (uint8_t)2);
   DIGconf1 = Wire.read();
   DIGconf2 = Wire.read();
-  dataString += String(DIGconf1,HEX);    
-  dataString += String(DIGconf2,HEX);    
+  dataString += String(DIGconf1,HEX);
+  dataString += String(DIGconf2,HEX);
 
-  dataString += "\r\n$ADC,"ADCTYPE","; 
+  dataString += "\r\n$ADC,"ADCTYPE",";
   Wire.beginTransmission(0x5B);                   // request SN from EEPROM - analog board
   Wire.write((int)0x08); // MSB
   Wire.write((int)0x00); // LSB
   Wire.endTransmission();
-  Wire.requestFrom((uint8_t)0x5B, (uint8_t)16);    
+  Wire.requestFrom((uint8_t)0x5B, (uint8_t)16);
   for (int8_t reg=0; reg<16; reg++)
-  { 
+  {
     uint8_t serialbyte = Wire.read(); // receive a byte
     if (serialbyte<0x10) dataString += "0";
-    dataString += String(serialbyte,HEX);    
+    dataString += String(serialbyte,HEX);
   };
-  dataString += ","; 
+  dataString += ",";
   Wire.beginTransmission(0x53);                   // request configuration from EEPROM - analog board
   Wire.write((int)0x00); // MSB
   Wire.write((int)0x00); // LSB
   Wire.endTransmission();
-  Wire.requestFrom((uint8_t)0x53, (uint8_t)2);    
+  Wire.requestFrom((uint8_t)0x53, (uint8_t)2);
   ADCconf1 = Wire.read();
   ADCconf2 = Wire.read();
-  dataString += String(ADCconf1,HEX);    
-  dataString += String(ADCconf2,HEX);    
+  dataString += String(ADCconf1,HEX);
+  dataString += String(ADCconf2,HEX);
 
   // Filename selection and initial write to SD card
-  {    
-    digitalWrite(SPI_MUX_SEL, LOW); // SD card    
+  {
+    digitalWrite(SPI_MUX_SEL, LOW); // SD card
     // make sure that the default chip select pin is set to output
     // see if the card is present and can be initialized:
-    if (!SD.begin(SS))//, SPI_HALF_SPEED)) 
+    if (!SD.begin(SS))//, SPI_HALF_SPEED))
     {
       Serial1.println("#SD init false");
       SDinserted = false;
@@ -794,76 +812,76 @@ while(true)
        filename = String(fn) + ".txt";
        if (SD.exists(filename) == 0) break;
     }
-    fn--;
+//    fn--;
     filename = String(fn) + ".txt";
-  
+
     for( uint8_t n=0; n<5; n++)
     {
-      delay(80);  
-      pinMode(LED2, OUTPUT); 
-      digitalWrite(LED2, HIGH); 
-      delay(80);  
-      digitalWrite(LED2, LOW); 
+      delay(80);
+      pinMode(LED2, OUTPUT);
+      digitalWrite(LED2, HIGH);
+      delay(80);
+      digitalWrite(LED2, LOW);
     }
-    digitalWrite(LED2, HIGH); 
-    
+    digitalWrite(LED2, HIGH);
+
     // open the file. note that only one file can be open at a time,
     // so you have to close this one before opening another.
     File dataFile = SD.open(filename, FILE_WRITE);
 
     uint32_t filesize = dataFile.size();
     Serial1.print("#Filesize,");
-    Serial1.println(filesize); 
+    Serial1.println(filesize);
     if (filesize > MAXFILESIZE)
     {
       dataFile.close();
       fn++;
-      filename = String(fn) + ".txt";      
+      filename = String(fn) + ".txt";
       dataFile = SD.open(filename, FILE_WRITE);
     }
     Serial1.print("#Filename,");
-    Serial1.println(filename); 
-  
+    Serial1.println(filename);
+
     // if the file is available, write to it:
-    if (dataFile) 
+    if (dataFile)
     {
-      dataFile.println(dataString);  // write to SDcard (800 ms)     
-      dataFile.close();  
-    }  
+      dataFile.println(dataString);  // write to SDcard (800 ms)
+      dataFile.close();
+    }
     // if the file isn't open, pop up an error:
-    else 
+    else
     {
       Serial1.println("#SD false");
       SDinserted = false;
     }
-    Serial1.println(dataString);  // print SN to terminal 
-    digitalWrite(SPI_MUX_SEL, HIGH); // ADC    
-  }    
+    Serial1.println(dataString);  // print SN to terminal
+    digitalWrite(SPI_MUX_SEL, HIGH); // ADC
+  }
 
   pinMode(EXT_I2C_EN, OUTPUT);    // Disable external I2C
-  digitalWrite(EXT_I2C_EN, LOW);   
+  digitalWrite(EXT_I2C_EN, LOW);
 
   for( uint8_t n=0; n<5; n++)
   {
-    delay(80);  
-    pinMode(LED3, OUTPUT); 
-    digitalWrite(LED3, HIGH); 
-    delay(80);  
-    digitalWrite(LED3, LOW); 
+    delay(80);
+    pinMode(LED3, OUTPUT);
+    digitalWrite(LED3, HIGH);
+    delay(80);
+    digitalWrite(LED3, LOW);
   }
-  digitalWrite(LED1, LOW); 
-  digitalWrite(LED2, LOW); 
+  digitalWrite(LED1, LOW);
+  digitalWrite(LED2, LOW);
 
   pinMode(POWER3V3, OUTPUT);   // Analog power 3.3 V
   digitalWrite(POWER3V3, LOW); // off
-  
+
   cli(); // disable interrupts during setup
   // Configure Timer 1 interrupt
   // F_clock = 8 MHz, prescaler = 1024, Fs = 0.125 Hz
   TCCR1A = 0;
   //TCCR1B = 1<<WGM12 | 0<<CS12 | 1<<CS11 | 1<<CS10;
   TCCR1B = 1<<WGM12 | 1<<CS12 | 0<<CS11 | 1<<CS10;
-  // OCR1A = ((F_clock / prescaler) / Fs) - 1 
+  // OCR1A = ((F_clock / prescaler) / Fs) - 1
   OCR1A = 39063;      // Set sampling frequency Fs, period 5 s
   //OCR1A = (62500/2)-1;      // Set sampling frequency Fs, period 4 s
   TCNT1 = 0;          // reset Timer 1 counter
@@ -885,7 +903,7 @@ void loop()
   digitalWrite(DRESET, LOW);
   SPI.transfer16(0x0000);
   digitalWrite(DRESET, HIGH);
-  
+
   store = 0;
   batt = 0;
   env = 0;
@@ -893,42 +911,51 @@ void loop()
   while(true)
   {
     while((PINB & 1)==0) // Waiting for signal drop
-    {     
+    {
       if (store >= 2) // Data out every 10 s
       {
         store = 0;
         batt++;
         env++;
 
-        digitalWrite(LED2, digitalRead(ACONNECT)); 
+        digitalWrite(LED2, digitalRead(ACONNECT));
         if (digitalRead(ACONNECT))  // Analog part is disconnected?
         {
-          Wire.beginTransmission(0x51); // 1 kHz to #INTA
-          Wire.write(0x28); 
-          Wire.write(0x05);             // COF
+          Wire.beginTransmission(0x51); // 1024 Hz to #INTA
+          Wire.write((uint8_t)0x27); // Start register
+          Wire.write((uint8_t)0x00); // 0x27 Enable CLX output on INTA pin, using bits set in reg 0x28
+          Wire.write(0x95);             // COF
           Wire.endTransmission();
 
           delay(3000);
-          
+
           for( uint16_t n=0; n<200; n++)
           {
             delayMicroseconds(250);
-            pinMode(BUZZER, OUTPUT); 
-            digitalWrite(BUZZER, HIGH); 
+            pinMode(BUZZER, OUTPUT);
+            digitalWrite(BUZZER, HIGH);
             delayMicroseconds(250);
-            pinMode(BUZZER, OUTPUT); 
-            digitalWrite(BUZZER, LOW); 
+            pinMode(BUZZER, OUTPUT);
+            digitalWrite(BUZZER, LOW);
           }
+
+          Wire.beginTransmission(0x51); // High-Z on #INTA
+          Wire.write((uint8_t)0x27); // Start register
+          Wire.write((uint8_t)0x03); // 0x27 High-Z on INTA pin.
+          Wire.write(0x95);             // COF
+          Wire.endTransmission();
+
+
           // Power off
           Wire.beginTransmission(0x6A); // I2C address
           Wire.write((uint8_t)0x18); // Start register
-          Wire.write((uint8_t)0x0A); // 
+          Wire.write((uint8_t)0x0A); //
           Wire.endTransmission();
           resetFunc();
           //delay(10000);
           //while(true);
         };
-  
+
         digitalWrite(DRESET, HIGH);
         digitalWrite(DSET, LOW);
         DataOut();
@@ -936,13 +963,13 @@ void loop()
         {
           histogram[n]=0;
         };
-  
+
         if (env >= 5*6) // Environment out every 5 minutes
         {
           env = 0;
           EnvOut();
         };
-        
+
         if (batt >= 30*6) // Battery status every 30 minutes
         {
           batt = 0;
@@ -952,7 +979,7 @@ void loop()
         // dummy conversion
         digitalWrite(DSET, HIGH);
         digitalWrite(DRESET, LOW); // L on CONV
-        SPI.transfer16(0x0000); 
+        SPI.transfer16(0x0000);
         digitalWrite(DRESET, HIGH);
 
         TCNT1 = 0;          // reset Timer 1 counter
@@ -963,8 +990,17 @@ void loop()
     // delayMicroseconds(4); // This delay is done in cycle overhead
     digitalWrite(DRESET, LOW); // L on CONV
     uint16_t adcVal = SPI.transfer16(0x0000); // 0c8000 +/GND, 0x0000 +/-
+
+    #ifdef RADIATION_CLICK
+      if (adcVal>320) digitalWrite(BUZZER, HIGH); // buzzer click on ADC conversion.
+    #endif
+
     adcVal >>= 6;
     if (histogram[adcVal]<255) histogram[adcVal]++;
     digitalWrite(DRESET, HIGH);
+
+    #ifdef RADIATION_CLICK
+      digitalWrite(BUZZER, LOW);
+    #endif
   }
 }

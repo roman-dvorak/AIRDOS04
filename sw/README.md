@@ -2,7 +2,7 @@
 
 A utility designed to control the AIRDOS04 dosimeter from the [Unix command line](https://ubuntu.com/tutorials/command-line-for-beginners#1-overview). The  generic usage is the following
 
-    ./airdoscontrol [command] [options]
+    sudo ./airdoscontrol [command] [options]
 
 The airdos control is tested on the Ubuntu Linux distribution. However, it should work on any Unix-like OS like MacOS for example, although the installation procedure may differ in details. 
 
@@ -16,7 +16,9 @@ The airdos control uses [hidapi library](https://pypi.org/project/hidapi/) to co
 
     sudo python3 -m pip install hidapi 
 
-The utility needs correct [system access rights](https://linuxconfig.org/tutorial-on-how-to-write-basic-udev-rules-in-linux) to the hid device. Create the file  `/etc/udev/rules.d/99-batdatunit.rules` in your Linux system with the following content:
+
+In case you do not want tu use [sudo](https://www.howtoforge.com/sudo-beginners-guide/) to run airdoscontrol every time, the utility needs correct [system access rights](https://linuxconfig.org/tutorial-on-how-to-write-basic-udev-rules-in-linux) to the hid device. To fix that create the file  `/etc/udev/rules.d/99-batdatunit.rules` in your Linux system with the following content:
+
 
 ```
 ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0403", ATTR{idProduct}=="6030", OPTIONS+="ignore_device"
