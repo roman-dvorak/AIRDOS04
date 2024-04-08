@@ -37,7 +37,9 @@ Connect the AIRDOS04 to the computer using the USB-C to USB-A cable. NOTE: The B
 
     airdoscontrol shutdown
 
-This command would be straightforward with no additional options required. The AIRDOS is then powered off immediately after disconnection of the USB cable. It could be powered on only by a button or plugging the USB-C cable back. Please look in the [AIRDOS manual](https://docs.dos.ust.cz/airdos/AIRDOS04) for details.
+This command would be straightforward with no additional options required. The AIRDOS is then powered off immediately after disconnection of the USB cable. It could be powered on only by a button or plugging the USB-C cable back.  If the USB-C power is removed in the middle of writing to internal storage. It is theoretically possible to corrupt the filesystem on the internal SD card. Because in case of removing the USB-C cable after the shutdown command, the power is removed instantly, and the write cycle may not be completed.  The possibility of corruption could be easily avoided by unplugging the USB-C cable after the blink of the write indication LED. (In that case, there is integration time, e.g. 10 seconds to completely safely unplug the USB-C cable)
+
+Please look in the [AIRDOS manual](https://docs.dos.ust.cz/airdos/AIRDOS04) for details.
 
 #### Set internal RTC (Real-Time Clock)
 
