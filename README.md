@@ -9,7 +9,9 @@ The upgraded version of [AIRDOS02](https://github.com/UniversalScientificTechnol
   - Rechargeable accumulators integrated with data storage in the hot-swap module called [BATDATUNIT01](https://docs.dos.ust.cz/airdos/BATDATUNIT01)
     - The changeable module allows new possible features in the future like GNSS-based position logging with a revised module 
   - One month of continuous logging for a single accumulator charge
-  - Easy activation by insertion of BATDATUNIT module to the device
+  - Easy activation by insertion of BATDATUNIT module into the device
+  - Data download without special software (Mass storage media)
+  - Continuously incrementing time marks (Unique logging time from every measurement) 
 
 ## Where to get it?
 
@@ -19,9 +21,9 @@ The device is designed as open-source hardware and software and is released unde
 ## Technical parameters
 
   * Silicon PIN diode detector with 44 mm³ detection volume
-  * The effective number of energy channels is 470 ±3
-  * Deposited energy ranges from 60 keV to 7 MeV
-  * Energy measurement resolution 15 ±2 keV
+  * The effective number of energy channels is 886 ± 3
+  * Deposited energy ranges from 36 keV to 7 MeV
+  * Energy measurement resolution 15 ± 2 keV
   * Service interface:  USB-C connector (charging and data download)
   * Energy source: 18650 Li-ion cells conforms with [≤ 100 Wh / 2g restrictions](https://www.iata.org/contentassets/6fea26dd84d24b26a7a1fd5788561d6e/passenger-lithium-battery.pdf)
   * Radiation spectra integration time 10 s
