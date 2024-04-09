@@ -15,8 +15,7 @@ The upgraded version of [AIRDOS02](https://github.com/UniversalScientificTechnol
 
 ## Where to get it?
 
-AIRDOS04 is commercially available from [Universal Scientific Technologies s.r.o.](https://www.ust.cz/), write an email to sale@ust.cz.
-The device is designed as open-source hardware and software and is released under the GPLv3 license. The device was initially developed and maintained by [UST (Universal Scientific Technologies s.r.o.)](https://www.ust.cz) company, which sells it commercially and offers technical support.
+Purchase AIRDOS04, the open-source device designed for versatility, from [Universal Scientific Technologies s.r.o.](https://www.ust.cz). For sales inquiries, contact sale@ust.cz. Developed and maintained by UST, it comes with full commercial availability and dedicated technical support. The device is released under the GPLv3 license.
 
 ## Technical parameters
 
