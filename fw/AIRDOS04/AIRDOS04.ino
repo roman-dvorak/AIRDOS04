@@ -9,7 +9,7 @@
 #include "githash.h"
 
 //#define CALIBRATION
-#define RADIATION_CLICK
+//#define RADIATION_CLICK
 
 
 #define XSTR(s) STR(s)
@@ -76,6 +76,7 @@ https://github.com/RobTillaart/MS5611
 #include <SPI.h>
 #include <SHT31.h>
 #include <MS5611.h>
+#include <avr/wdt.h>
 
 #define CONV        0    // PB0, MOLEX B0, D Q, ADC CONV signal
 #define DRESET      22   // PC6, MOLEX C0, D #Reset
@@ -538,17 +539,24 @@ while(true)
     boolean SDreader = true;    // wanted SD reader mode
     boolean USBchanged = true;  // USB devaci need to be changed
 
+    wdt_enable(WDTO_2S);  // watchdog for preventing I2C hanging
+    
     Wire.beginTransmission(0x6A);      // ADC of VBUS
     Wire.write(0x2D); // MSB 0.264 V/bit
     Wire.endTransmission();
     Wire.requestFrom(0x6A, 1);
     Wire.read() & 0x7F;
-    delay(3000); // Vaiting for stable voltage
+    wdt_reset();
+    delay(1000); // Vaiting for stable voltage
+    wdt_reset();
+    delay(1000); // Vaiting for stable voltage
+    wdt_reset();
+    delay(1000); // Vaiting for stable voltage
+    wdt_reset();
     while(true)
     {
       uint8_t vbus;
-      //uint8_t vbus_old = 0;
-      //while(true)
+
       {
         // Is VBUS (USB) present?
         Wire.beginTransmission(0x6A);      // ADC of VBUS
@@ -556,18 +564,25 @@ while(true)
         Wire.endTransmission();
         Wire.requestFrom(0x6A, 1);
         vbus = Wire.read() & 0x7F;
-        //if (vbus_old == vbus) break; // is the value stable?
-        //vbus_old = vbus;
-        //delay(200);
       }
+      wdt_reset();
 
       if (vbus < 17) // < 4.5 V
       {
+        digitalWrite(LED2, digitalRead(ACONNECT));
         // discharge analog board detection signal
         Wire.beginTransmission(0x51); // 1 kHz to #INTA
         Wire.write(0x28);
         Wire.write(0x95);             // COF
         Wire.endTransmission();
+
+        wdt_reset();
+        delay(1000); // Vaiting for capacitor discharge
+        wdt_reset();
+        delay(1000); 
+        wdt_reset();
+        delay(1000); 
+        wdt_reset();
 
         for( uint16_t n=0; n<200; n++)
         {
@@ -578,20 +593,24 @@ while(true)
           pinMode(BUZZER, OUTPUT);
           digitalWrite(BUZZER, LOW);
         }
-        // Power off
-        Wire.beginTransmission(0x6A); // I2C address
-        Wire.write((uint8_t)0x18); // Start register
-        Wire.write((uint8_t)0x0A); //
-        Wire.endTransmission();
-        delay(3000);
-
         // end discharging of analog board detection signal
         Wire.beginTransmission(0x51); // High-Z on #INTA
         Wire.write((uint8_t)0x27); // Start register
         Wire.write((uint8_t)0x03); // 0x27 High-Z on INTA pin.
         Wire.write(0x95);             // COF
         Wire.endTransmission();
+
+        // Power off
+        Wire.beginTransmission(0x6A); // I2C address
+        Wire.write((uint8_t)0x18); // Start register
+        Wire.write((uint8_t)0x0A); //
+        Wire.endTransmission();
+
+        while(true); // Waiting for reset
+
       }
+
+      wdt_reset();
 
       if (USBchanged)
       {
@@ -731,6 +750,8 @@ while(true)
   Wire.write((uint8_t)0x00); // 0x04
   Wire.write((uint8_t)0x00); // 0x05
   Wire.endTransmission();*/
+
+  wdt_enable(WDTO_8S);  // watchdog for preventing I2C hanging
 
   // make a string for device identification output
   String dataString = "$DOS,"TYPE"," + FWversion + ",0," + githash + ","; // FW version and Git hash
@@ -875,6 +896,8 @@ while(true)
   pinMode(POWER3V3, OUTPUT);   // Analog power 3.3 V
   digitalWrite(POWER3V3, LOW); // off
 
+  wdt_disable();
+
   cli(); // disable interrupts during setup
   // Configure Timer 1 interrupt
   // F_clock = 8 MHz, prescaler = 1024, Fs = 0.125 Hz
@@ -951,13 +974,16 @@ void loop()
           Wire.write((uint8_t)0x18); // Start register
           Wire.write((uint8_t)0x0A); //
           Wire.endTransmission();
-          resetFunc();
-          //delay(10000);
-          //while(true);
+          
+          wdt_enable(WDTO_120MS);    // reset processor in case of USB power
+          while(true);
         };
 
         digitalWrite(DRESET, HIGH);
         digitalWrite(DSET, LOW);
+
+        wdt_enable(WDTO_8S);  // watchdog for preventing I2C hanging
+
         DataOut();
         for(int n=0; n<CHANNELS; n++) // reset histogram
         {
@@ -981,6 +1007,8 @@ void loop()
         digitalWrite(DRESET, LOW); // L on CONV
         SPI.transfer16(0x0000);
         digitalWrite(DRESET, HIGH);
+
+        wdt_disable();
 
         TCNT1 = 0;          // reset Timer 1 counter
       }
