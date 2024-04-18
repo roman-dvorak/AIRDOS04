@@ -1,5 +1,5 @@
 // This file is overwritten by github actions, do not update it manually
-String githash = "ec53dc5eac2e08f0529508bfefecbd19f1d7e67e,User";
+String githash = "c994276f20aa0ee9e49ca23be3db28352fddbd13,User";
 #define GHRELEASE 0
 #define GHBUILD 0
 #define GHBUILDTYPE User
