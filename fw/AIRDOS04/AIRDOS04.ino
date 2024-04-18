@@ -179,6 +179,8 @@ ISR(TIMER1_COMPA_vect)
 // Enviromental sensors out
 void EnvOut()
 {
+  wdt_enable(WDTO_2S);  // watchdog for preventing I2C hanging
+
   digitalWrite(SDpower, HIGH);   // SD card power on
   digitalWrite(SPI_MUX_SEL, LOW); // SDcard
 
@@ -231,6 +233,8 @@ void EnvOut()
   digitalWrite(EXT_I2C_EN, LOW);
   pinMode(POWER3V3, OUTPUT);    // Analog power 3.3 V
   digitalWrite(POWER3V3, LOW);  // off
+
+  wdt_disable();
 
   if (SDinserted)
   {
@@ -491,8 +495,13 @@ void setup()
 
   digitalWrite(SDpower, HIGH);   // SD card power on
   digitalWrite(SS, HIGH);        // Disable SD card
-  digitalWrite(SCK, LOW);
+  digitalWrite(SCK, LOW);        
+  delay(100); 
+
   digitalWrite(SDmode, LOW);     // SD card reader oscilator off
+
+  pinMode(EXT_I2C_EN, OUTPUT);    // Disable external I2C
+  digitalWrite(EXT_I2C_EN, LOW);
 
   // Setup battery charger
   Wire.beginTransmission(0x6A); // I2C address
@@ -975,8 +984,19 @@ void loop()
           Wire.write((uint8_t)0x0A); //
           Wire.endTransmission();
           
-          wdt_enable(WDTO_120MS);    // reset processor in case of USB power
-          while(true);
+          while(true)
+          {
+            delay(5000);
+            for( uint16_t n=0; n<200; n++)
+            {
+              delayMicroseconds(250);
+              pinMode(BUZZER, OUTPUT);
+              digitalWrite(BUZZER, HIGH);
+              delayMicroseconds(250);
+              pinMode(BUZZER, OUTPUT);
+              digitalWrite(BUZZER, LOW);
+            }
+          }
         };
 
         digitalWrite(DRESET, HIGH);
