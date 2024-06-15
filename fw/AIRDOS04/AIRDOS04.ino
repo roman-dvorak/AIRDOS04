@@ -110,6 +110,7 @@ https://github.com/RobTillaart/MS5611
 String filename = "";
 uint16_t fn;
 uint16_t count = 0;
+uint16_t hit_count = 0;    // clear events
 boolean SDinserted = true;
 uint32_t hit_time[EVENTS];    // time of events
 uint8_t hit_time_s100[EVENTS];
@@ -119,8 +120,6 @@ uint8_t ADCconf1;
 uint8_t ADCconf2;
 uint8_t DIGconf1;
 uint8_t DIGconf2;
-
-void(* resetFunc) (void) = 0; //declare reset function at address 0
 
 uint8_t bcdToDec(uint8_t b)
 {
@@ -172,6 +171,7 @@ int16_t readBat(int8_t regaddr)
 
 uint8_t store = 0;
 uint8_t batt = 0;
+uint8_t hit_count = 0;
 uint8_t env = 0;
 uint8_t ainserted = 0;
 
@@ -1001,8 +1001,6 @@ void loop()
   digitalWrite(DRESET, LOW);
   SPI.transfer16(0x0000);
   digitalWrite(DRESET, HIGH);
-
-  uint16_t hit_count = 0;    // clear events
 
   store = 0;
   batt = 0;
