@@ -15,6 +15,9 @@
 #define XSTR(s) STR(s)
 #define STR(s) #s
 
+
+#define RANGE 25  // histogram range
+#define EVENTS 256 // maximal number of single events detection in memory
 #define CHANNELS 1024 // number of channels in the buffer for histogram
 
 String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(GHRELEASE)"-"XSTR(GHBUILD)"-"XSTR(GHBUILDTYPE);
@@ -108,6 +111,9 @@ String filename = "";
 uint16_t fn;
 uint16_t count = 0;
 boolean SDinserted = true;
+uint32_t hit_time[EVENTS];    // time of events
+uint8_t hit_time_s100[EVENTS];
+uint16_t hit_channel[EVENTS];  // energy of events
 uint8_t histogram[CHANNELS];
 uint8_t ADCconf1;
 uint8_t ADCconf2;
@@ -396,6 +402,7 @@ void logHits() { // Hits out
   digitalWrite(SDpower, LOW);   // SD card power off
   delay(1);
   hits_interval = 0;
+  hit_count = 0
 }
 
 // Data out
@@ -995,6 +1002,8 @@ void loop()
   SPI.transfer16(0x0000);
   digitalWrite(DRESET, HIGH);
 
+  uint16_t hit_count = 0;    // clear events
+
   store = 0;
   batt = 0;
   env = 0;
@@ -1110,13 +1119,11 @@ void loop()
       if (adcVal>320) digitalWrite(BUZZER, HIGH); // buzzer click on ADC conversion.
     #endif
 
-    adcVal >>= 6;
-    if (histogram[adcVal]<255) histogram[adcVal]++;
-    digitalWrite(DRESET, HIGH);
+    adcVal >>= 6; // squash to 10 bit value
 
-    if (adcVal >  RANGE)
+    if (adcVal <  RANGE)
     {
-      buffer[adcVal]++;
+      if (histogram[adcVal]<255) histogram[adcVal]++; // increment histogram bin count and avoid overflow
     }
     else
     {
@@ -1125,12 +1132,12 @@ void loop()
         readRTC();
 
         hit_time[hit_count] = tm;
-        hit_time_s100[hit_count]=tm_s100;        
+        hit_time_s100[hit_count]=tm_s100;
         hit_channel[hit_count] = adcVal;
       }
-      hit_count++;
       logHits();
     }
+    digitalWrite(DRESET, HIGH);
 
     #ifdef RADIATION_CLICK
       digitalWrite(BUZZER, LOW);
