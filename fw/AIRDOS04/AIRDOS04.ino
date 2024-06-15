@@ -339,6 +339,65 @@ void BattOut()
   delay(1);
 }
 
+void logHits() { // Hits out
+
+  digitalWrite(SDpower, HIGH);   // SD card power on
+  digitalWrite(SPI_MUX_SEL, LOW); // SDcard
+
+  // make a string for assembling the data to log:
+  String dataString = "$HITS,";
+
+  dataString += String(hit_count);
+
+  if (hit_count > EVENTS) hit_count = EVENTS;
+
+  for(uint16_t n=0; n<hit_count; n++)
+  {
+    dataString += ",";
+    dataString += String(hit_time[n]);
+    dataString += ".";
+    dataString += String(hit_time_s100[n]);
+    dataString += ",";
+    dataString += String(hit_channel[n]);
+  }
+
+  if (SDinserted)
+  {
+    // make sure that the default chip select pin is set to output
+    // see if the card is present and can be initialized:
+    if (!SD.begin(SS))//, SPI_HALF_SPEED))
+    {
+      Serial1.println("#SD init false");
+      SDinserted = false;
+      // don't do anything more:
+    }
+    else
+    {
+      // open the file. note that only one file can be open at a time,
+      // so you have to close this one before opening another.
+      File dataFile = SD.open(filename, FILE_WRITE);
+
+      // if the file is available, write to it:
+      if (dataFile)
+      {
+        dataFile.println(dataString);  // write to SDcard (800 ms)
+        dataFile.close();
+      }
+      // if the file isn't open, pop up an error:
+      else
+      {
+        Serial.println("#SD false");
+        SDinserted = false;
+      }
+    }
+    digitalWrite(SS, HIGH);         // Disable SD card
+  }
+  digitalWrite(SPI_MUX_SEL, HIGH); // ADC
+  digitalWrite(SDpower, LOW);   // SD card power off
+  delay(1);
+  hits_interval = 0;
+}
+
 // Data out
 void DataOut()
 {
@@ -949,6 +1008,7 @@ void loop()
         store = 0;
         batt++;
         env++;
+        hits_interval++;
 
         digitalWrite(LED2, digitalRead(ACONNECT));
         if (digitalRead(ACONNECT))  // Analog part is disconnected?
@@ -1022,6 +1082,13 @@ void loop()
           BattOut();
         };
 
+        if (hits_interval >= 30*6) // Hits output at the least every 30 minutes
+        {
+          hits_interval = 0;
+          logHits();
+        };
+
+
         // dummy conversion
         digitalWrite(DSET, HIGH);
         digitalWrite(DRESET, LOW); // L on CONV
@@ -1046,6 +1113,24 @@ void loop()
     adcVal >>= 6;
     if (histogram[adcVal]<255) histogram[adcVal]++;
     digitalWrite(DRESET, HIGH);
+
+    if (adcVal >  RANGE)
+    {
+      buffer[adcVal]++;
+    }
+    else
+    {
+      if (hit_count < EVENTS)
+      {
+        readRTC();
+
+        hit_time[hit_count] = tm;
+        hit_time_s100[hit_count]=tm_s100;        
+        hit_channel[hit_count] = adcVal;
+      }
+      hit_count++;
+      logHits();
+    }
 
     #ifdef RADIATION_CLICK
       digitalWrite(BUZZER, LOW);
