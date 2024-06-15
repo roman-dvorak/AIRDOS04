@@ -171,7 +171,7 @@ int16_t readBat(int8_t regaddr)
 
 uint8_t store = 0;
 uint8_t batt = 0;
-uint8_t hit_count = 0;
+uint8_t hits_interval = 0;
 uint8_t env = 0;
 uint8_t ainserted = 0;
 
@@ -402,7 +402,7 @@ void logHits() { // Hits out
   digitalWrite(SDpower, LOW);   // SD card power off
   delay(1);
   hits_interval = 0;
-  hit_count = 0
+  hit_count = 0;
 }
 
 // Data out
