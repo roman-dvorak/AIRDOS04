@@ -495,8 +495,8 @@ void setup()
 
   digitalWrite(SDpower, HIGH);   // SD card power on
   digitalWrite(SS, HIGH);        // Disable SD card
-  digitalWrite(SCK, LOW);        
-  delay(100); 
+  digitalWrite(SCK, LOW);
+  delay(100);
 
   digitalWrite(SDmode, LOW);     // SD card reader oscilator off
 
@@ -549,7 +549,7 @@ while(true)
     boolean USBchanged = true;  // USB devaci need to be changed
 
     wdt_enable(WDTO_2S);  // watchdog for preventing I2C hanging
-    
+
     Wire.beginTransmission(0x6A);      // ADC of VBUS
     Wire.write(0x2D); // MSB 0.264 V/bit
     Wire.endTransmission();
@@ -588,9 +588,9 @@ while(true)
         wdt_reset();
         delay(1000); // Vaiting for capacitor discharge
         wdt_reset();
-        delay(1000); 
+        delay(1000);
         wdt_reset();
-        delay(1000); 
+        delay(1000);
         wdt_reset();
 
         for( uint16_t n=0; n<200; n++)
@@ -983,7 +983,7 @@ void loop()
           Wire.write((uint8_t)0x18); // Start register
           Wire.write((uint8_t)0x0A); //
           Wire.endTransmission();
-          
+
           while(true)
           {
             delay(5000);
@@ -1010,7 +1010,7 @@ void loop()
           histogram[n]=0;
         };
 
-        if (env >= 5*6) // Environment out every 5 minutes
+        if (env >= 1) // Environment out every integration interval
         {
           env = 0;
           EnvOut();
