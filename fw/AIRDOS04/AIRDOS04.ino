@@ -15,10 +15,8 @@
 #define XSTR(s) STR(s)
 #define STR(s) #s
 
-
-#define RANGE 25  // histogram range
 #define EVENTS 256 // maximal number of single events detection in memory
-#define CHANNELS 1024 // number of channels in the buffer for histogram
+#define CHANNELS 64 // number of channels channels in the buffer for histogram
 
 String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(GHRELEASE)"-"XSTR(GHBUILD)"-"XSTR(GHBUILDTYPE);
 
@@ -1089,7 +1087,7 @@ void loop()
           BattOut();
         };
 
-        if (hits_interval >= 30*6) // Hits output at the least every 30 minutes
+        if (hits_interval >= 10*6) // Hits output at the least every 10 minutes
         {
           hits_interval = 0;
           logHits();
@@ -1119,7 +1117,7 @@ void loop()
 
     adcVal >>= 6; // squash to 10 bit value
 
-    if (adcVal <  RANGE)
+    if (adcVal <  CHANNELS) // If the pulse energy fits to hystogram, use histogram to log.
     {
       if (histogram[adcVal]<255) histogram[adcVal]++; // increment histogram bin count and avoid overflow
     }
