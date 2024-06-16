@@ -416,6 +416,8 @@ void DataOut()
   {
     flux += histogram[n];
   }
+  
+  flux += hit_count;  // sum particles in the histogram with single partiles detections. 
 
   // make a string for assembling the data to log:
   String dataString = "";
