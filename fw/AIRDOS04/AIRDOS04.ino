@@ -17,6 +17,8 @@
 
 #define EVENTS 256 // maximal number of single events detection in memory
 #define CHANNELS 64 // number of channels channels in the buffer for histogram
+#define NOISE 4 // number of the last histogram channel considered as noise and not counted in to the flux
+
 
 String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(GHRELEASE)"-"XSTR(GHBUILD)"-"XSTR(GHBUILDTYPE);
 
@@ -409,10 +411,9 @@ void DataOut()
   digitalWrite(SDpower, HIGH);   // SD card power on
   digitalWrite(SPI_MUX_SEL, LOW); // SDcard
 
-  uint16_t noise = 4;
   uint32_t flux=0;
 
-  for(uint16_t n=noise; n<(CHANNELS); n++)
+  for(uint16_t n=NOISE; n<(CHANNELS); n++)
   {
     flux += histogram[n];
   }
