@@ -1128,6 +1128,7 @@ void loop()
       hit_time[hit_count] = tm;
       hit_time_s100[hit_count]=tm_s100;
       hit_channel[hit_count] = adcVal;
+      hit_count++;
 
       if (hit_count >= (EVENTS-1)) logHits(); // log HITS message in case the EVENTS count is reached. 
     }
